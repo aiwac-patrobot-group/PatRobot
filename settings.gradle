@@ -1,1 +1,1 @@
-include ':robotapp', ':commonlibrary', ':clientapp'
+include ':robotapp', ':commonlibrary', ':clientapp', ':ZBLibrary'
