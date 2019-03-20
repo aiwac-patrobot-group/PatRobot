@@ -43,11 +43,17 @@ public class WebSocketApplication {
         try{
             SharedPreferences pref = PatRobotApplication.getContext().getSharedPreferences(Constant.DB_USER_TABLENAME, MODE_PRIVATE);
             String token = pref.getString(Constant.USER_DATA_FIELD_TOKEN, "");
-            URI uri = new URI(Constant.WEBSOCKET_URL+token);
-            LogUtil.d("uri:"+uri);
-            //URI uri = new URI(Constant.WEBSOCKET_URL);
+            String phoneNumber=pref.getString(Constant.USER_REGISTER_NUMBER,"");
+            Map<String,String> headers=new HashMap<>();
+            headers.put("userNumber",phoneNumber);
+            headers.put("Authorization",token);
             //这里会进行和服务端的握手操作
-            webSocketHelper = new WebSocketClientHelper(uri, getDefaultMap(),context);
+            webSocketHelper = new WebSocketClientHelper(new URI(Constant.WEBSOCKET_PAT_URL),headers,PatRobotApplication.getContext());
+            //WEBSOCKET_PAT_URL=WEBSOCKET_BASE_URL+"/websocketbusiness";
+
+            /*URI uri = new URI(Constant.WEBSOCKET_URL+token);
+            LogUtil.d("uri:"+uri);*/
+            //URI uri = new URI(Constant.WEBSOCKET_URL);
             Log.d("11", "init: "+webSocketHelper);
         }catch (Exception e){
             e.printStackTrace();

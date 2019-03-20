@@ -122,7 +122,7 @@
                 android:textColor="@color/white"/>
 
             <Button
-                android:id="@+id/register_button"
+                android:id="@+id/login_bycode_button"
                 style="?android:textAppearanceSmall"
                 android:layout_width="40sp"
                 android:layout_height="30sp"

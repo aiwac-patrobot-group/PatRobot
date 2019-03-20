@@ -62,7 +62,7 @@ public class JsonUtil {
     public static String parseErrorCode(String jsonStr){
         try{
             JSONObject root = new JSONObject(jsonStr);
-            String result = root.getString(Constant.WEBSOCKET_TIMER_ERRORCODE);
+            String result = root.getString(Constant.RETURN_JSON_ERRORCODE);
             return result;
         }catch (Exception e){
             e.printStackTrace();
@@ -70,6 +70,7 @@ public class JsonUtil {
             throw new JsonException(Constant.JSON_PARSE_EXCEPTION, e);
         }
     }
+
 
     //解析errorCode 获取消息是否成功传递到后台
     public static String parseToken(String jsonStr){

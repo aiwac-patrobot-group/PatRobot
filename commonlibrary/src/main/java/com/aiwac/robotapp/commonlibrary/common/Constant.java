@@ -8,35 +8,15 @@ public class Constant {
 
     //public final static String IP="192.168.1.109";
     public final static String IP="101.132.192.66";
-    public final static String HTTP_IP = IP+":8080";
-    public final static String WEBSOCKET_IP = IP+":8082";
+    public final static String IP_PAT="47.102.203.26";
+    public final static String HTTP_IP = IP_PAT+":8080";
+    public final static String WEBSOCKET_IP = IP_PAT+":8080";
     //public final static String HTTP_PORT="8080";
     //public final static String WEBSOCKET_PORT="8082";
 
-    //WebSocket 和讲座 健康检测结果  相关的
-
-    public final static String WEBSOCKET_MESSAGE_ACCOUNT = "account";
-    public final static String WEBSOCKET_MESSAGE_CODE = "code";
-    public final static String WEBSOCKET_MESSAGE_LECTUREID = "lectureID";
-    public final static String WEBSOCKET_MESSAGE_HEALTH_TEST_RESULT = "resultID";
-
-    public final static String WEBSOCKET_MESSAGE_DATA  = "data";
 
 
-    public final static String WEBSOCKET_LECTURE_ABSTRACT  = "lectureAbstract";
-    public final static String WEBSOCKET_LECTURE_COURSE_UPDATETIME  = "updateTime";
-    public final static String WEBSOCKET_LECTURE_COURSE_DESCRIPTION = "description";
-    public final static String WEBSOCKET_LECTURE_COURSE_COVER  = "cover";
-    public final static String WEBSOCKET_LECTURE_COURSE_DURATION = "duration";
-    public final static String WEBSOCKET_LECTURE_COURSE_NAME = "name";
-    public final static String WEBSOCKET_MESSAGE_LECTURE_AV_LINK = "link";
-    public final static String WEBSOCKET_MESSAGE_LECTURE_CONTEXT = "lectureContext";
-    public final static String WEBSOCKET_MESSAGE_RESULTID = "resultID";
-    public final static String WEBSOCKET_MESSAGE_UPDATETIME = "updateTime";
-    public final static String WEBSOCKET_MESSAGE_RESULT_CONTEXT = "resultContext";
-    public final static String WEBSOCKET_MESSAGE_SYSYTEM_CLIENTTYPE = "robot";
-    public final static String WEBSOCKET_TIMER_STATUS = "status";
-    public final static String WEBSOCKET_BUSINESS_DOWNLOAD_LECTURE = "正在加载讲座资源，稍等...";
+
 
 
     //和安全相关的
@@ -73,6 +53,7 @@ public class Constant {
     public final static String WEBSOCKET_BASE_URL = "ws://" + WEBSOCKET_IP;
     public final static String WEBSOCKET_USER_IDENTITY = "number";
     public final static String WEBSOCKET_URL = WEBSOCKET_BASE_URL +"/ws?token=";
+    public final static String WEBSOCKET_PAT_URL=WEBSOCKET_BASE_URL+"/websocketbusiness";
     public final static String WEBSOCKET_MESSAGE_BUSSINESSTYPE = "code";
     public final static String WEBSOCKET_MESSAGE_CLIENTID = "account";
     public final static String WEBSOCKET_MESSAGE_UUID = "uniqueID";
@@ -83,6 +64,10 @@ public class Constant {
     public final static String WEBSOCKET_MESSAGE_DESCRIPTION = "description";
     public final static String WEBSOCKET_MESSAGE_ITEMS = "items";
 
+    public final static String RETURN_JSON_ERRORCODE="errorCode";
+    public final static String RETURN_JSON_ERRORDESC="errorDesc";
+    public final static String RETURN_JSON_ERRORCODE_VALUE_SUCCEED="200";
+    public final static String RETURN_JSON_ERRORCODE_VALUE_FAIL="201";
 
 
     public final static String MESSAGE_ERRORCODE_2000 = "2000";
@@ -129,46 +114,11 @@ public class Constant {
     public final static String WEBSOCKET_SKINRESULT_DRUG = "drug";
     public final static String WEBSOCKET_SKINRESULT_RESULT = "result";
 
-    //体检推荐的参数
-    public final static String WEBSOCKET_EXAM_ID = "examID";//体检推荐的id
-    public final static String WEBSOCKET_EXAM_NAME="name";//体检推荐的名字
-    public final static String WEBSOCKET_EXAM_COVER = "cover";//体检的图片
-    public final static String WEBSOCKET_EXAM_DESCRIPTION="description";//体检的描述
-    public final static String WEBSOCKET_EXAM_UPDATETIME="updateTime";//体检的时间
-    public final static String WEBSOCKET_EXAM_CONTEXT="examContext";//体检的详情
-    public final static String WEBSOCKET_EXAM_MENU_LINK="packageLink";//体检套餐的文件link
-    public final static String WEBSOCKET_EXAM_LIST_IS_NULL="体检推荐列表为空";
-    public final static String WEBSOCKET_EXAM_DETAIL_IS_NULL="未查询到该体检推荐";
 
-    //消息通知相关
-    public final static String WEBSOCKET_NOTIFICTION_MESSAGETYPE="messageType";
-    public final static String WEBSOCKET_NOTIFICTION_MESSAGEID="messageID";
+
 
     public final static String WEBSOCKET_REGISTER_ID = "registerID";
-    public final static String WEBSOCKET_MESSAGE_ID = "messageID";//新消息通知
-    public final static String WEBSOCKET_RESULT_ID = "resultID";//健康周报结果查询
-    public final static String WEBSOCKET_HEALTH_WEEKLY_REPORT_RESULT_CONTEXT="resultContext";//健康周报结果查询返回的json里保存doc的link的key。
 
-    public final static String WEBSOCKET_MESSAGE_CLIENTTYPE_NUMBER = "2";
-    public final static String WEBSOCKET_QUERYPERSONINFO_BUSSINESSTYPE_CODE = "0005";
-    public final static String WEBSOCKET_PERSONAL_INFOMATION_BUSSINESSTYPE_CODE = "0006";
-    public final static String WEBSOCKET_LECTURE_AUDIO_ABSTRACT_TYPE_CODE = "0009";   //类型查询 讲座音频摘要
-    public final static String WEBSOCKET_LECTURE_VIDEO_ABSTRACT_TYPE_CODE = "0010";   //类型查询 讲座视频摘要
-    public final static String WEBSOCKET_LECTURE_AV_DETAIL_TYPE_CODE = "0011";   //类型查询 讲座视频和音频 详情
-    public final static String WEBSOCKET_LECTURE_ARTICLE_ABSTRACT_TYPE_CODE = "0012";   //类型查询 讲座文章摘要
-    public final static String WEBSOCKET_LECTURE_ARTICLE_DETAIL_TYPE_CODE = "0013";   //类型查询 讲座文章 详情
-    public final static String WEBSOCKET_SKIN_RESULT_CODE = "0016";
-    public final static String WEBSOCKET_VOICECHAT_BUSSINESSTYPE_CODE = "0017";
-    public final static String WEBSOCKET_VOICEREGISTER_BUSSINESSTYPE_CODE = "0019";//挂号医院信息
-    public final static String WEBSOCKET_REGISTERHISTORY_BUSSINESSTYPE_CODE = "0020";//挂号历史纪录
-    public final static String WEBSOCKET_REGISTERRESULT_BUSSINESSTYPE_CODE = "0021";//挂号结果
-    public final static String WEBSOCKET_NEW_MESSAGE_BUSSINESSTYPE_CODE = "0018";//新消息通知
-    public final static String WEBSOCKET_HANGUPCHAT_BUSSINESSTYPE_CODE = "0024"; //挂断在线问诊
-    public final static String WEBSOCKET_THREE_EXAM_BUSSINESSTYPE_CODE = "0023"; //挂断在线问诊
-    public final static String WEBSOCKET_MEDICAL_EXAM_DETAIL_BUSSINESSTYPE_CODE="0008";//体检推荐详细信息查询
-    public final static String WEBSOCKET_MEDICAL_EXAM_SUMMARY_BUSSINESSTYPE_CODE="0007";//体检推荐摘要查询
-    public final static String WEBSOCKET_MEDICAL_EXAM_MENU_CODE="0022";//体检套餐查询
-    public final static String WEBSOCKET_HEALTH_WEEKLY_REPORT_CODE="0015";//健康周报，健康检查结果
 
 
     public final static String WEBSOCKET_USER_IDENTITY_EXCEPTION = "没有用户异常";
@@ -332,6 +282,8 @@ public class Constant {
     public final static int USER_CHECKCODE_MILLISINFUTURE = 60 * USER_CHECKCODE_COUNTDOWNINTERVAL; //要倒计时的总时间
 
 
+    public final static String USER_LOGIN_SUCCEED="用户登录成功";
+
     public final static String USER_MODIFY_PASSWORD_OPT  = "modifyPasswd";
     public final static String USER_LOGIN_PASSWORD_OPT  = "loginWithPasswd";
     public final static String USER_GET_CHECKCODE_OPT  = "getIdentifyCode";
@@ -339,12 +291,17 @@ public class Constant {
 
     public final static String HTTP_BASE_URL = "http://" + HTTP_IP;
 
-    public final static String HTTP_CHECKCODE_URL = HTTP_BASE_URL + "/login/getIdentifyCode";
+
+    //http登录注册相关
+    public final static String HTTP_CHECKCODE_URL = HTTP_BASE_URL + "/account/get/identifycode";
+    public final static String HTTP_USER_REGISTER_RUL = HTTP_BASE_URL + "/account/register";
+    public final static String HTTP_USER_LOGIN_IDENTIFYCODE_BASEURL = HTTP_BASE_URL + "/account/login/withidentifycode";
+    public final static String HTTP_USER_LOGIN_BY_PASSWORD_URL=HTTP_BASE_URL + "/account/login/withpassword";
+
     public final static String HTTP_GET_TOKEN_STRING_URL = HTTP_BASE_URL + "/login/getTokenString";
     public final static String HTTP_USER_LOGIN_PASSWORD_BASEURL = HTTP_BASE_URL + "/web/login/" + USER_LOGIN_PASSWORD_OPT;
-    public final static String HTTP_USER_LOGIN_IDENTIFYCODE_BASEURL = HTTP_BASE_URL + "/login/loginWithIdentifyCode";
 
-    public final static String USER_REGISTER_NUMBER ="account";
+    public final static String USER_REGISTER_NUMBER ="phoneNumber";
     public final static String USER_REGISTER_CHECKCODE ="identifyCode";
     public final static String USER_REGISTER_PHONENUMBER_EXIST ="isPhoneNumberExist";
     public final static String USER_REGISTER_PHONENUMBER_EXIST_YES ="1";
