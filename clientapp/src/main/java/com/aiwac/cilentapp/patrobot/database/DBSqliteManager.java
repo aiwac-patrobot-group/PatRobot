@@ -77,28 +77,6 @@ public class DBSqliteManager extends SQLiteOpenHelper{
         userMap.put("number", "varchar(20) UNIQUE");
         createTable(db, Constant.DB_USER_TABLENAME, userMap);
 
-        //定时任务表
-        HashMap<String, String> timerMap = new HashMap<String, String>();
-        timerMap.put("clientId", "varchar(15)");
-        timerMap.put("businessType", "varchar(10)");
-        timerMap.put("uuid", "varchar(32)");
-        timerMap.put("clientType", "varchar(2)");
-        timerMap.put("attentionType", "varchar(2)");
-        timerMap.put("attentionContent", "varchar(100)");
-        timerMap.put("activationMode", "varchar(7)");
-        timerMap.put("activatedTime", "varchar(10)");
-        timerMap.put("operationType", "varchar(2)");
-        timerMap.put("isOpen", "varchar(1)");
-        timerMap.put("isCommit", "varchar(1) default('2')");
-        createTable(db, Constant.DB_TIMER_TABLENAME, timerMap);
-
-        //创建消息数据库
-        HashMap<String,String> notificationMap=new HashMap<String,String >();
-        notificationMap.put("notificationid","integer PRIMARY KEY autoincrement");
-        notificationMap.put("messageid","integer");//表示体检推荐ID或者周报ID，挂号id
-        notificationMap.put("messagetype","integer");//0表示新的体检推荐，1表示健康检测周报,2表示挂号结果
-        notificationMap.put("isread","integer");//0未读，1已读
-        createTable(db,Constant.DB_Notification,notificationMap);
     }
 
     @Override

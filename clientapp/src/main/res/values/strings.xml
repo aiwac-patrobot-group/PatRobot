@@ -1,3 +1,20 @@
 <resources>
     <string name="app_name">clientApp</string>
+
+
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">手机号</string>
+    <string name="prompt_number">手机号</string>
+    <string name="prompt_check_code">验证码</string>
+    <string name="action_register">手机号登录</string>
+    <string name="action_checkcode">获取验证码</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address or number is invalid</string>
+    <string name="error_incorrect_checkcode">验证码错误或失效，请重新获取</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+
 </resources>

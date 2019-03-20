@@ -76,7 +76,7 @@ public class UserSqliteHelper implements SQLiteHelper<User> {
             sdb = dbManager.getWritableDatabase();
             Log.d(LOG_TAG, Constant.DB_OPEN_WRITE_CONNECTION);
 
-            sdb.update(tableName, values,"number = ?",new String[]{"user.getNumber()"});
+            sdb.update(tableName, values,"number = ?",new String[]{user.getNumber()});
             Log.d(LOG_TAG, Constant.DB_UPDATE + user);
         }catch (Exception e){
             Log.d(LOG_TAG, Constant.DB_UPDATE_EXCEPTIOIN);
@@ -129,6 +129,11 @@ public class UserSqliteHelper implements SQLiteHelper<User> {
         }
     }
 
+    /**
+     * 通过手机号获取用户
+     * @param number
+     * @return
+     */
     public User getUser(String number){
         User user = null;
         SQLiteDatabase sdb = null;

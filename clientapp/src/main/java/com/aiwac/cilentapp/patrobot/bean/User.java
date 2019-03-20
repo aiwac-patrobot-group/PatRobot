@@ -8,7 +8,7 @@ public class User extends BaseEntity{
 
     private Integer id;
     private Boolean isRegister;
-    private String number;
+    private String number;//手机号
     private String password;
 
 
