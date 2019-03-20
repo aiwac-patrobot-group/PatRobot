@@ -21,22 +21,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.loginandregister.LoginActivity">
+        <activity android:name=".activity.loginandregister.LoginByPasswordActivity"></activity>
+        <activity android:name=".activity.loginandregister.RegisterCodeActivity" />
+        <activity android:name=".activity.loginandregister.LoginActivity" />
+        <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.MainActivity">
-        </activity>
-
 
         <service
             android:name=".service.WebSocketService"
             android:enabled="true"
             android:exported="true" />
-
     </application>
 
 </manifest>

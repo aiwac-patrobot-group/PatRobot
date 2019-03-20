@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/activity_login"
     android:gravity="center_horizontal"
     android:orientation="vertical"
     android:background="@color/white"
-    tools:context=".activity.loginandregister.LoginActivity">
-
+    tools:context=".activity.loginandregister.RegisterCodeActivity">
     <RelativeLayout style="@style/topbar_bg">
 
         <ImageButton style="@style/topbar_return_img" />
@@ -16,11 +15,11 @@
         <TextView
             style="@style/topbar_title"
             android:layout_centerHorizontal="true"
-            android:text="验证码登录" />
-        <Button
-            android:id="@+id/btn_to_register"
-            style="@style/topbar_right_btn"
             android:text="注册" />
+        <Button
+            android:id="@+id/btn_to_login"
+            style="@style/topbar_right_btn"
+            android:text="登录" />
     </RelativeLayout>
 
     <ScrollView
@@ -108,6 +107,27 @@
 
             </LinearLayout>
 
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="40sp"
+                android:layout_weight="15"
+                android:background="@drawable/register_account_bg">
+
+                <EditText
+                    android:id="@+id/register_password_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="20sp"
+                    android:layout_marginRight="20sp"
+                    android:background="@null"
+                    android:hint="@string/prompt_password"
+                    android:inputType="textEmailAddress"
+                    android:textAlignment="center"
+                    android:textColor="@color/theme"
+
+                    />
+            </android.support.design.widget.TextInputLayout>
 
             <Button
                 android:id="@+id/register_check_code_button"
@@ -132,16 +152,6 @@
                 android:layout_margin="20sp"
                 android:background="@drawable/register_rightlog"
                 />
-
-            <TextView
-                android:id="@+id/tv_password_login"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_margin="20sp"
-                android:enabled="true"
-                android:text="@string/action_password_login"
-                android:textColor="@color/theme" />
         </LinearLayout>
     </ScrollView>
 

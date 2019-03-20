@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aiwac.cilentapp.patrobot.R;
@@ -19,6 +20,7 @@ import com.aiwac.cilentapp.patrobot.bean.User;
 import com.aiwac.cilentapp.patrobot.database.UserData;
 import com.aiwac.cilentapp.patrobot.database.UserSqliteHelper;
 import com.aiwac.cilentapp.patrobot.service.WebSocketService;
+import com.aiwac.cilentapp.patrobot.utils.ActivityUtil;
 import com.aiwac.cilentapp.patrobot.utils.HttpUtil;
 import com.aiwac.cilentapp.patrobot.utils.JsonUtil;
 import com.aiwac.robotapp.commonlibrary.common.Constant;
@@ -49,6 +51,25 @@ public class LoginActivity extends AppCompatActivity {
         checkcodeEidt = (EditText) findViewById(R.id.register_checkcode_edit);
         checkcodeBtn = (Button) findViewById(R.id.register_check_code_button);
         registerBtn = (Button) findViewById(R.id.register_button);
+
+        TextView textToRegister = findViewById(R.id.btn_to_register);
+        textToRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent toRegisterIntent=new Intent(LoginActivity.this,RegisterCodeActivity.class);
+                //ActivityUtil.skipActivity(LoginActivity.this,RegisterCodeActivity.class,true);
+                startActivity(toRegisterIntent);
+                finish();
+            }
+        });
+        TextView tvToLoginByPassword = findViewById(R.id.tv_password_login);
+        tvToLoginByPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(LoginActivity.this,LoginByPasswordActivity.class));
+                finish();
+            }
+        });
 
         checkcodeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,6 +148,7 @@ public class LoginActivity extends AppCompatActivity {
                                 if(resultJson != null) {
                                     String errorCode = JsonUtil.parseErrorCode(resultJson);
                                     if(errorCode.equals(Constant.MESSAGE_ERRORCODE_2000)){
+                                        //注册成功
                                         String token =JsonUtil.parseToken(resultJson);
                                         SharedPreferences.Editor editor = getSharedPreferences(Constant.DB_USER_TABLENAME, MODE_PRIVATE).edit();
                                         editor.putString(Constant.USER_DATA_FIELD_TOKEN, token);
