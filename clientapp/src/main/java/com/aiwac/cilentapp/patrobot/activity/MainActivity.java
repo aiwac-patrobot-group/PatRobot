@@ -8,6 +8,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -15,12 +16,16 @@ import com.aiwac.cilentapp.patrobot.R;
 import com.aiwac.cilentapp.patrobot.activity.loginandregister.LoginByPasswordActivity;
 import com.aiwac.cilentapp.patrobot.activity.loginandregister.RegisterCodeActivity;
 import com.aiwac.cilentapp.patrobot.activity.setting.SettingActivity;
+import com.aiwac.cilentapp.patrobot.activity.videoplayer.VideoAudioActivity;
+import com.aiwac.cilentapp.patrobot.activity.videoplayer.VideoPlayActivity;
 import com.aiwac.cilentapp.patrobot.database.UserData;
 import com.aiwac.cilentapp.patrobot.service.WebSocketService;
 import com.aiwac.robotapp.commonlibrary.common.Constant;
 import com.aiwac.robotapp.commonlibrary.utils.LogUtil;
 
 import java.util.ArrayList;
+
+import io.vov.vitamio.Vitamio;
 
 public class MainActivity extends AppCompatActivity {
     private Button btn_setting;
@@ -29,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
     private Button btn_player;
     private Button btn_feed;
     private Button btn_cruise;
+//测试视频播放
+    protected String link = "noLink";
 
 
 
@@ -42,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
         initView();
         initEven();
         initPermission();
+
+        Vitamio.isInitialized(this);
     }
     //判断 是否已经登录，如果没有登录，结束本activity，跳转到登录界面
     private void hasLogged(){
@@ -62,6 +71,22 @@ public class MainActivity extends AppCompatActivity {
         btn_player=findViewById(R.id.btn_player);
         btn_feed=findViewById(R.id.btn_feed);
         btn_cruise=findViewById(R.id.btn_cruise);
+        btn_player.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+        //        Intent intent = new Intent(MainActivity.this, VideoAudioActivity.class);
+//                startActivity(intent);
+
+                Intent intent = new Intent(MainActivity.this, VideoPlayActivity.class);
+
+//                    //测试
+                   link  = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
+//                    //测试
+                Log.d("lecture",link);
+                intent.putExtra("Link",link);
+                startActivity(intent);
+            }
+        });
 
         btn_register.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -2,9 +2,15 @@ package com.aiwac.robotapp.patrobot.server;
 
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.aiwac.robotapp.commonlibrary.common.Constant;
 import com.aiwac.robotapp.commonlibrary.utils.LogUtil;
+import com.aiwac.robotapp.patrobot.activity.videoplayer.AudioPlayActivity;
+import com.aiwac.robotapp.patrobot.activity.videoplayer.VideoPlayActivity;
+import com.aiwac.robotapp.patrobot.bean.aVDetail;
 import com.aiwac.robotapp.patrobot.utils.JsonUtil;
 
 
@@ -16,6 +22,8 @@ import org.java_websocket.handshake.ServerHandshake;
 import java.net.URI;
 import java.util.Map;
 
+import io.vov.vitamio.Vitamio;
+
 
 /**     用于WebSocket客户端通信
  * Created by luwang on 2017/10/31.
@@ -24,6 +32,8 @@ import java.util.Map;
 public class WebSocketClientHelper extends WebSocketClient {
 
     private Context context;
+    protected aVDetail aVDetail;
+    protected String link = "noLink";
 
 
     public Context getContext() {
@@ -90,6 +100,51 @@ public class WebSocketClientHelper extends WebSocketClient {
                 MessageEvent messageEvent = new MessageEvent("RegisterResult", json);
                 EventBus.getDefault().postSticky(messageEvent);
             }*/
+            if ((businessType.equals(Constant.WEBSOCKET_VIDEO_DETAIL_TYPE_CODE))) //视频详细信息到达
+            {
+                aVDetail = JsonUtil.parseAVDetailInfo(json);
+                if (aVDetail != null) {
+                    link = aVDetail.getLink();
+
+                    Log.d("lecture","link: "+link);
+                }
+
+                if ( !link.equals("noLink" ) )
+                {
+                    Vitamio.isInitialized(context);
+                    Toast.makeText(context, "播放视频", Toast.LENGTH_SHORT).show();
+                    Intent intent =new Intent(context, VideoPlayActivity.class);
+                    //link  = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
+                    //测试
+                    Log.d("lecture",link);
+                    intent.putExtra("Link",link);
+                    context.startActivity(intent);
+
+                }
+
+            }else if ((businessType.equals(Constant.WEBSOCKET_AUDIO_DETAIL_TYPE_CODE))) //音频详细信息到达
+            {
+                aVDetail = JsonUtil.parseAVDetailInfo(json);
+                if (aVDetail != null) {
+                    link = aVDetail.getLink();
+
+                    Log.d("lecture","link: "+link);
+                }
+
+                if ( !link.equals("noLink" ) )
+                {
+                    Vitamio.isInitialized(context);
+                    Toast.makeText(context, "播放音频", Toast.LENGTH_SHORT).show();
+                    Intent intent =new Intent(context, AudioPlayActivity.class);
+                    //link  = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
+                    //测试
+                    Log.d("lecture",link);
+                    intent.putExtra("Link",link);
+                    context.startActivity(intent);
+
+                }
+
+            }
 
 
         }catch (Exception e){

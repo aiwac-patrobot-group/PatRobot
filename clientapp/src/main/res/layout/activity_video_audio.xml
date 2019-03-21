@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activity.videoplayer.VideoAudioActivity">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:theme="?attr/actionBarTheme">
+
+        <Button
+            android:layout_width="34dp"
+            android:layout_height="35dp"
+            android:id="@+id/backButton"
+            android:background="@drawable/back2"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"/>
+
+        <RelativeLayout
+            android:id="@+id/control_play"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_gravity="center|center_horizontal">
+
+            <TextView
+                android:id="@+id/toolbar_title"
+                style="@style/topbar_title"
+                android:layout_centerHorizontal="true"
+                android:text="音视频播放"
+                />
+        </RelativeLayout>
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#d9d9d9"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/bottombar_home"
+            android:descendantFocusability= "blocksDescendants"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:layout_margin="5sp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/topbar_lecture_video"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="视频"
+                android:textSize = "19sp"
+                android:gravity="center"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/bottombar_news"
+            android:descendantFocusability= "blocksDescendants"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:layout_margin="5sp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/topbar_lecture_music"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="音频"
+                android:textSize = "19sp"
+                android:gravity="center"/>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+    <FrameLayout
+        android:id="@+id/main_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="#E9E9E9"
+        android:layout_weight="1">
+
+    </FrameLayout>
+
+
+</LinearLayout>

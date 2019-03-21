@@ -3,20 +3,16 @@
     package="com.aiwac.cilentapp.patrobot">
     <!-- 浮动通知权限 -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <!-- skin -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" /> <!-- skin -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <!-- skin -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- skin -->
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
-    <!-- 语音识别 -->
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" /> <!-- 语音识别 -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
@@ -27,7 +23,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.setting.SettingActivity"></activity>
+        <activity android:name=".activity.videoplayer.AudioPlayActivity"></activity>
+        <activity android:name=".activity.videoplayer.VideoPlayActivity" />
+        <activity android:name=".activity.videoplayer.VideoDetailActivity" />
+        <activity android:name=".activity.videoplayer.audioDetailActivity" />
+        <activity android:name=".activity.videoplayer.VideoAudioActivity" />
+        <activity android:name=".activity.setting.SettingActivity" />
         <activity android:name=".activity.loginandregister.LoginByPasswordActivity" />
         <activity android:name=".activity.loginandregister.RegisterCodeActivity" />
         <activity android:name=".activity.loginandregister.LoginActivity" />

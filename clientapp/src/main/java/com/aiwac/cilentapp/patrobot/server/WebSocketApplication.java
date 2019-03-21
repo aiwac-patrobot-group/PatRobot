@@ -6,6 +6,8 @@ import android.util.Log;
 
 import com.aiwac.cilentapp.patrobot.PatClientApplication;
 import com.aiwac.cilentapp.patrobot.bean.User;
+import com.aiwac.cilentapp.patrobot.bean.aVDetail;
+import com.aiwac.cilentapp.patrobot.bean.videoAbstractInfo;
 import com.aiwac.cilentapp.patrobot.database.UserData;
 import com.aiwac.cilentapp.patrobot.utils.HttpUtil;
 import com.aiwac.cilentapp.patrobot.utils.JsonUtil;
@@ -143,6 +145,22 @@ public class WebSocketApplication {
             LogUtil.d( Constant.WEBSOCKET_CONNECTION_CLOSE);
         }
         //startWebSocketConnection(HealthRobotApplication.getContext());
+    }
+
+    public videoAbstractInfo getWebSocketHelperAudioAllInfo(){
+        return   webSocketHelper.getLectureAudioAllInfo();
+    }
+
+    public videoAbstractInfo getWebSocketHelperVideoAllInfo(){
+        return webSocketHelper.getLectureVideoAllInfo();
+    }
+
+    public aVDetail getWebSocketHelperAudioDetail(){
+        return webSocketHelper.getAudioDetail();
+    }
+
+    public aVDetail getWebSocketHelperVideoDetail(){
+        return webSocketHelper.getVideoDetail();
     }
 
     //在新的线程中开启一个websocket连接
