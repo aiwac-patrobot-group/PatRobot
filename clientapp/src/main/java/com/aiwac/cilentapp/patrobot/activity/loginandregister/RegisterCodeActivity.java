@@ -34,7 +34,6 @@ import org.json.JSONObject;
 
 public class RegisterCodeActivity extends AppCompatActivity {
 
-    private final static String LOG_TAG = "RegisterCodeActivity";
     private Button checkcodeBtn;
     private Button registerBtn;
 

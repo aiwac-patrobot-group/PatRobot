@@ -54,7 +54,7 @@ public class Constant {
     public final static String WEBSOCKET_USER_IDENTITY = "number";
     public final static String WEBSOCKET_URL = WEBSOCKET_BASE_URL +"/ws?token=";
     public final static String WEBSOCKET_PAT_URL=WEBSOCKET_BASE_URL+"/websocketbusiness";
-    public final static String WEBSOCKET_MESSAGE_BUSSINESSTYPE = "code";
+    public final static String WEBSOCKET_MESSAGE_BUSSINESSTYPE = "businessType";
     public final static String WEBSOCKET_MESSAGE_CLIENTID = "account";
     public final static String WEBSOCKET_MESSAGE_UUID = "uniqueID";
     public final static String WEBSOCKET_MESSAGE_CLIENTTYPE = "clientType";

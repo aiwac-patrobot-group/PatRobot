@@ -23,4 +23,13 @@
         app:layout_constraintTop_toBottomOf="@+id/btn_setting"
         app:srcCompat="@drawable/aiwac"
         tools:layout_editor_absoluteX="0dp" />
+
+    <TextView
+        android:id="@+id/tv_mac"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="MAC:"
+        app:layout_constraintTop_toBottomOf="@+id/codeImage"
+        tools:layout_editor_absoluteX="38dp" />
 </android.support.constraint.ConstraintLayout>

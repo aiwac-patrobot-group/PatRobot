@@ -38,13 +38,6 @@ public class WebSocketClientHelper extends WebSocketClient {
 
 
 
-
-
-
-
-
-
-
     public WebSocketClientHelper(URI serverUri, Map<String, String> httpHeaders, Context context) {
         this(serverUri, new Draft_6455(), httpHeaders, 0, context);
         //LogUtil.d( "serverUri  : " + serverUri);

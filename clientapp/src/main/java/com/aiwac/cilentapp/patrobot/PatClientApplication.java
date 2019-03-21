@@ -3,6 +3,7 @@ package com.aiwac.cilentapp.patrobot;
 import android.content.Context;
 
 import com.aiwac.robotapp.commonlibrary.utils.LogUtil;
+import com.uuzuche.lib_zxing.activity.ZXingLibrary;
 
 import zuo.biao.library.base.BaseApplication;
 
@@ -15,7 +16,10 @@ public class PatClientApplication extends BaseApplication {
         // LogcatHelper.getInstance(this).start();
 
         context = getApplicationContext();
+        ZXingLibrary.initDisplayOpinion(this);
         LogUtil.d( context.toString());
+
+
     }
 
     public static Context getContext(){
