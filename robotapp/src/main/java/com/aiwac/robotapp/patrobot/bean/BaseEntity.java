@@ -1,28 +1,19 @@
-package com.aiwac.cilentapp.patrobot.bean;
+package com.aiwac.robotapp.patrobot.bean;
 
-
-import com.aiwac.cilentapp.patrobot.database.UserData;
 
 /**     基本的类，实现实体类共有的功能，如序列化等
  * Created by zyt on 2017/10/18.
  */
 
 public class BaseEntity {
-    public String clientId = UserData.getUserData().getNumber();    //客户端id
+    //public String clientId = UserData.getUserData().getNumber();    //客户端id
     public String businessType;    //事物类型，如：数据采集，数据查询等
     public String uuid;    //一次事务
-    public String clientType = "1";  // 客户端类型 1表示手机  2 表示后台 3表示机器人
+    public String clientType = "3";  // 客户端类型 1表示手机  2 表示后台
     public String time;    //采集的时间
 
 
 
-    public String getClientId() {
-        return clientId;
-    }
-
-    public void setClientId(String clientId) {
-        this.clientId = clientId;
-    }
 
     public String getBusinessType() {
         return businessType;

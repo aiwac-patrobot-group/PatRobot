@@ -316,6 +316,6 @@ public class Constant {
     public final static String USER_DATA_PERSISTENCE_CLEAN = "清空SharedPreferences用户数据";
     public final static String USER_DATA_ISCONNECTWIFI = "isConnectWifi";
 
-
+    public final static String ROBOT_MAC_ADDRESS="macAddress";//保存机器人mad地址
 
 }

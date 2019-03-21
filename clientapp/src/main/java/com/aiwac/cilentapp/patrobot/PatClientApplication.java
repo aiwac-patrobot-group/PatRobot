@@ -6,7 +6,7 @@ import com.aiwac.robotapp.commonlibrary.utils.LogUtil;
 
 import zuo.biao.library.base.BaseApplication;
 
-public class PatRobotApplication extends BaseApplication {
+public class PatClientApplication extends BaseApplication {
     private static Context context;
 
     @Override

@@ -1,6 +1,5 @@
 package com.aiwac.cilentapp.patrobot.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
@@ -9,12 +8,10 @@ import android.view.View;
 import android.widget.Button;
 
 import com.aiwac.cilentapp.patrobot.R;
-import com.aiwac.cilentapp.patrobot.activity.loginandregister.LoginActivity;
 import com.aiwac.cilentapp.patrobot.activity.loginandregister.LoginByPasswordActivity;
 import com.aiwac.cilentapp.patrobot.activity.loginandregister.RegisterCodeActivity;
 import com.aiwac.cilentapp.patrobot.database.UserData;
 import com.aiwac.cilentapp.patrobot.service.WebSocketService;
-import com.aiwac.cilentapp.patrobot.utils.ActivityUtil;
 import com.aiwac.robotapp.commonlibrary.common.Constant;
 import com.aiwac.robotapp.commonlibrary.utils.LogUtil;
 

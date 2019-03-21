@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.os.Environment;
 
-import com.aiwac.cilentapp.patrobot.PatRobotApplication;
+import com.aiwac.cilentapp.patrobot.PatClientApplication;
 import com.aiwac.robotapp.commonlibrary.common.Constant;
 import com.aiwac.robotapp.commonlibrary.exception.FileException;
 import com.aiwac.robotapp.commonlibrary.utils.LogUtil;
@@ -25,7 +25,7 @@ import java.io.InputStream;
 
 public class FileUtil {
 
-    private static Context context = PatRobotApplication.getContext();
+    private static Context context = PatClientApplication.getContext();
 
     public static File getDir(String folderName) {
         return Environment.getExternalStoragePublicDirectory(folderName);

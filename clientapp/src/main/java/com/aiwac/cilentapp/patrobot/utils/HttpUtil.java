@@ -2,7 +2,7 @@ package com.aiwac.cilentapp.patrobot.utils;
 
 import android.content.SharedPreferences;
 
-import com.aiwac.cilentapp.patrobot.PatRobotApplication;
+import com.aiwac.cilentapp.patrobot.PatClientApplication;
 import com.aiwac.robotapp.commonlibrary.common.Constant;
 import com.aiwac.robotapp.commonlibrary.exception.HttpException;
 import com.aiwac.robotapp.commonlibrary.utils.LogUtil;
@@ -255,7 +255,7 @@ public class HttpUtil {
             urlConn.setDoInput(true);
             // Post请求不能使用缓存
             urlConn.setUseCaches(false);
-            SharedPreferences pref = PatRobotApplication.getContext().getSharedPreferences(Constant.DB_USER_TABLENAME, MODE_PRIVATE);
+            SharedPreferences pref = PatClientApplication.getContext().getSharedPreferences(Constant.DB_USER_TABLENAME, MODE_PRIVATE);
             String token = pref.getString(Constant.USER_DATA_FIELD_TOKEN, "");
             String tokenStr = "Bearer " + token;
             urlConn.addRequestProperty("Authorization", tokenStr);

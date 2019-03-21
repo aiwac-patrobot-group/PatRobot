@@ -1,4 +1,4 @@
-package com.aiwac.cilentapp.patrobot.utils;
+package com.aiwac.robotapp.commonlibrary.utils;
 
 import android.app.ActivityManager;
 import android.content.Context;
@@ -6,13 +6,10 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
-import com.aiwac.cilentapp.patrobot.R;
 import com.aiwac.robotapp.commonlibrary.common.Constant;
-import com.aiwac.robotapp.commonlibrary.utils.LogUtil;
 
 import java.util.List;
 import java.util.Map;
-
 
 
 /**     界面工具类，辅助界面完成相关功能

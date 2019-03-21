@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.SettingActivity">
+    <RelativeLayout
+        style="@style/match_match"
+        android:layout_weight="1"
+        tools:ignore="MissingConstraints">
+
+        <ScrollView style="@style/match_match" >
+
+            <LinearLayout style="@style/ll_vertical_match_match" >
+
+
+
+                <LinearLayout
+                    android:id="@+id/btn_wifi_setting"
+                    style="@style/content_item_white" >
+
+                    <TextView
+                        style="@style/content_item_lf_tv"
+                        android:layout_weight="1"
+                        android:text="wifi设置" />
+
+                    <ImageView
+                        style="@style/content_item_rt_img"
+                        android:padding="0dp" />
+                </LinearLayout>
+
+                <View style="@style/divider_horizontal_1px" />
+
+                <LinearLayout
+                    android:id="@+id/btn_robot_app_update"
+                    style="@style/content_item_white" >
+
+                    <TextView
+                        style="@style/content_item_lf_tv"
+                        android:layout_weight="1"
+                        android:text="版本更新" />
+
+                    <ImageView
+                        style="@style/content_item_rt_img"
+                        android:padding="0dp" />
+                </LinearLayout>
+
+                <View
+                    style="@style/divider_horizontal_1px"
+                    android:layout_marginBottom="@dimen/item_padding_bottom" />
+
+
+            </LinearLayout>
+        </ScrollView>
+    </RelativeLayout>
+</android.support.constraint.ConstraintLayout>
