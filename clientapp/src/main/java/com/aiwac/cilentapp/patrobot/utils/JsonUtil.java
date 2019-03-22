@@ -191,6 +191,29 @@ public class JsonUtil {
         }
     }
 
+    /**
+     * 转发指令 视频通话
+     * @param uuid
+     * @return
+     */
+    public static String commendVideoChat(String uuid){
+        try {
+            BaseEntity baseEntity = new BaseEntity();
+            baseEntity.setBusinessType(Constant.WEBSOCKET_COMMAND_CODE);
+            JSONObject root=baseEntity2Json(baseEntity);
+            JSONObject data=new JSONObject();
+            data.put(Constant.WEBSOCKET_COMMAND_TYPE,Constant.WEBSOCKET_COMMAND_VIDEO_CODE);
+            data.put(Constant.WEBSOCKET_COMMAND_VIDEO_UUID,uuid);
+            root.put(Constant.WEBSOCKET_MESSAGE_DATA,data);
+
+            LogUtil.d(Constant.JSON_GENERATE_SUCCESS+root.toString());
+            return root.toString();
+        } catch (JSONException e) {
+            e.printStackTrace();
+            LogUtil.d(Constant.JSON_GENERATE_EXCEPTION);
+            throw new JsonException(Constant.JSON_GENERATE_EXCEPTION, e);
+        }
+    }
 
     //生成查询讲座视频摘要的json
     public static String videoAbstract2Json(){

@@ -1,7 +1,6 @@
 package com.aiwac.robotapp.patrobot.activity;
 
 import android.Manifest;
-import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,12 +9,10 @@ import android.graphics.Bitmap;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
-import android.os.SystemClock;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -26,15 +23,11 @@ import com.aiwac.robotapp.commonlibrary.utils.ActivityUtil;
 import com.aiwac.robotapp.commonlibrary.utils.LogUtil;
 import com.aiwac.robotapp.commonlibrary.utils.WifiUtil;
 import com.aiwac.robotapp.patrobot.R;
-import com.aiwac.robotapp.patrobot.service.WebSocketService;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.ArrayList;
@@ -45,7 +38,8 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_FINE_LOCATION = 0;
 
     String macAddress="";
-    Button btn_setting;
+    Button btnSetting;
+    Button btnVideoChat;
     TextView tvMac;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,16 +75,23 @@ public class MainActivity extends AppCompatActivity {
     private void initView(){
         //设置携带mac地址的图片
         setMacImg();
-        btn_setting=findViewById(R.id.btn_setting);
+        btnSetting =findViewById(R.id.btn_setting);
         tvMac=findViewById(R.id.tv_mac);
         tvMac.setText(macAddress);
+        btnVideoChat=findViewById(R.id.btn_video_chat);
     }
 
     private void initEvent(){
-        btn_setting.setOnClickListener(new View.OnClickListener() {
+        btnSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(MainActivity.this, SettingActivity.class));
+            }
+        });
+        btnVideoChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this,VideoChatViewActivity.class));
             }
         });
     }

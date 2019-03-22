@@ -19,11 +19,14 @@ import com.aiwac.cilentapp.patrobot.activity.setting.SettingActivity;
 import com.aiwac.cilentapp.patrobot.activity.videoplayer.VideoAudioActivity;
 import com.aiwac.cilentapp.patrobot.activity.videoplayer.VideoPlayActivity;
 import com.aiwac.cilentapp.patrobot.database.UserData;
+import com.aiwac.cilentapp.patrobot.server.WebSocketApplication;
 import com.aiwac.cilentapp.patrobot.service.WebSocketService;
+import com.aiwac.cilentapp.patrobot.utils.JsonUtil;
 import com.aiwac.robotapp.commonlibrary.common.Constant;
 import com.aiwac.robotapp.commonlibrary.utils.LogUtil;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import io.vov.vitamio.Vitamio;
 
@@ -115,6 +118,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(MainActivity.this, SettingActivity.class));
+            }
+        });
+
+        btn_video_chat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this,VideoChatViewActivity.class));
             }
         });
 

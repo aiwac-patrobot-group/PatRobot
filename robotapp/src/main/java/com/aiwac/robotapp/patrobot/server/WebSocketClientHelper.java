@@ -144,6 +144,8 @@ public class WebSocketClientHelper extends WebSocketClient {
 
                 }
 
+            }else if((businessType.equals(Constant.WEBSOCKET_COMMAND_CODE))){
+
             }
 
 

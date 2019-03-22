@@ -342,4 +342,10 @@ public class Constant {
 
     public final static String WEBSOCKET_MESSAGE_DATA  = "data";
 
+    //指令转发
+    public final static String WEBSOCKET_COMMAND_CODE="0002";//
+    public final static String WEBSOCKET_COMMAND_TYPE="commandType";//指令类型
+    public final static String WEBSOCKET_COMMAND_VIDEO_CODE="1001";//转发视频通话指令
+    public final static String WEBSOCKET_COMMAND_VIDEO_UUID="videoDataUUID";
+
 }
