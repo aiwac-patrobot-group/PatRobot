@@ -25,6 +25,7 @@ public class UserData {
         map = new HashMap<String, String>();
         map.put(Constant.USER_DATA_FIELD_PASSWORD, "");
         map.put(Constant.USER_DATA_FIELD_NUMBER, "");
+        map.put(Constant.WEBSOCKET_MESSAGE_CLIENTID,"");
         isNetwork = true;
     }
 
@@ -42,6 +43,13 @@ public class UserData {
     public void setPassword(String password){
         map.put(Constant.USER_DATA_FIELD_PASSWORD, password);
         Log.d(LOG_TAG, "UserData setPassword : " + password);
+    }
+    public String getClientID(){
+        return map.get(Constant.WEBSOCKET_MESSAGE_CLIENTID);
+    }
+    public void setClientID(String clientid){
+        map.put(Constant.WEBSOCKET_MESSAGE_CLIENTID, clientid);
+        Log.d(LOG_TAG, "UserData setPassword : " + clientid);
     }
 
     public String getNumber(){

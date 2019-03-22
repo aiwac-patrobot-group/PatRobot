@@ -96,13 +96,20 @@ public class LoginByPasswordActivity extends AppCompatActivity {
                                     if(errorCode.equals(Constant.RETURN_JSON_ERRORCODE_VALUE_SUCCEED)){
                                         //登录成功
                                         String token =JsonUtil.parseToken(resultJson);
+                                        String clientId=JsonUtil.parseClientID(resultJson);
                                         SharedPreferences.Editor editor = getSharedPreferences(Constant.DB_USER_TABLENAME, MODE_PRIVATE).edit();
+                                        editor.putString(Constant.WEBSOCKET_MESSAGE_CLIENTID,clientId);
                                         editor.putString(Constant.USER_DATA_FIELD_TOKEN, token);
                                         editor.putString(Constant.USER_REGISTER_NUMBER,phoneNumber);
+                                        editor.putString(Constant.USER_DATA_FIELD_PASSWORD,password);
                                         editor.putLong(Constant.USER_DATA_FIELD_TOKENTIME, System.currentTimeMillis());
                                         editor.apply();
+
                                         UserData userData = UserData.getUserData();
                                         userData.setNumber(phoneNumber);
+                                        userData.setClientID(clientId);
+                                        userData.setPassword(password);
+
                                         message.what = Constant.USER_CHECKCODE_SUCCESS;
                                         LogUtil.d(Constant.USER_LOGIN_SUCCEED);
 

@@ -8,7 +8,7 @@ import com.aiwac.cilentapp.patrobot.database.UserData;
  */
 
 public class BaseEntity {
-    public String clientId = UserData.getUserData().getNumber();    //客户端id
+    public String clientId = UserData.getUserData().getClientID();;    //客户端id
     public String businessType;    //事物类型，如：数据采集，数据查询等
     public String uuid;    //一次事务
     public String clientType = "1";  // 客户端类型 1表示手机  2 表示后台 3表示机器人

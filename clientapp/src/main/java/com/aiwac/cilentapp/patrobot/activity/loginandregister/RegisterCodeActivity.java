@@ -139,6 +139,7 @@ public class RegisterCodeActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         String checkcode = checkcodeEidt.getText().toString().trim();
+                        String password = etPassword.getText().toString().trim();
                         LogUtil.d(checkcode + " : " + phoneNumber);
                         Message message = new Message();
                         if(phoneNumber != null && checkcode != null){
@@ -146,7 +147,7 @@ public class RegisterCodeActivity extends AppCompatActivity {
                             try {
                                 root.put(Constant.USER_REGISTER_NUMBER, phoneNumber);
                                 root.put(Constant.USER_REGISTER_CHECKCODE, checkcode);
-                                root.put(Constant.USER_DATA_FIELD_PASSWORD,etPassword.getText());
+                                root.put(Constant.USER_DATA_FIELD_PASSWORD,password);
                                 LogUtil.d(Constant.JSON_GENERATE_SUCCESS + root.toString());
                                 String resultJson = HttpUtil.requestPostJson(Constant.HTTP_USER_REGISTER_RUL, root.toString());
                                 LogUtil.d("resultJson : " + resultJson);
@@ -163,16 +164,23 @@ public class RegisterCodeActivity extends AppCompatActivity {
                                         String logResultJson = HttpUtil.requestPostJson(Constant.HTTP_USER_LOGIN_BY_PASSWORD_URL, logroot.toString());
                                         if(JsonUtil.parseErrorCode(logResultJson).equals(Constant.RETURN_JSON_ERRORCODE_VALUE_SUCCEED)){
                                             String token =JsonUtil.parseToken(logResultJson);
+                                            String clientId=JsonUtil.parseClientID(resultJson);
+
+
                                             SharedPreferences.Editor editor = getSharedPreferences(Constant.DB_USER_TABLENAME, MODE_PRIVATE).edit();
+                                            editor.putString(Constant.WEBSOCKET_MESSAGE_CLIENTID,clientId);
                                             editor.putString(Constant.USER_REGISTER_NUMBER,phoneNumber);
                                             editor.putString(Constant.USER_DATA_FIELD_TOKEN, token);
+                                            editor.putString(Constant.USER_DATA_FIELD_PASSWORD,password);
                                             editor.putLong(Constant.USER_DATA_FIELD_TOKENTIME, System.currentTimeMillis());
                                             editor.apply();
+
+                                            userData.setClientID(clientId);
+                                            userData.setPassword(password);
+
                                             message.what = Constant.USER_CHECKCODE_SUCCESS;
                                             LogUtil.d("注册成功");
                                         }
-
-
                                     }else{
                                         message.what = Constant.USER_CHECKCODE_ERROR_EXCEPTION;
                                         LogUtil.d("注册错误 : "+resultJson);

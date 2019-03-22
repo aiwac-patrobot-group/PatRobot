@@ -5,6 +5,7 @@ import android.content.Context;
 
 import com.aiwac.cilentapp.patrobot.bean.User;
 import com.aiwac.cilentapp.patrobot.utils.JsonUtil;
+import com.aiwac.robotapp.commonlibrary.bean.MessageEvent;
 import com.aiwac.robotapp.commonlibrary.common.Constant;
 import com.aiwac.robotapp.commonlibrary.utils.LogUtil;
 
@@ -102,13 +103,18 @@ public class WebSocketClientHelper extends WebSocketClient {
        LogUtil.printJson( Constant.WEBSOCKET_MESSAGE_FROM_SERVER ,json,"##");
 
         try{
+
             String businessType = JsonUtil.parseBusinessType(json);
-            /*if(businessType.equals(Constant.WEBSOCKET_VOICECHAT_BUSSINESSTYPE_CODE)){  //在线问诊房间号
-                EventBus.getDefault().postSticky(new MessageEvent(json));//eventbus黏性事件
-            }else if(businessType.equals(Constant.WEBSOCKET_REGISTERRESULT_BUSSINESSTYPE_CODE)) { //语音挂号结果
-                MessageEvent messageEvent = new MessageEvent("RegisterResult", json);
-                EventBus.getDefault().postSticky(messageEvent);
-            }*/
+            if(businessType.equals(Constant.WEBSOCKET_BUSSINESS_MACADDRESS_CODE)){  //绑定机器人mac地址
+                if(JsonUtil.parseErrorCode(json).equals(Constant.RETURN_JSON_ERRORCODE_VALUE_SUCCEED)){
+                    //发送消息广播
+                    EventBus.getDefault().postSticky(new MessageEvent(Constant.WEBSOCKET_BUSSINESS_MACADDRESS_SUCCEEDED,json));
+                }else{
+                    //mac绑定失败
+                    EventBus.getDefault().postSticky(new MessageEvent(Constant.WEBSOCKET_BUSSINESS_MACADDRESS_FAILED,json));
+                }
+
+            }
 
 
         }catch (Exception e){

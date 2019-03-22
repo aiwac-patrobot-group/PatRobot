@@ -55,7 +55,7 @@ public class Constant {
     public final static String WEBSOCKET_URL = WEBSOCKET_BASE_URL +"/ws?token=";
     public final static String WEBSOCKET_PAT_URL=WEBSOCKET_BASE_URL+"/websocketbusiness";
     public final static String WEBSOCKET_MESSAGE_BUSSINESSTYPE = "businessType";
-    public final static String WEBSOCKET_MESSAGE_CLIENTID = "account";
+    public final static String WEBSOCKET_MESSAGE_CLIENTID = "clientID";
     public final static String WEBSOCKET_MESSAGE_UUID = "uniqueID";
     public final static String WEBSOCKET_MESSAGE_CLIENTTYPE = "clientType";
     public final static String WEBSOCKET_MESSAGE_COMMANDPRIORITY = "commandPriority";
@@ -310,12 +310,16 @@ public class Constant {
     public final static String USER_DATA_FIELD_REGISTER = "register";
     public final static String USER_DATA_FIELD_PASSWORD = "password";
     public final static String USER_DATA_FIELD_NUMBER = "number";
-    public final static String USER_DATA_FIELD_TOKEN = "token";
+    public final static String USER_DATA_FIELD_TOKEN = "token";//jwt token
+    public final static String USER_DATA_FIELD_ID="id";//帐号在数据库中的id
     public final static String USER_DATA_FIELD_TOKENTIME = "time";//获取token的时间
     public final static String USER_DATA_PERSISTENCE = "利用SharedPreferences持久化用户数据";
     public final static String USER_DATA_PERSISTENCE_CLEAN = "清空SharedPreferences用户数据";
     public final static String USER_DATA_ISCONNECTWIFI = "isConnectWifi";
 
     public final static String ROBOT_MAC_ADDRESS="macAddress";//保存机器人mad地址
+    public final static String WEBSOCKET_BUSSINESS_MACADDRESS_CODE="0001";
+    public final static String WEBSOCKET_BUSSINESS_MACADDRESS_SUCCEEDED="bindMacSucceeded";
+    public final static String WEBSOCKET_BUSSINESS_MACADDRESS_FAILED="bindMacfailed";
 
 }

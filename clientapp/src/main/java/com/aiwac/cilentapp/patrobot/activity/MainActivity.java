@@ -13,7 +13,7 @@ import android.widget.Button;
 
 import com.aiwac.cilentapp.patrobot.R;
 import com.aiwac.cilentapp.patrobot.activity.loginandregister.LoginByPasswordActivity;
-import com.aiwac.cilentapp.patrobot.activity.loginandregister.RegisterCodeActivity;
+import com.aiwac.cilentapp.patrobot.activity.setting.ScanCodeActivity;
 import com.aiwac.cilentapp.patrobot.activity.setting.SettingActivity;
 import com.aiwac.cilentapp.patrobot.database.UserData;
 import com.aiwac.cilentapp.patrobot.service.WebSocketService;
@@ -24,7 +24,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     private Button btn_setting;
-    private Button btn_register;
+    private Button btn_login;
     private Button btn_video_chat;
     private Button btn_player;
     private Button btn_feed;
@@ -37,11 +37,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        initPermission();
         hasLogged();
-
+        hasMac();
         initView();
         initEven();
-        initPermission();
     }
     //判断 是否已经登录，如果没有登录，结束本activity，跳转到登录界面
     private void hasLogged(){
@@ -51,22 +51,35 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(MainActivity.this, LoginByPasswordActivity.class));
             finish();
         }else{
-            UserData.getUserData().setNumber(phoneNumber);
+            UserData userData = UserData.getUserData();
+            userData.setClientID(s.getString(Constant.WEBSOCKET_MESSAGE_CLIENTID,""));
+            userData.setPassword(s.getString(Constant.USER_DATA_FIELD_PASSWORD,""));
+            userData.setNumber(phoneNumber);
             LogUtil.d("用户已经登录："+phoneNumber);
         }
     }
+    //判断是否已经绑定了机器人，如果没有，则结束本activity，跳转到绑定页面
+    private void hasMac(){
+        //在这里不能关闭本activity，他需要websocket
+        SharedPreferences s = getSharedPreferences(Constant.DB_USER_TABLENAME,MODE_PRIVATE);
+        String macAddress = s.getString(Constant.ROBOT_MAC_ADDRESS,"");
+        if(macAddress.equals("")){
+            startActivity(new Intent(MainActivity.this, ScanCodeActivity.class));
+        }
+    }
+
     private void initView(){
         btn_setting=findViewById(R.id.btn_setting);
-        btn_register=findViewById(R.id.btn_register);
+        btn_login =findViewById(R.id.btn_login);
         btn_video_chat=findViewById(R.id.btn_video_chat);
         btn_player=findViewById(R.id.btn_player);
         btn_feed=findViewById(R.id.btn_feed);
         btn_cruise=findViewById(R.id.btn_cruise);
 
-        btn_register.setOnClickListener(new View.OnClickListener() {
+        btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, RegisterCodeActivity.class);
+                Intent intent = new Intent(MainActivity.this, LoginByPasswordActivity.class);
                 //ActivityUtil.skipActivity(MainActivity.this, LoginActivity.class);
                 startActivity(intent);
             }
