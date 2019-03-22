@@ -19,8 +19,8 @@ import com.aiwac.robotapp.commonlibrary.task.ThreadPoolManager;
 
 public class VideoAudioActivity extends AppCompatActivity {
 
-    //视频  音频
-    private View videoView,audioView;
+    //视频  音频  正在播放
+    private View videoView,audioView,playView;
     private Button backButton;
 
     @Override
@@ -46,12 +46,14 @@ public class VideoAudioActivity extends AppCompatActivity {
     public void selected(){
         videoView.setSelected(false);
         audioView.setSelected(false);
+        playView.setSelected(false);
     }
 
     private void setView() {
 
         videoView = findViewById(R.id.topbar_lecture_video);
         audioView = findViewById(R.id.topbar_lecture_music);
+        playView = findViewById(R.id.topbar_play_list);
 
 
         videoView.setSelected(true);
@@ -71,6 +73,15 @@ public class VideoAudioActivity extends AppCompatActivity {
                 selected();
                 audioView.setSelected(true);
                 addFragment(new audioFragment());
+            }
+        });
+
+        playView.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                selected();
+                playView.setSelected(true);
+                addFragment(new playFragment());
             }
         });
 
@@ -109,11 +120,10 @@ public class VideoAudioActivity extends AppCompatActivity {
                     WebSocketApplication.getWebSocketApplication().send(JsonUtil.videoAbstract2Json());
                 }catch (Exception e){
                     e.printStackTrace();
-                    Log.d("tag", "LoadEducationInfoAsync onPostExecute setOnItemClickListener exception");
+                    Log.d("tag", "LoadVideoAsync onPostExecute setOnItemClickListener exception");
                 }
             }
         });
-
 
         // 音频摘要 请求
         ThreadPoolManager.getThreadPoolManager().submitTask(new Runnable() {
@@ -123,7 +133,7 @@ public class VideoAudioActivity extends AppCompatActivity {
                     WebSocketApplication.getWebSocketApplication().send( JsonUtil.audioAbstract2Json());
                 }catch (Exception e){
                     e.printStackTrace();
-                    Log.d("tag", "LoadEducationInfoAsync onPostExecute setOnItemClickListener exception");
+                    Log.d("tag", "LoadAudioAsync onPostExecute setOnItemClickListener exception");
                 }
             }
         });

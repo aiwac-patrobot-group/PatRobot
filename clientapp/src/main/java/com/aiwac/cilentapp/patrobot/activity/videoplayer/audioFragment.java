@@ -54,7 +54,7 @@ public class audioFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
 
-        //获取已经到达 的讲座组消息数据，信息请求在 LectureActivtiy  被发送
+        //获取已经到达 的讲座组消息数据，信息请求在 VideoAudioActivity  被发送
         getLectureAudioAbstractAsync loadCourseGroupAsync = new  getLectureAudioAbstractAsync();
         loadCourseGroupAsync.execute();
 
@@ -93,30 +93,30 @@ public class audioFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                final videoInfo lectureCourseClicked = data.get(i);
+                final videoInfo audioClicked = data.get(i);
 
-                //向后台请求讲座音视频的详细内容
-                ThreadPoolManager.getThreadPoolManager().submitTask(new Runnable() {
-                    @Override
-                    public void run() {
-                        try{
-                            WebSocketApplication.getWebSocketApplication().send(JsonUtil.aVDetail2Json( lectureCourseClicked.getLectureID()));
-                        }catch (Exception e){
-                            e.printStackTrace();
-                            Log.d("tag", "LoadEducationInfoAsync onPostExecute setOnItemClickListener exception");
-                        }
-                    }
-                });
+//                //向后台请求讲座音视频的详细内容
+//                ThreadPoolManager.getThreadPoolManager().submitTask(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        try{
+//                            WebSocketApplication.getWebSocketApplication().send(JsonUtil.aVDetail2Json( lectureCourseClicked.getLectureID()));
+//                        }catch (Exception e){
+//                            e.printStackTrace();
+//                            Log.d("tag", "LoadEducationInfoAsync onPostExecute setOnItemClickListener exception");
+//                        }
+//                    }
+//                });
 
 
                 Intent intent = new Intent(getContext(), audioDetailActivity.class);
 
 
-                Bitmap receive = lectureCourseClicked.getCover();
-                intent.putExtra("bitmap", receive);
+                //Bitmap receive = lectureCourseClicked.getCover();
+                //intent.putExtra("bitmap", receive);
 
-                lectureCourseClicked.setCover( ImageUtil.getBitmap("1111"));
-                intent.putExtra("videoInfo",lectureCourseClicked);
+                //lectureCourseClicked.setCover( ImageUtil.getBitmap("1111"));
+                intent.putExtra("audioInfo",audioClicked);
 
                 startActivity(intent);
 
@@ -181,12 +181,12 @@ public class audioFragment extends Fragment {
             TextView lecture_name = view.findViewById(R.id.lecture_gridview_name);
             ImageView cover_image = view.findViewById(R.id.lecture_gridview_cover_image);
 
-            videoInfo lectureCourse = this.lectureCourses.get(position);  //取出一节讲座的信息
+            videoInfo audioInfo = this.lectureCourses.get(position);  //取出一个音频信息
 
-            lecture_name.setText(lectureCourse.getName());
+            lecture_name.setText(audioInfo.getTitle());
 
             //集成需要加入
-            cover_image.setImageBitmap(lectureCourse.getCover());
+            //cover_image.setImageBitmap(audioInfo.getCover());
 
             return view;
         }

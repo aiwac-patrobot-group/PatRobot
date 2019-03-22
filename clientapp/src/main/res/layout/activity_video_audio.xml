@@ -81,6 +81,25 @@
                 android:gravity="center"/>
 
         </LinearLayout>
+        <LinearLayout
+            android:id="@+id/bottombar_play"
+            android:descendantFocusability= "blocksDescendants"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:layout_margin="5sp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/topbar_play_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="正在播放"
+                android:textSize = "19sp"
+                android:gravity="center"/>
+
+        </LinearLayout>
 
 
     </LinearLayout>

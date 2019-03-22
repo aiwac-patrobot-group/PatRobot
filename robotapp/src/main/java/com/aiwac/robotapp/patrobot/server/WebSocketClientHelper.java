@@ -8,8 +8,10 @@ import android.widget.Toast;
 
 import com.aiwac.robotapp.commonlibrary.common.Constant;
 import com.aiwac.robotapp.commonlibrary.utils.LogUtil;
+import com.aiwac.robotapp.patrobot.R;
 import com.aiwac.robotapp.patrobot.activity.videoplayer.AudioPlayActivity;
 import com.aiwac.robotapp.patrobot.activity.videoplayer.VideoPlayActivity;
+import com.aiwac.robotapp.patrobot.bean.MessageTransform;
 import com.aiwac.robotapp.patrobot.bean.aVDetail;
 import com.aiwac.robotapp.patrobot.utils.JsonUtil;
 
@@ -34,6 +36,7 @@ public class WebSocketClientHelper extends WebSocketClient {
     private Context context;
     protected aVDetail aVDetail;
     protected String link = "noLink";
+    protected MessageTransform messageTransform;
 
 
     public Context getContext() {
@@ -94,56 +97,10 @@ public class WebSocketClientHelper extends WebSocketClient {
 
         try{
             String businessType = JsonUtil.parseBusinessType(json);
-            /*if(businessType.equals(Constant.WEBSOCKET_VOICECHAT_BUSSINESSTYPE_CODE)){  //在线问诊房间号
-                EventBus.getDefault().postSticky(new MessageEvent(json));//eventbus黏性事件
-            }else if(businessType.equals(Constant.WEBSOCKET_REGISTERRESULT_BUSSINESSTYPE_CODE)) { //语音挂号结果
-                MessageEvent messageEvent = new MessageEvent("RegisterResult", json);
-                EventBus.getDefault().postSticky(messageEvent);
-            }*/
-            if ((businessType.equals(Constant.WEBSOCKET_VIDEO_DETAIL_TYPE_CODE))) //视频详细信息到达
-            {
-                aVDetail = JsonUtil.parseAVDetailInfo(json);
-                if (aVDetail != null) {
-                    link = aVDetail.getLink();
-
-                    Log.d("lecture","link: "+link);
-                }
-
-                if ( !link.equals("noLink" ) )
-                {
-                    Vitamio.isInitialized(context);
-                    Toast.makeText(context, "播放视频", Toast.LENGTH_SHORT).show();
-                    Intent intent =new Intent(context, VideoPlayActivity.class);
-                    //link  = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
-                    //测试
-                    Log.d("lecture",link);
-                    intent.putExtra("Link",link);
-                    context.startActivity(intent);
-
-                }
-
-            }else if ((businessType.equals(Constant.WEBSOCKET_AUDIO_DETAIL_TYPE_CODE))) //音频详细信息到达
-            {
-                aVDetail = JsonUtil.parseAVDetailInfo(json);
-                if (aVDetail != null) {
-                    link = aVDetail.getLink();
-
-                    Log.d("lecture","link: "+link);
-                }
-
-                if ( !link.equals("noLink" ) )
-                {
-                    Vitamio.isInitialized(context);
-                    Toast.makeText(context, "播放音频", Toast.LENGTH_SHORT).show();
-                    Intent intent =new Intent(context, AudioPlayActivity.class);
-                    //link  = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
-                    //测试
-                    Log.d("lecture",link);
-                    intent.putExtra("Link",link);
-                    context.startActivity(intent);
-
-                }
-
+            if ((businessType.equals(Constant.WEBSOCKET_MESSAGE_TRANSFORM_CODE))){
+                messageTransform = JsonUtil.parseMessageTransform(json);
+                String messageType[] = messageTransform.getData().split("：");
+                dealMessageTransform(messageType);
             }
 
 
@@ -173,6 +130,44 @@ public class WebSocketClientHelper extends WebSocketClient {
                 }
             });
         }*/
+    }
+    private void dealMessageTransform(String messageType[]){
+        if (messageType[0].equals("PlayVideo")){
+            Intent intent = new Intent(context,VideoPlayActivity.class);
+            intent.putExtra("Link",messageType[1]);
+            context.startActivity(intent);
+        }else if (messageType[0].equals("PlayAudio")){
+            Intent intent = new Intent(context,AudioPlayActivity.class);
+            intent.putExtra("Link",messageType[1]);
+            context.startActivity(intent);
+        }else if (messageType[0].equals("PauseVideo")){
+            if(VideoPlayActivity.mVideoView.isPlaying()){
+                VideoPlayActivity.mVideoView.pause();
+                VideoPlayActivity.mIvPlay.setImageResource(R.drawable.video_play);
+                VideoPlayActivity.mHandler.removeMessages(VideoPlayActivity.UPDATE_PALY_TIME);
+                VideoPlayActivity.mHandler.removeMessages(VideoPlayActivity.HIDE_CONTROL_BAR);
+                VideoPlayActivity.showControlBar();
+            }
+        }else if(messageType[0].equals("ContinueVideo")){
+            VideoPlayActivity.mVideoView.start();
+            VideoPlayActivity.mIvPlay.setImageResource(R.drawable.video_pause);
+            VideoPlayActivity.mHandler.sendEmptyMessage(VideoPlayActivity.UPDATE_PALY_TIME);
+            VideoPlayActivity.mHandler.sendEmptyMessageDelayed(VideoPlayActivity.HIDE_CONTROL_BAR, VideoPlayActivity.HIDE_TIME);
+        }else if (messageType[0].equals("PauseAudio")){
+            if(AudioPlayActivity.mVideoView.isPlaying()){
+                AudioPlayActivity.mVideoView.pause();
+                AudioPlayActivity.mIvPlay.setImageResource(R.drawable.video_play);
+                AudioPlayActivity.mHandler.removeMessages(AudioPlayActivity.UPDATE_PALY_TIME);
+                AudioPlayActivity.mHandler.removeMessages(AudioPlayActivity.HIDE_CONTROL_BAR);
+                AudioPlayActivity.showControlBar();
+            }
+        }else if(messageType[0].equals("ContinueAudio")){
+            AudioPlayActivity.mVideoView.start();
+            AudioPlayActivity.mIvPlay.setImageResource(R.drawable.video_pause);
+            AudioPlayActivity.mHandler.sendEmptyMessage(AudioPlayActivity.UPDATE_PALY_TIME);
+            AudioPlayActivity.mHandler.sendEmptyMessageDelayed(AudioPlayActivity.HIDE_CONTROL_BAR, AudioPlayActivity.HIDE_TIME);
+        }
+
     }
 
 

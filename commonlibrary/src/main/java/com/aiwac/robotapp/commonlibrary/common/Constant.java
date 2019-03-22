@@ -55,9 +55,10 @@ public class Constant {
     public final static String WEBSOCKET_URL = WEBSOCKET_BASE_URL +"/ws?token=";
     public final static String WEBSOCKET_PAT_URL=WEBSOCKET_BASE_URL+"/websocketbusiness";
     public final static String WEBSOCKET_MESSAGE_BUSSINESSTYPE = "businessType";
-    public final static String WEBSOCKET_MESSAGE_CLIENTID = "account";
+    public final static String WEBSOCKET_MESSAGE_CLIENTID = "clientID";
     public final static String WEBSOCKET_MESSAGE_UUID = "uniqueID";
     public final static String WEBSOCKET_MESSAGE_CLIENTTYPE = "clientType";
+    public final static String WEBSOCKET_MESSAGE_TIME = "time";
     public final static String WEBSOCKET_MESSAGE_COMMANDPRIORITY = "commandPriority";
     public final static String WEBSOCKET_MESSAGE_PERSONALITYTYPE = "personalityType";
     public final static String WEBSOCKET_MESSAGE_ERRORDESC = "message";
@@ -72,6 +73,7 @@ public class Constant {
 
     public final static String MESSAGE_ERRORCODE_2000 = "2000";
     public final static String MESSAGE_ERRORCODE_2001 = "2001";
+    public final static String MESSAGE_ERRORCODE_200 = "200";
 
     public final static String WEBSOCKET_TIMER_OPERATIONTYPE = "operationType";
     public final static String WEBSOCKET_TIMER_ATTENTIONTYPE = "attentionType";
@@ -80,7 +82,7 @@ public class Constant {
     public final static String WEBSOCKET_TIMER_ACTIVATEDTIME = "activatedTime";
     public final static String WEBSOCKET_TIMER_ERRORCODE = "status";
     public final static String WEBSOCKET_BUSINESS_DATA = "data";
-    public final static String WEBSOCKET_MESSAGE_TIME = "time";
+
 
 
     public final static String WEBSOCKET_USER_NAME = "clientName";
@@ -326,7 +328,8 @@ public class Constant {
     public final static String WEBSOCKET_MESSAGE_LECTUREID = "lectureID";
     public final static String WEBSOCKET_MESSAGE_HEALTH_TEST_RESULT = "resultID";
     public final static String WEBSOCKET_LECTURE_AUDIO_ABSTRACT_TYPE_CODE = "0009";   //类型查询 讲座音频摘要
-    public final static String WEBSOCKET_LECTURE_VIDEO_ABSTRACT_TYPE_CODE = "0010";   //类型查询 讲座视频摘要
+    public final static String WEBSOCKET_LECTURE_VIDEO_ABSTRACT_TYPE_CODE = "0006";   //类型查询 讲座视频摘要
+    public final static String WEBSOCKET_MESSAGE_TRANSFORM_CODE = "0002";   //  消息转发
     public final static String WEBSOCKET_VIDEO_DETAIL_TYPE_CODE = "0011";   //类型查询 视频 详情
     public final static String WEBSOCKET_AUDIO_DETAIL_TYPE_CODE = "0012";   //类型查询 音频 详情
     public final static String WEBSOCKET_LECTURE_AV_DETAIL_TYPE_CODE = "0013";
@@ -334,6 +337,25 @@ public class Constant {
     public final static String WEBSOCKET_MESSAGE_LECTURE_AV_LINK = "link";
 
 
-    public final static String WEBSOCKET_MESSAGE_DATA  = "data";
+    public final static String WEBSOCKET_MESSAGE_TYPE_Client = "1";//表示手机客户端
+    public final static String WEBSOCKET_MESSAGE_TYPE_Robot = "2";//表示手机客户端
+    public final static String WEBSOCKET_MESSAGE_TYPE_Server = "3";//表示手机客户端
+
+    public final static String WEBSOCKET_MESSAGE_VIDEO_AUDIO_TYPE = "type";//表示音视频类型
+    public final static String WEBSOCKET_MESSAGE_PAGE_NUMBER = "pageNo";//表示音视频页号
+    public final static String WEBSOCKET_MESSAGE_PAGE_SIZE = "pageSize";//表示音视频页大小
+    public final static String WEBSOCKET_FILE_ID = "id";//表示文件id
+    public final static String WEBSOCKET_FILE_TITLE = "title";//表示音视频挑剔
+    public final static String WEBSOCKET_FILE_DESC = "desc";//表示音视频描述
+    public final static String WEBSOCKET_FILE_COVER = "cover";//表示封面链接
+    public final static String WEBSOCKET_FILE_URL = "url";//表示音视频链接
+
+
+    public final static String WEBSOCKET_MESSAGE_TRANSFORM = "data";//表示转发消息
+
+
+
+
+    public final static String WEBSOCKET_MESSAGE_DATA  = "fileList";
 
 }

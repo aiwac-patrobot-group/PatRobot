@@ -8,33 +8,44 @@ import java.io.Serializable;
 // 存放视频 音频等摘要信息
 public class videoInfo implements Serializable {
 
-    protected String lectureID;
-    protected String name;
-    protected String updateTime;
+
+    protected String type;
+    protected String infoID;
+    protected String title;
     protected String description;
-    protected Bitmap cover;
-    protected String duration;
+    protected String cover;
+    protected String link;
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
 
 
-    public String getLectureID() {
-        return lectureID;
+    public String getType() {
+        return type;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public String getInfoID() {
+        return infoID;
     }
     public void setLectureID(String lectureID) {
-        this.lectureID = lectureID;
-    }
-
-    public String getName() {
-        return name;
-    }
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getUpdateTime() {
-        return updateTime;
-    }
-    public void setUpdateTime(String updateTime) {
-        this.updateTime = updateTime;
+        this.infoID = lectureID;
     }
 
     public String getDescription() {
@@ -44,17 +55,11 @@ public class videoInfo implements Serializable {
         this.description = description;
     }
 
-    public Bitmap getCover() {
+    public String getCover() {
         return cover;
     }
-    public void setCover(Bitmap cover) {
+    public void setCover(String cover) {
         this.cover = cover;
     }
 
-    public String getDuration() {
-        return duration;
-    }
-    public void setDuration(String duration) {
-        this.duration = duration;
-    }
 }

@@ -40,6 +40,10 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 
+import io.vov.vitamio.Vitamio;
+
+import static com.aiwac.robotapp.patrobot.PatRobotApplication.getContext;
+
 public class MainActivity extends AppCompatActivity {
     private final static  int PERMISSION_REQUEST_COARSE_LOCATION=1;
     private static final int REQUEST_FINE_LOCATION = 0;
@@ -55,6 +59,8 @@ public class MainActivity extends AppCompatActivity {
         initPermission();
         initView();
         initEvent();
+
+        Vitamio.isInitialized(getContext());
 
     }
 

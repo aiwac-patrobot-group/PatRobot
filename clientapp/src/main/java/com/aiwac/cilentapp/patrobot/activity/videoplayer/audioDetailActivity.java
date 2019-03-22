@@ -1,6 +1,7 @@
 package com.aiwac.cilentapp.patrobot.activity.videoplayer;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBar;
@@ -20,14 +21,16 @@ import com.aiwac.cilentapp.patrobot.R;
 import com.aiwac.cilentapp.patrobot.bean.aVDetail;
 import com.aiwac.cilentapp.patrobot.bean.videoInfo;
 import com.aiwac.cilentapp.patrobot.server.WebSocketApplication;
+import com.aiwac.cilentapp.patrobot.utils.JsonUtil;
 import com.aiwac.robotapp.commonlibrary.common.Constant;
+import com.aiwac.robotapp.commonlibrary.task.ThreadPoolManager;
 
 public class audioDetailActivity extends AppCompatActivity {
 
     protected videoInfo lectureCourseNow;
-    private aVDetail lectureAVDetail;
+    //private aVDetail lectureAVDetail;
     protected ImageView lectureCover;
-    protected TextView lectureName, lectureDuration, lectureUpdateTime, lectureDescription;
+    protected TextView audioTitle, audioDescription;
     protected String link = "noLink";
     private Button backButton, buttonplay_pause;
 
@@ -45,9 +48,9 @@ public class audioDetailActivity extends AppCompatActivity {
             actionbar.hide();
         }
 
-        //获取已经到达 的讲座组消息数据，信息请求在 fragment_lecture_article 被发送
-        getLectureAudioDetailAsync loadCourseGroupAsync = new getLectureAudioDetailAsync();
-        loadCourseGroupAsync.execute();
+//        //获取已经到达 的讲座组消息数据，信息请求在 fragment_lecture_article 被发送
+//        getLectureAudioDetailAsync loadCourseGroupAsync = new getLectureAudioDetailAsync();
+//        loadCourseGroupAsync.execute();
 
         setView();
 
@@ -59,19 +62,19 @@ public class audioDetailActivity extends AppCompatActivity {
         lectureCourseNow = (videoInfo) getIntent().getSerializableExtra("LectureCourse");
 
         lectureCover = (ImageView)findViewById(R.id.lecture_cover);
-        lectureName = (TextView)findViewById(R.id.lecture_name);
-        lectureDuration = (TextView)findViewById(R.id.lecture_duration);
-        lectureUpdateTime = (TextView)findViewById(R.id.lecture_update_time);
-        lectureDescription = (TextView)findViewById(R.id.lecture_description);
+        audioTitle = (TextView)findViewById(R.id.lecture_name);
+        //lectureDuration = (TextView)findViewById(R.id.lecture_duration);
+        //lectureUpdateTime = (TextView)findViewById(R.id.lecture_update_time);
+        audioDescription = (TextView)findViewById(R.id.lecture_description);
 
         //集成需要加入
         //lectureCover.setImageBitmap(lectureCourseNow.getCover());
         Bitmap receive=(Bitmap)(getIntent().getParcelableExtra("bitmap"));
         lectureCover.setImageBitmap(receive);
-        lectureName.setText(lectureCourseNow.getName());
-        lectureDuration.setText(lectureCourseNow.getDuration());
-        lectureUpdateTime.setText(lectureCourseNow.getUpdateTime());
-        lectureDescription.setText(lectureCourseNow.getDescription());
+        audioTitle.setText(lectureCourseNow.getTitle());
+        //lectureDuration.setText(lectureCourseNow.getDuration());
+        //lectureUpdateTime.setText(lectureCourseNow.getUpdateTime());
+        audioDescription.setText(lectureCourseNow.getDescription());
 
         backButton = (Button)findViewById(R.id.backButton) ;
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -102,14 +105,30 @@ public class audioDetailActivity extends AppCompatActivity {
                     }
                     else
                     {
-                        //Intent intent = new Intent(LectureAudioDetailActivity.this, LectureAudioPlayActivity.class);
+
+                        //测试
+//                    link  = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
+                        link =lectureCourseNow.getLink();
+                        ThreadPoolManager.getThreadPoolManager().submitTask(new Runnable() {
+                            @Override
+                            public void run() {
+                                try{
+                                    WebSocketApplication.getWebSocketApplication().send( JsonUtil.messageTransform2Json("PlayAudio："+link));
+                                }catch (Exception e){
+                                    e.printStackTrace();
+                                    Log.d("tag", "LoadEducationInfoAsync onPostExecute setOnItemClickListener exception");
+                                }
+                            }
+                        });
+
+                        Intent intent = new Intent(audioDetailActivity.this, AudioPlayActivity.class);
 
 //                    //测试
 //                    link  = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
 //                    //测试
                         Log.d("lecture test",link);
-                        //intent.putExtra("Link",link);
-                        //startActivity(intent);
+                        intent.putExtra("Link",link);
+                        startActivity(intent);
                     }
 
                     buttonplay_pause.setSelected(false);
@@ -119,77 +138,22 @@ public class audioDetailActivity extends AppCompatActivity {
             }
         });
 
+        backButton = (Button)findViewById(R.id.backButton) ;
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        //lectureCover.setImageBitmap(lectureCourseNow.getCover());
+        //Bitmap receive=(Bitmap)(getIntent().getParcelableExtra("bitmap"));
+        lectureCover.setImageBitmap(receive);
+        audioTitle.setText(lectureCourseNow.getTitle());
+        audioDescription.setText(lectureCourseNow.getDescription());
+        link = lectureCourseNow.getLink();
+
     }
 
-
-
-
-    class getLectureAudioDetailAsync extends AsyncTask<Void, Void, Boolean> {
-
-        private AlertDialog dialog;
-
-        @Override
-        protected void onPreExecute() {
-            AlertDialog.Builder builder = new AlertDialog.Builder(audioDetailActivity.this);
-            View view = View.inflate(audioDetailActivity.this, R.layout.activity_progress, null);
-            builder.setIcon(R.drawable.login_aiwac_log);
-            builder.setTitle(Constant.WEBSOCKET_BUSINESS_DOWNLOAD_LECTURE);
-            builder.setView(view);  //必须使用view加载，如果使用R.layout设置则无法改变bar的进度
-
-            dialog = builder.create();
-            dialog.setCancelable(false);
-
-            dialog.show();
-        }
-
-        // 获取已经到达的讲座视频详细数据
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            try {
-
-
-                for (int i = 0; i < 5; i++) {
-                    Thread.sleep(500);
-                    lectureAVDetail = WebSocketApplication.getWebSocketApplication().getWebSocketHelperAudioDetail();
-
-                    if (lectureAVDetail != null) {
-                        link = lectureAVDetail.getLink();
-                        return true;
-                    }
-                }
-
-
-
-            } catch (Exception e) {
-                Log.d("tag", e.getMessage());
-                e.printStackTrace();
-            }
-
-            return false;
-        }
-
-        @Override
-        protected void onPostExecute(Boolean aBoolean) {
-            dialog.cancel();
-            if (aBoolean) {   //加载讲座内容
-
-            } else { // 失败。显示空白
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(audioDetailActivity.this);
-                builder.setIcon(R.drawable.login_aiwac_log);
-                builder.setTitle("抱歉");
-                builder.setMessage("亲，暂无资源~");
-                builder.setNegativeButton("好的", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        ;
-                    }
-                });
-
-                builder.show();
-
-            }
-        }
-    }
 
 }

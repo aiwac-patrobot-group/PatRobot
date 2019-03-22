@@ -2,7 +2,11 @@ package com.aiwac.cilentapp.patrobot.server;
 
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
+import android.widget.Toast;
 
+import com.aiwac.cilentapp.patrobot.activity.videoplayer.VideoPlayActivity;
 import com.aiwac.cilentapp.patrobot.bean.User;
 import com.aiwac.cilentapp.patrobot.bean.aVDetail;
 import com.aiwac.cilentapp.patrobot.bean.videoAbstractInfo;
@@ -19,6 +23,8 @@ import org.java_websocket.handshake.ServerHandshake;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Map;
+
+import io.vov.vitamio.Vitamio;
 
 
 /**     用于WebSocket客户端通信
@@ -122,12 +128,9 @@ public class WebSocketClientHelper extends WebSocketClient {
 
         try{
             String businessType = JsonUtil.parseBusinessType(json);
-            /*if(businessType.equals(Constant.WEBSOCKET_VOICECHAT_BUSSINESSTYPE_CODE)){  //在线问诊房间号
-                EventBus.getDefault().postSticky(new MessageEvent(json));//eventbus黏性事件
-            }else if(businessType.equals(Constant.WEBSOCKET_REGISTERRESULT_BUSSINESSTYPE_CODE)) { //语音挂号结果
-                MessageEvent messageEvent = new MessageEvent("RegisterResult", json);
-                EventBus.getDefault().postSticky(messageEvent);
-            }*/
+            if(businessType.equals(Constant.WEBSOCKET_LECTURE_VIDEO_ABSTRACT_TYPE_CODE)){
+                videoAllInfo = JsonUtil.parseLectureAVAbstractInfo(json);
+            }
 
 
         }catch (Exception e){

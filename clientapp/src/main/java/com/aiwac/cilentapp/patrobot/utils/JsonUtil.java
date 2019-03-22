@@ -6,9 +6,12 @@ import android.util.Log;
 import com.aiwac.cilentapp.patrobot.bean.BaseEntity;
 import com.aiwac.cilentapp.patrobot.bean.User;
 import com.aiwac.cilentapp.patrobot.bean.aVDetail;
+import com.aiwac.cilentapp.patrobot.bean.videoAbstractInfo;
+import com.aiwac.cilentapp.patrobot.bean.videoInfo;
 import com.aiwac.robotapp.commonlibrary.bean.WifiInfo;
 import com.aiwac.robotapp.commonlibrary.common.Constant;
 import com.aiwac.robotapp.commonlibrary.exception.JsonException;
+import com.aiwac.robotapp.commonlibrary.utils.ImageUtil;
 import com.aiwac.robotapp.commonlibrary.utils.LogUtil;
 
 import org.json.JSONArray;
@@ -304,8 +307,6 @@ public class JsonUtil {
 
     }
 
-
-
     public static String setBussinessType(String bussinessType){
         JSONObject root = new JSONObject();
         try{
@@ -378,11 +379,14 @@ public class JsonUtil {
         JSONObject root = new JSONObject();
         try{
             User user = new User();
-            root.put(Constant.WEBSOCKET_MESSAGE_ACCOUNT, user.clientId);
-            root.put(Constant.WEBSOCKET_MESSAGE_CODE, WEBSOCKET_LECTURE_VIDEO_ABSTRACT_TYPE_CODE);
-            root.put(Constant.WEBSOCKET_MESSAGE_UUID, UUID.randomUUID().toString());
-            root.put(Constant.WEBSOCKET_MESSAGE_CLIENTTYPE, WEBSOCKET_MESSAGE_SYSYTEM_CLIENTTYPE);
+            root.put(Constant.WEBSOCKET_MESSAGE_CLIENTID, user.clientId);
+            root.put(Constant.WEBSOCKET_MESSAGE_BUSSINESSTYPE,Constant.WEBSOCKET_LECTURE_VIDEO_ABSTRACT_TYPE_CODE);
+            root.put(Constant.WEBSOCKET_MESSAGE_CLIENTTYPE,Constant.WEBSOCKET_MESSAGE_TYPE_Client);
             root.put(Constant.WEBSOCKET_MESSAGE_TIME,System.currentTimeMillis() + "");
+            root.put(Constant.WEBSOCKET_MESSAGE_UUID, UUID.randomUUID().toString());
+            root.put(Constant.WEBSOCKET_MESSAGE_VIDEO_AUDIO_TYPE, "video");
+            root.put(Constant.WEBSOCKET_MESSAGE_PAGE_NUMBER, 1);
+            root.put(Constant.WEBSOCKET_MESSAGE_PAGE_SIZE, 10);
             Log.d("make",root.toString());
             LogUtil.d( Constant.JSON_GENERATE_SUCCESS + root.toString());
             return root.toString();
@@ -398,11 +402,14 @@ public class JsonUtil {
         JSONObject root = new JSONObject();
         try{
             User user = new User();
-            root.put(Constant.WEBSOCKET_MESSAGE_ACCOUNT, user.clientId);
-            root.put(Constant.WEBSOCKET_MESSAGE_CODE, Constant.WEBSOCKET_LECTURE_AUDIO_ABSTRACT_TYPE_CODE);
-            root.put(Constant.WEBSOCKET_MESSAGE_UUID, UUID.randomUUID().toString());
-            root.put(Constant.WEBSOCKET_MESSAGE_CLIENTTYPE, Constant.WEBSOCKET_MESSAGE_SYSYTEM_CLIENTTYPE);
+            root.put(Constant.WEBSOCKET_MESSAGE_CLIENTID, user.clientId);
+            root.put(Constant.WEBSOCKET_MESSAGE_BUSSINESSTYPE,WEBSOCKET_LECTURE_VIDEO_ABSTRACT_TYPE_CODE);
+            root.put(Constant.WEBSOCKET_MESSAGE_CLIENTTYPE,Constant.WEBSOCKET_MESSAGE_TYPE_Client);
             root.put(Constant.WEBSOCKET_MESSAGE_TIME,System.currentTimeMillis() + "");
+            root.put(Constant.WEBSOCKET_MESSAGE_UUID, UUID.randomUUID().toString());
+            root.put(Constant.WEBSOCKET_MESSAGE_VIDEO_AUDIO_TYPE, "audio");
+            root.put(Constant.WEBSOCKET_MESSAGE_PAGE_NUMBER, 1);
+            root.put(Constant.WEBSOCKET_MESSAGE_PAGE_SIZE, 10);
             Log.d("make",root.toString());
             LogUtil.d( Constant.JSON_GENERATE_SUCCESS + root.toString());
             return root.toString();
@@ -412,26 +419,32 @@ public class JsonUtil {
             throw new JsonException(Constant.JSON_GENERATE_EXCEPTION, e);
         }
     }
-    //生成查询讲座音视频详情的json
-    public static String aVDetail2Json(String lectureID ){
+
+    // 生成消息转发请求json
+    public static String messageTransform2Json(String transformMessage){
+
         JSONObject root = new JSONObject();
         try{
             User user = new User();
-            root.put(Constant.WEBSOCKET_MESSAGE_ACCOUNT, user.clientId);
-            root.put(Constant.WEBSOCKET_MESSAGE_CODE, Constant.WEBSOCKET_LECTURE_AV_DETAIL_TYPE_CODE);
-            root.put(Constant.WEBSOCKET_MESSAGE_UUID, UUID.randomUUID().toString());
-            root.put(Constant.WEBSOCKET_MESSAGE_CLIENTTYPE, Constant.WEBSOCKET_MESSAGE_SYSYTEM_CLIENTTYPE);
+            root.put(Constant.WEBSOCKET_MESSAGE_CLIENTID, user.clientId);
+            root.put(Constant.WEBSOCKET_MESSAGE_BUSSINESSTYPE,Constant.WEBSOCKET_MESSAGE_TRANSFORM_CODE);
+            root.put(Constant.WEBSOCKET_MESSAGE_CLIENTTYPE,Constant.WEBSOCKET_MESSAGE_TYPE_Client);
             root.put(Constant.WEBSOCKET_MESSAGE_TIME,System.currentTimeMillis() + "");
-            root.put(Constant.WEBSOCKET_MESSAGE_LECTUREID, lectureID);
+            root.put(Constant.WEBSOCKET_MESSAGE_UUID, UUID.randomUUID().toString());
+            root.put(Constant.WEBSOCKET_MESSAGE_TRANSFORM,transformMessage);
             Log.d("make",root.toString());
             LogUtil.d( Constant.JSON_GENERATE_SUCCESS + root.toString());
             return root.toString();
+
         }catch (Exception e){
             e.printStackTrace();
-            LogUtil.d( Constant.JSON_GENERATE_EXCEPTION);
-            throw new JsonException(Constant.JSON_GENERATE_EXCEPTION, e);
+            LogUtil.d(Constant.JSON_GENERATE_EXCEPTION);
+            throw new JsonException(Constant.JSON_GENERATE_EXCEPTION,e);
+
         }
     }
+
+
 
 /*    public static User jsonToPersonInfo(String json){
         User user = new User();
@@ -446,24 +459,40 @@ public class JsonUtil {
         }
     }*/
 
-    //解析json 获取讲座  视音频的详细信息
-    public static aVDetail parseLectureAVDetailInfo(String jsonStr){
+
+
+
+//解析json 获取  视频 音频的摘要信息、
+
+    public static videoAbstractInfo parseLectureAVAbstractInfo(String jsonStr){
         String errorCode = JsonUtil.parseErrorCode(jsonStr);
-        if(errorCode.equals(Constant.MESSAGE_ERRORCODE_2000)) {
+        if(errorCode.equals(Constant.MESSAGE_ERRORCODE_200)) {
 
             try {
                 JSONObject root = new JSONObject(jsonStr);
 
-                aVDetail  lectureAVDetail = new  aVDetail();
+                videoAbstractInfo aVAbstractInfo = new videoAbstractInfo();
 
-                lectureAVDetail.setLectureID(root.getString(Constant.WEBSOCKET_MESSAGE_ACCOUNT));
-                lectureAVDetail.setBusinessType(root.getString(Constant.WEBSOCKET_MESSAGE_CODE));
-                lectureAVDetail.setClientType(root.getString(Constant.WEBSOCKET_MESSAGE_CLIENTTYPE));
-                lectureAVDetail.setUniqueID(root.getString(Constant.WEBSOCKET_MESSAGE_UUID));
+                aVAbstractInfo.setClientId(root.getString(Constant.WEBSOCKET_MESSAGE_CLIENTID));
+                aVAbstractInfo.setBusinessType(root.getString(Constant.WEBSOCKET_MESSAGE_BUSSINESSTYPE));
+                aVAbstractInfo.setClientType(root.getString(Constant.WEBSOCKET_MESSAGE_CLIENTTYPE));
+                aVAbstractInfo.setUuid(root.getString(Constant.WEBSOCKET_MESSAGE_UUID));
+                JSONArray jsonArray = root.getJSONArray(Constant.WEBSOCKET_MESSAGE_DATA);
 
-                lectureAVDetail.setLink(root.getString(Constant.WEBSOCKET_MESSAGE_LECTURE_AV_LINK));
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    videoInfo lectureCourse = new videoInfo();
+                    JSONObject lectureCourseJson = jsonArray.getJSONObject(i);
 
-                return lectureAVDetail;
+                    //  在json里获取某一讲座课程的摘要信息
+                    lectureCourse.setType(lectureCourseJson.getString(Constant.WEBSOCKET_MESSAGE_VIDEO_AUDIO_TYPE));
+                    lectureCourse.setLectureID(lectureCourseJson.getString(Constant.WEBSOCKET_FILE_ID));
+                    lectureCourse.setTitle(lectureCourseJson.getString(Constant.WEBSOCKET_FILE_TITLE));
+                    lectureCourse.setDescription(lectureCourseJson.getString(Constant.WEBSOCKET_FILE_DESC));
+                    lectureCourse.setCover(lectureCourseJson.getString(Constant.WEBSOCKET_FILE_COVER));
+                    lectureCourse.setLink(lectureCourseJson.getString(Constant.WEBSOCKET_FILE_URL));
+                    aVAbstractInfo.getLectureCourseAbstracts().add(lectureCourse);
+                }
+                return aVAbstractInfo;
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -474,8 +503,5 @@ public class JsonUtil {
             return null;
         }
     }
-
-
-
 
 }

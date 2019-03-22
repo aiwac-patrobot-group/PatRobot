@@ -6,8 +6,8 @@ import java.util.List;
 
 public class videoAbstractInfo implements Serializable {
     private String clientId;    //客户端id
-    private String businessType;    //事物类型，如：数据采集，数据查询等
-    private String clientType;  // 客户端类型 1表示机器人  2 表示终端
+    private String businessType;    //事物类型
+    private String clientType;  // 客户端类型 1表示app  2 表示后台  3表示机器人
     private String uuid;    //一次事务
 
     private String errorCode;

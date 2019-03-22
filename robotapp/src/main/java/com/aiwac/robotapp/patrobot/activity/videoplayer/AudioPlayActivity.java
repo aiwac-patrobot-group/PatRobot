@@ -47,24 +47,24 @@ public class AudioPlayActivity extends AppCompatActivity implements View.OnClick
     public final static int SUB_FLAG = -1;
 
     private FrameLayout mVideoLayout;
-    private VideoView mVideoView;
-    private RelativeLayout mControlTop;//顶部控制栏
-    private RelativeLayout mControlBottom;//底部控制栏
+    public static VideoView mVideoView;
+    public static RelativeLayout mControlTop;//顶部控制栏
+    public static RelativeLayout mControlBottom;//底部控制栏
     private ImageView mIvBack;//返回
-    private ImageView mIvPlay;//播放/暂停
-    private TextView mTvTime;//时间显示
-    private TextView mTvTime_end;//总时间显示
-    private SeekBar mSeekBar;//进度条
+    public static ImageView mIvPlay;//播放/暂停
+    public static TextView mTvTime;//时间显示
+    public static TextView mTvTime_end;//总时间显示
+    public static SeekBar mSeekBar;//进度条
     private ImageView mIvIsFullScreen;//是否全屏
     private RelativeLayout mProgressBar;//缓冲提示
-    private LinearLayout mControlCenter;
+    public static LinearLayout mControlCenter;
     private ImageView mIvControl;
     private TextView mTvControl;
     private TextView mTvFast;//快进
 
     private int mScreenWidth = 0;//屏幕宽度
     private boolean mIsFullScreen = false;//是否为全屏
-    private long mVideoTotalTime = 0;//视频总时间
+    public static long mVideoTotalTime = 0;//视频总时间
     private boolean mIntoSeek = false;//是否 快进/快退
     private long mSeek = 0;//快进的进度tv_time
     private boolean mIsFastFinish = false;
@@ -79,7 +79,7 @@ public class AudioPlayActivity extends AppCompatActivity implements View.OnClick
 
     private String mPlayUrl;
 
-    private Handler mHandler = new Handler() {
+    public static Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -111,7 +111,7 @@ public class AudioPlayActivity extends AppCompatActivity implements View.OnClick
      * @param time
      * @return
      */
-    private String sec2time(long time) {
+    public static String sec2time(long time) {
         String hms = StringUtils.generateTime(time);
         return hms;
     }
@@ -562,7 +562,7 @@ public class AudioPlayActivity extends AppCompatActivity implements View.OnClick
     /**
      * 显示控制条
      */
-    private void showControlBar() {
+    public static void showControlBar() {
         mControlBottom.setVisibility(View.VISIBLE);
         mControlTop.setVisibility(View.VISIBLE);
     }
