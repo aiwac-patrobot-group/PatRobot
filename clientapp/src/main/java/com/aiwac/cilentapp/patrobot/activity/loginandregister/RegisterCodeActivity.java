@@ -16,10 +16,7 @@ import android.widget.Toast;
 
 import com.aiwac.cilentapp.patrobot.R;
 import com.aiwac.cilentapp.patrobot.activity.MainActivity;
-import com.aiwac.cilentapp.patrobot.bean.User;
 import com.aiwac.cilentapp.patrobot.database.UserData;
-import com.aiwac.cilentapp.patrobot.database.UserSqliteHelper;
-import com.aiwac.cilentapp.patrobot.service.WebSocketService;
 import com.aiwac.cilentapp.patrobot.utils.HttpUtil;
 import com.aiwac.cilentapp.patrobot.utils.JsonUtil;
 import com.aiwac.robotapp.commonlibrary.common.Constant;
@@ -53,11 +50,11 @@ public class RegisterCodeActivity extends AppCompatActivity {
 
     private void initView(){
 
-        numberEdit = (AutoCompleteTextView) findViewById(R.id.register_number_edit);
-        checkcodeEidt = (EditText) findViewById(R.id.register_checkcode_edit);
+        numberEdit = (AutoCompleteTextView) findViewById(R.id.change_password_number_edit);
+        checkcodeEidt = (EditText) findViewById(R.id.change_password_checkcode_edit);
         checkcodeBtn = (Button) findViewById(R.id.register_check_code_button);
-        registerBtn = (Button) findViewById(R.id.register_button);
-        etPassword=  findViewById(R.id.register_password_edit);
+        registerBtn = (Button) findViewById(R.id.change_password_button);
+        etPassword=  findViewById(R.id.change_password_edit);
 
         toLoginTextView = findViewById(R.id.btn_to_login);
         toLoginTextView.setOnClickListener(new View.OnClickListener() {
@@ -139,6 +136,7 @@ public class RegisterCodeActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         String checkcode = checkcodeEidt.getText().toString().trim();
+                        String password = etPassword.getText().toString().trim();
                         LogUtil.d(checkcode + " : " + phoneNumber);
                         Message message = new Message();
                         if(phoneNumber != null && checkcode != null){
@@ -146,7 +144,7 @@ public class RegisterCodeActivity extends AppCompatActivity {
                             try {
                                 root.put(Constant.USER_REGISTER_NUMBER, phoneNumber);
                                 root.put(Constant.USER_REGISTER_CHECKCODE, checkcode);
-                                root.put(Constant.USER_DATA_FIELD_PASSWORD,etPassword.getText());
+                                root.put(Constant.USER_DATA_FIELD_PASSWORD,password);
                                 LogUtil.d(Constant.JSON_GENERATE_SUCCESS + root.toString());
                                 String resultJson = HttpUtil.requestPostJson(Constant.HTTP_USER_REGISTER_RUL, root.toString());
                                 LogUtil.d("resultJson : " + resultJson);
@@ -163,18 +161,27 @@ public class RegisterCodeActivity extends AppCompatActivity {
                                         String logResultJson = HttpUtil.requestPostJson(Constant.HTTP_USER_LOGIN_BY_PASSWORD_URL, logroot.toString());
                                         if(JsonUtil.parseErrorCode(logResultJson).equals(Constant.RETURN_JSON_ERRORCODE_VALUE_SUCCEED)){
                                             String token =JsonUtil.parseToken(logResultJson);
+                                            String clientId=JsonUtil.parseClientID(logResultJson);
+
+
                                             SharedPreferences.Editor editor = getSharedPreferences(Constant.DB_USER_TABLENAME, MODE_PRIVATE).edit();
+                                            editor.putString(Constant.WEBSOCKET_MESSAGE_CLIENTID,clientId);
                                             editor.putString(Constant.USER_REGISTER_NUMBER,phoneNumber);
                                             editor.putString(Constant.USER_DATA_FIELD_TOKEN, token);
+                                            editor.putString(Constant.USER_DATA_FIELD_PASSWORD,password);
                                             editor.putLong(Constant.USER_DATA_FIELD_TOKENTIME, System.currentTimeMillis());
                                             editor.apply();
+
+                                            userData.setClientID(clientId);
+                                            userData.setPassword(password);
+
                                             message.what = Constant.USER_CHECKCODE_SUCCESS;
                                             LogUtil.d("注册成功");
                                         }
-
-
                                     }else{
                                         message.what = Constant.USER_CHECKCODE_ERROR_EXCEPTION;
+                                        String errorDesc = JsonUtil.parseErrorDesc(resultJson);
+                                        /*Toast.makeText(RegisterCodeActivity.this, errorDesc, Toast.LENGTH_LONG).show();*/
                                         LogUtil.d("注册错误 : "+resultJson);
                                     }
 
@@ -232,9 +239,10 @@ public class RegisterCodeActivity extends AppCompatActivity {
                     break;
                 case Constant.USER_CHECKCODE_ERROR_EXCEPTION:
                     //Toast.makeText(RegisterCodeActivity.this, Constant.USER_CHECKCODE_ERROR_EXCEPTION_MESSAGE, Toast.LENGTH_LONG).show();
-                    Toast.makeText(RegisterCodeActivity.this, "注册失败，", Toast.LENGTH_LONG).show();
+                    Toast.makeText(RegisterCodeActivity.this, "注册失败", Toast.LENGTH_LONG).show();
                     break;
                 case Constant.USER_CHECKCODE_SUCCESS:
+                    Toast.makeText(RegisterCodeActivity.this, "注册成功", Toast.LENGTH_LONG).show();
                     //直接跳转到主函数
                     startActivity(new Intent(RegisterCodeActivity.this, MainActivity.class));
 

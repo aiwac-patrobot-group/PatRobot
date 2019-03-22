@@ -11,6 +11,7 @@ import com.aiwac.cilentapp.patrobot.bean.User;
 import com.aiwac.cilentapp.patrobot.bean.aVDetail;
 import com.aiwac.cilentapp.patrobot.bean.videoAbstractInfo;
 import com.aiwac.cilentapp.patrobot.utils.JsonUtil;
+import com.aiwac.robotapp.commonlibrary.bean.MessageEvent;
 import com.aiwac.robotapp.commonlibrary.common.Constant;
 import com.aiwac.robotapp.commonlibrary.utils.LogUtil;
 
@@ -126,17 +127,26 @@ public class WebSocketClientHelper extends WebSocketClient {
 
        LogUtil.printJson( Constant.WEBSOCKET_MESSAGE_FROM_SERVER ,json,"##");
 
-        try{
+        try {
+
             String businessType = JsonUtil.parseBusinessType(json);
-            if(businessType.equals(Constant.WEBSOCKET_LECTURE_VIDEO_ABSTRACT_TYPE_CODE)){
+
+            if (businessType.equals(Constant.WEBSOCKET_LECTURE_VIDEO_ABSTRACT_TYPE_CODE)) {
                 videoAllInfo = JsonUtil.parseLectureAVAbstractInfo(json);
+            } else if (businessType.equals(Constant.WEBSOCKET_BUSSINESS_MACADDRESS_CODE)) {  //绑定机器人mac地址
+                if (JsonUtil.parseErrorCode(json).equals(Constant.RETURN_JSON_ERRORCODE_VALUE_SUCCEED)) {
+                    //发送消息广播
+                    EventBus.getDefault().postSticky(new MessageEvent(Constant.WEBSOCKET_BUSSINESS_MACADDRESS_SUCCEEDED, json));
+                } else {
+                    //mac绑定失败
+                    EventBus.getDefault().postSticky(new MessageEvent(Constant.WEBSOCKET_BUSSINESS_MACADDRESS_FAILED, json));
+                }
+
+
             }
-
-
         }catch (Exception e){
             e.printStackTrace();
             LogUtil.d( "onMessage : " + e.getMessage());
-
         }
 
     }

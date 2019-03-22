@@ -167,12 +167,17 @@ public class WebSocketApplication {
                         //检测token有效期，无效则更新
                         SharedPreferences pref = context.getSharedPreferences(Constant.DB_USER_TABLENAME, MODE_PRIVATE);
                         Long validTime = pref.getLong(Constant.USER_DATA_FIELD_TOKENTIME, 0);
-                        if (System.currentTimeMillis() - validTime > 23 * 60 * 60 * 1000) {  //有效期为1天
+                        if (System.currentTimeMillis() - validTime > 11 * 60 * 60 * 1000) {  //有效期为12h
+
+                            String phoneNumber=pref.getString(Constant.USER_REGISTER_NUMBER,"");
+                            String password=pref.getString(Constant.USER_DATA_FIELD_PASSWORD,"");
                             JSONObject root = new JSONObject();
-                            root.put(Constant.USER_REGISTER_NUMBER, UserData.getUserData().getNumber());
+                            root.put(Constant.USER_REGISTER_NUMBER, phoneNumber);
+                            root.put(Constant.USER_DATA_FIELD_PASSWORD, password);
                             LogUtil.d(Constant.JSON_GENERATE_SUCCESS + root.toString());
-                            String resultJson = HttpUtil.requestTokenString(Constant.HTTP_GET_TOKEN_STRING_URL, root.toString());
+                            String resultJson = HttpUtil.requestPostJson(Constant.HTTP_USER_LOGIN_BY_PASSWORD_URL, root.toString());
                             LogUtil.d("resultJson : " + resultJson);
+
                             if (resultJson != null) {
                                 String errorCode = JsonUtil.parseErrorCode(resultJson);
                                 if (errorCode.equals(Constant.MESSAGE_ERRORCODE_2000)) {

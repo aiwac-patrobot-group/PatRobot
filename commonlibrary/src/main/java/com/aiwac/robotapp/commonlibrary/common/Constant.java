@@ -297,6 +297,8 @@ public class Constant {
     //http登录注册相关
     public final static String HTTP_CHECKCODE_URL = HTTP_BASE_URL + "/account/get/identifycode";
     public final static String HTTP_USER_REGISTER_RUL = HTTP_BASE_URL + "/account/register";
+    public final static String HTTP_USER_CHANGE_PASSWORD_RUL = HTTP_BASE_URL + "/account/modify/password/withidentifycode";
+
     public final static String HTTP_USER_LOGIN_IDENTIFYCODE_BASEURL = HTTP_BASE_URL + "/account/login/withidentifycode";
     public final static String HTTP_USER_LOGIN_BY_PASSWORD_URL=HTTP_BASE_URL + "/account/login/withpassword";
 
@@ -312,13 +314,17 @@ public class Constant {
     public final static String USER_DATA_FIELD_REGISTER = "register";
     public final static String USER_DATA_FIELD_PASSWORD = "password";
     public final static String USER_DATA_FIELD_NUMBER = "number";
-    public final static String USER_DATA_FIELD_TOKEN = "token";
+    public final static String USER_DATA_FIELD_TOKEN = "token";//jwt token
+    public final static String USER_DATA_FIELD_ID="id";//帐号在数据库中的id
     public final static String USER_DATA_FIELD_TOKENTIME = "time";//获取token的时间
     public final static String USER_DATA_PERSISTENCE = "利用SharedPreferences持久化用户数据";
     public final static String USER_DATA_PERSISTENCE_CLEAN = "清空SharedPreferences用户数据";
     public final static String USER_DATA_ISCONNECTWIFI = "isConnectWifi";
 
     public final static String ROBOT_MAC_ADDRESS="macAddress";//保存机器人mad地址
+    public final static String WEBSOCKET_BUSSINESS_MACADDRESS_CODE="0001";
+    public final static String WEBSOCKET_BUSSINESS_MACADDRESS_SUCCEEDED="bindMacSucceeded";
+    public final static String WEBSOCKET_BUSSINESS_MACADDRESS_FAILED="bindMacfailed";
 
 
     //视频音频相关

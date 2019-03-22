@@ -1,6 +1,8 @@
 package com.aiwac.cilentapp.patrobot.utils;
 
 
+
+import com.aiwac.cilentapp.patrobot.bean.BaseEntity;
 import android.util.Log;
 
 import com.aiwac.cilentapp.patrobot.bean.BaseEntity;
@@ -15,10 +17,12 @@ import com.aiwac.robotapp.commonlibrary.utils.ImageUtil;
 import com.aiwac.robotapp.commonlibrary.utils.LogUtil;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.UUID;
 
+import static android.content.Context.MODE_PRIVATE;
 
 import static com.aiwac.robotapp.commonlibrary.common.Constant.WEBSOCKET_LECTURE_VIDEO_ABSTRACT_TYPE_CODE;
 import static com.aiwac.robotapp.commonlibrary.common.Constant.WEBSOCKET_MESSAGE_SYSYTEM_CLIENTTYPE;
@@ -29,8 +33,6 @@ import static com.aiwac.robotapp.commonlibrary.common.Constant.WEBSOCKET_MESSAGE
  */
 
 public class JsonUtil {
-
-
     /*     用户 Json 字符串格式
         String jsonStr =
                 {
@@ -39,20 +41,6 @@ public class JsonUtil {
                     [{"id":1,"number":"15911112222","name":"zhangsan"}]
                 }
      */
-
-    //解析json获取操作 ，如插入，更新等
-    public static String parseOpt(String jsonStr){
-        try{
-            JSONObject root = new JSONObject(jsonStr);
-            String opt = root.getString(Constant.JSON_OPT);
-            LogUtil.d(Constant.JSON_PARSE_SUCCESS + opt);
-            return opt;
-        }catch (Exception e){
-            e.printStackTrace();
-            LogUtil.d(Constant.JSON_PARSE_EXCEPTION);
-            throw new JsonException(Constant.JSON_PARSE_EXCEPTION, e);
-        }
-    }
 
     //解析businessType 获取事物类型
     public static String parseBusinessType(String jsonStr){
@@ -81,7 +69,7 @@ public class JsonUtil {
     }
 
 
-    //解析errorCode 获取消息是否成功传递到后台
+    //解析errorCode
     public static String parseToken(String jsonStr){
         try{
             JSONObject root = new JSONObject(jsonStr);
@@ -93,13 +81,24 @@ public class JsonUtil {
             throw new JsonException(Constant.JSON_PARSE_EXCEPTION, e);
         }
     }
-
+    //解析ClientID  :帐号在数据库中的id
+    public static String parseClientID(String jsonStr){
+        try{
+            JSONObject root = new JSONObject(jsonStr);
+            String result = root.getString(Constant.USER_DATA_FIELD_ID);
+            return result;
+        }catch (Exception e){
+            e.printStackTrace();
+            LogUtil.d(Constant.JSON_PARSE_EXCEPTION);
+            throw new JsonException(Constant.JSON_PARSE_EXCEPTION, e);
+        }
+    }
 
     //解析ErrorDesc
     public static String parseErrorDesc(String jsonStr){
         try{
             JSONObject root = new JSONObject(jsonStr);
-            String result = root.getString(Constant.WEBSOCKET_MESSAGE_ERRORDESC);
+            String result = root.getString(Constant.RETURN_JSON_ERRORDESC);
             return result;
         }catch (Exception e){
             e.printStackTrace();
@@ -107,20 +106,6 @@ public class JsonUtil {
             throw new JsonException(Constant.JSON_PARSE_EXCEPTION, e);
         }
     }
-
-    //解析用户登录密码
-    public static String parsePWD(String jsonStr){
-        try{
-            JSONObject root = new JSONObject(jsonStr);
-            String result = root.getString(Constant.USER_DATA_FIELD_PASSWORD);
-            return result;
-        }catch (Exception e){
-            e.printStackTrace();
-            LogUtil.d(Constant.JSON_PARSE_EXCEPTION);
-            throw new JsonException(Constant.JSON_PARSE_EXCEPTION, e);
-        }
-    }
-
 
     //解析uuid 获取定时任务消息的UUID属性
     public static String parseTimerUUID(String jsonStr){
@@ -128,19 +113,6 @@ public class JsonUtil {
             JSONObject root = new JSONObject(jsonStr);
             String result = root.getString(Constant.WEBSOCKET_MESSAGE_UUID);
             return result;
-        }catch (Exception e){
-            e.printStackTrace();
-            LogUtil.d(Constant.JSON_PARSE_EXCEPTION);
-            throw new JsonException(Constant.JSON_PARSE_EXCEPTION, e);
-        }
-    }
-
-    //解析json result等
-    public static boolean parseResult(String jsonStr){
-        try{
-            JSONObject root = new JSONObject(jsonStr);
-            String errorCode = root.getString(Constant.WEBSOCKET_TIMER_ERRORCODE);
-            return Constant.MESSAGE_ERRORCODE_2000.equals(errorCode);
         }catch (Exception e){
             e.printStackTrace();
             LogUtil.d(Constant.JSON_PARSE_EXCEPTION);
@@ -166,7 +138,7 @@ public class JsonUtil {
     }
 
     //将BaseEntity对象转换成json字符串
-    public static String baseEntity2Json(BaseEntity baseEntity){
+    public static String baseEntity2JsonString(BaseEntity baseEntity){
         JSONObject root = new JSONObject();
         try{
             root.put(Constant.WEBSOCKET_MESSAGE_CLIENTID, baseEntity.getClientId());
@@ -183,8 +155,8 @@ public class JsonUtil {
         }
     }
 
-    //通过id查询挂号信息
-    public static String queryRegistgerInfoById(BaseEntity baseEntity, String id){
+    //将BaseEntity对象转换成json
+    public static JSONObject baseEntity2Json(BaseEntity baseEntity){
         JSONObject root = new JSONObject();
         try{
             root.put(Constant.WEBSOCKET_MESSAGE_CLIENTID, baseEntity.getClientId());
@@ -192,9 +164,8 @@ public class JsonUtil {
             root.put(Constant.WEBSOCKET_MESSAGE_UUID, UUID.randomUUID().toString());
             root.put(Constant.WEBSOCKET_MESSAGE_CLIENTTYPE, baseEntity.getClientType());
             root.put(Constant.WEBSOCKET_MESSAGE_TIME, System.currentTimeMillis()+"");
-            root.put(Constant.WEBSOCKET_REGISTER_ID, id);
-            LogUtil.d(Constant.JSON_GENERATE_SUCCESS + root.toString());
-            return root.toString();
+            //LogUtil.d(Constant.JSON_GENERATE_SUCCESS + root.toString());
+            return root;
         }catch (Exception e){
             e.printStackTrace();
             LogUtil.d(Constant.JSON_GENERATE_EXCEPTION);
@@ -202,64 +173,18 @@ public class JsonUtil {
         }
     }
 
-
-    //解析json获取用户注册是否成功
-    public static boolean isUserRegisterSucess(String jsonStr){
-        try{
-            JSONObject root = new JSONObject(jsonStr);
-            String isSuccess = root.getString(Constant.USER_REGISTER_ISSUCCESS);
-            LogUtil.d( Constant.JSON_PARSE_SUCCESS + isSuccess);
-            return isSuccess.equals(Constant.USER_REGISTER_SUCCESS);
-        }catch (Exception e){
-            e.printStackTrace();
-            LogUtil.d( Constant.JSON_PARSE_EXCEPTION);
-            throw new JsonException(Constant.JSON_PARSE_EXCEPTION, e);
-        }
-    }
-
-    //解析json获取验证码
-    public static String parseCheckcode(String jsonStr){
-        try{
-            JSONObject root = new JSONObject(jsonStr);
-            JSONArray jsonArray = root.getJSONArray(Constant.JSON_OBJECT_USER_NAME);
-            JSONObject jsonObject = jsonArray.getJSONObject(0);
-            String checkcode = jsonObject.getString(Constant.USER_REGISTER_CHECKCODE);
-            LogUtil.d( Constant.JSON_PARSE_SUCCESS + checkcode);
-
-            return checkcode;
-        }catch (Exception e){
-            e.printStackTrace();
-            LogUtil.d( Constant.JSON_PARSE_EXCEPTION);
-            throw new JsonException(Constant.JSON_PARSE_EXCEPTION, e);
-        }
-    }
-
-    //解析json 判断用户是否注册
-    public static boolean isUserRegisted(String jsonStr){
-        try{
-            JSONObject root = new JSONObject(jsonStr);
-            JSONArray jsonArray = root.getJSONArray(Constant.JSON_OBJECT_USER_NAME);
-            JSONObject jsonObject = jsonArray.getJSONObject(0);
-            String isNumberExist = jsonObject.getString(Constant.USER_REGISTER_PHONENUMBER_EXIST);
-            LogUtil.d( Constant.JSON_PARSE_SUCCESS + isNumberExist);
-
-            return isNumberExist.equals(Constant.USER_REGISTER_PHONENUMBER_EXIST_YES);
-        }catch (Exception e){
-            e.printStackTrace();
-            LogUtil.d( Constant.JSON_PARSE_EXCEPTION);
-            throw new JsonException(Constant.JSON_PARSE_EXCEPTION, e);
-        }
-    }
-
-    //解析json获取用户
-    public static User parseJson(String jsonStr) {
-
-        //String jsonStr = "{"id":1,"number":"15911112222","name":"zhangsan"}";
+    /**
+     * 发送mac地址给服务器进行绑定
+     * businessType=0001
+     * @param macAddress
+     * @return 发送的json串
+     */
+    public static String sendMacAddress(String macAddress){
         try {
-            User user = new User();
-            //将json字符串jsonData装入JSON数组，即JSONArray
-            //jsonData可以是从文件中读取，也可以从服务器端获得
-            JSONObject root = new JSONObject(jsonStr);
+            BaseEntity baseEntity = new BaseEntity();
+            baseEntity.setBusinessType(Constant.WEBSOCKET_BUSSINESS_MACADDRESS_CODE);
+            JSONObject root=baseEntity2Json(baseEntity);
+
 
             JSONArray jsonArray = root.getJSONArray(Constant.JSON_OBJECT_USER_NAME);
             // for (int i = 0; i< jsonArray.length(); i++) {
@@ -328,51 +253,18 @@ public class JsonUtil {
             root.put("ssid", wifiInfo.getSsid());
             root.put("password",wifiInfo.getPassword());
             LogUtil.d( Constant.JSON_GENERATE_SUCCESS + root.toString());
+
+            root.put(Constant.ROBOT_MAC_ADDRESS,macAddress);
+            LogUtil.d(Constant.JSON_GENERATE_SUCCESS+root.toString());
+
             return root.toString();
-        }catch (Exception e){
-            e.printStackTrace();
-            LogUtil.d( Constant.JSON_GENERATE_EXCEPTION);
-            throw new JsonException(Constant.JSON_GENERATE_EXCEPTION, e);
-        }
-    }
-
-
-    public static String userToJson(User user){
-        JSONObject root = new JSONObject();
-        try{
-            root.put(Constant.WEBSOCKET_MESSAGE_CLIENTID, user.getClientId());
-            root.put(Constant.WEBSOCKET_MESSAGE_BUSSINESSTYPE, user.getBusinessType());
-            root.put(Constant.WEBSOCKET_MESSAGE_UUID, user.getUuid());
-            root.put(Constant.WEBSOCKET_MESSAGE_CLIENTTYPE, user.getClientType());
-            root.put(Constant.WEBSOCKET_MESSAGE_TIME, System.currentTimeMillis()+"");
-
-            LogUtil.d(Constant.JSON_GENERATE_SUCCESS + root.toString());
-            return root.toString();
-        }catch (Exception e){
+        } catch (JSONException e) {
             e.printStackTrace();
             LogUtil.d(Constant.JSON_GENERATE_EXCEPTION);
             throw new JsonException(Constant.JSON_GENERATE_EXCEPTION, e);
         }
     }
 
-
-    public static String queryPersonInfo(BaseEntity baseEntity){
-        JSONObject root = new JSONObject();
-        try{
-            root.put(Constant.WEBSOCKET_MESSAGE_CLIENTID, baseEntity.getClientId());
-            root.put(Constant.WEBSOCKET_MESSAGE_BUSSINESSTYPE, baseEntity.getBusinessType());
-            root.put(Constant.WEBSOCKET_MESSAGE_UUID, UUID.randomUUID());
-            root.put(Constant.WEBSOCKET_MESSAGE_CLIENTTYPE, baseEntity.getClientType());
-            root.put(Constant.WEBSOCKET_MESSAGE_TIME, System.currentTimeMillis()+"");
-
-            LogUtil.d(Constant.JSON_GENERATE_SUCCESS + root.toString());
-            return root.toString();
-        }catch (Exception e){
-            e.printStackTrace();
-            LogUtil.d(Constant.JSON_GENERATE_EXCEPTION);
-            throw new JsonException(Constant.JSON_GENERATE_EXCEPTION, e);
-        }
-    }
 
     //生成查询讲座视频摘要的json
     public static String videoAbstract2Json(){

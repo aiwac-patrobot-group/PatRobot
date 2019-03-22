@@ -1,4 +1,4 @@
-package com.aiwac.cilentapp.patrobot.activity.loginandregister;
+package com.aiwac.cilentapp.patrobot.activity.setting;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,11 +11,10 @@ import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aiwac.cilentapp.patrobot.R;
-import com.aiwac.cilentapp.patrobot.activity.MainActivity;
+import com.aiwac.cilentapp.patrobot.activity.loginandregister.RegisterCodeActivity;
 import com.aiwac.cilentapp.patrobot.database.UserData;
 import com.aiwac.cilentapp.patrobot.utils.HttpUtil;
 import com.aiwac.cilentapp.patrobot.utils.JsonUtil;
@@ -29,54 +28,40 @@ import com.aiwac.robotapp.commonlibrary.utils.StringUtil;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class LoginActivity extends AppCompatActivity {
-
+public class ChangePasswordActivity extends AppCompatActivity {
     private Button checkcodeBtn;
-    private Button loginBtn;
+    private Button changePasswordBtn;
 
     private AutoCompleteTextView numberEdit;
     private EditText checkcodeEidt;
-    private TextView textToRegister;
     private String phoneNumber;
-    private TextView tvToLoginByPassword;
+    private EditText  etPassword;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_change_password);
+
         initView();
         initEvent();
-
-
-
-
     }
+
     private void initView(){
+
         numberEdit = (AutoCompleteTextView) findViewById(R.id.change_password_number_edit);
         checkcodeEidt = (EditText) findViewById(R.id.change_password_checkcode_edit);
         checkcodeBtn = (Button) findViewById(R.id.register_check_code_button);
-        loginBtn = (Button) findViewById(R.id.login_bycode_button);
+        changePasswordBtn = (Button) findViewById(R.id.change_password_button);
+        etPassword=  findViewById(R.id.change_password_edit);
 
-        textToRegister = findViewById(R.id.btn_to_register);
-        textToRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent toRegisterIntent=new Intent(LoginActivity.this,RegisterCodeActivity.class);
-                //ActivityUtil.skipActivity(LoginActivity.this,RegisterCodeActivity.class,true);
-                startActivity(toRegisterIntent);
-                finish();
-            }
-        });
-        tvToLoginByPassword = findViewById(R.id.tv_password_login);
-        tvToLoginByPassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(LoginActivity.this,LoginByPasswordActivity.class));
-                finish();
-            }
-        });
-
+        SharedPreferences s = getSharedPreferences(Constant.DB_USER_TABLENAME,MODE_PRIVATE);
+        String phoneNumber = s.getString(Constant.USER_REGISTER_NUMBER,"");
+        numberEdit.setText(phoneNumber);
+        numberEdit.setEnabled(false);
     }
+
+
     private void initEvent(){
+
         checkcodeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,7 +81,7 @@ public class LoginActivity extends AppCompatActivity {
                                 LogUtil.d(Constant.JSON_GENERATE_SUCCESS + root.toString());
                                 String resultJson = HttpUtil.requestPostJson(Constant.HTTP_CHECKCODE_URL, root.toString());
                                 LogUtil.d("resultJson : " + resultJson);
-                                String resultCode=JsonUtil.parseErrorCode(resultJson);
+                                String resultCode= JsonUtil.parseErrorCode(resultJson);
                                 if((resultCode != null) && resultCode.equals(Constant.RETURN_JSON_ERRORCODE_VALUE_SUCCEED)) {
                                     message.what = Constant.USER_GET_CHECKCODE;
                                 }else{
@@ -126,7 +111,7 @@ public class LoginActivity extends AppCompatActivity {
                 }else {
                     LogUtil.d(Constant.USER_INPUT_NUMBER_ERROR);
                     numberEdit.setError(Constant.USER_INPUT_NUMBER_ERROR);
-                    Toast.makeText(LoginActivity.this, Constant.USER_INPUT_NUMBER_ERROR, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ChangePasswordActivity.this, Constant.USER_INPUT_NUMBER_ERROR, Toast.LENGTH_SHORT).show();
                     numberEdit.setFocusable(true);
                     numberEdit.setFocusableInTouchMode(true);
                     numberEdit.requestFocus();
@@ -134,14 +119,15 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        //用户登录
-        loginBtn.setOnClickListener(new View.OnClickListener() {
+        //用户注册
+        changePasswordBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ThreadPoolManager.getThreadPoolManager().submitTask(new Runnable() {
                     @Override
                     public void run() {
                         String checkcode = checkcodeEidt.getText().toString().trim();
+                        String password = etPassword.getText().toString().trim();
                         LogUtil.d(checkcode + " : " + phoneNumber);
                         Message message = new Message();
                         if(phoneNumber != null && checkcode != null){
@@ -149,34 +135,46 @@ public class LoginActivity extends AppCompatActivity {
                             try {
                                 root.put(Constant.USER_REGISTER_NUMBER, phoneNumber);
                                 root.put(Constant.USER_REGISTER_CHECKCODE, checkcode);
+                                root.put(Constant.USER_DATA_FIELD_PASSWORD,password);
                                 LogUtil.d(Constant.JSON_GENERATE_SUCCESS + root.toString());
-                                String resultJson = HttpUtil.requestPostJson(Constant.HTTP_USER_LOGIN_IDENTIFYCODE_BASEURL, root.toString());
+                                String resultJson = HttpUtil.requestPostJson(Constant.HTTP_USER_CHANGE_PASSWORD_RUL, root.toString());
                                 LogUtil.d("resultJson : " + resultJson);
                                 if(resultJson != null) {
                                     String errorCode = JsonUtil.parseErrorCode(resultJson);
                                     if(errorCode.equals(Constant.RETURN_JSON_ERRORCODE_VALUE_SUCCEED)){
-                                        //登录成功
-                                        String token =JsonUtil.parseToken(resultJson);
-                                        String clientId=JsonUtil.parseClientID(resultJson);
-
-                                        SharedPreferences.Editor editor = getSharedPreferences(Constant.DB_USER_TABLENAME, MODE_PRIVATE).edit();
-                                        editor.putString(Constant.WEBSOCKET_MESSAGE_CLIENTID,clientId);
-                                        editor.putString(Constant.USER_DATA_FIELD_TOKEN, token);
-                                        editor.putString(Constant.USER_REGISTER_NUMBER,phoneNumber);
-                                        editor.putLong(Constant.USER_DATA_FIELD_TOKENTIME, System.currentTimeMillis());
-                                        editor.apply();
-
+                                        //修改成功，保存手机号
                                         UserData userData = UserData.getUserData();
                                         userData.setNumber(phoneNumber);
-                                        userData.setClientID(clientId);
+                                        // 直接登录
+                                        JSONObject logroot = new JSONObject();
+                                        logroot.put(Constant.USER_REGISTER_NUMBER, phoneNumber);
+                                        logroot.put(Constant.USER_DATA_FIELD_PASSWORD,etPassword.getText());
+                                        LogUtil.d("登录json："+Constant.JSON_GENERATE_SUCCESS + root.toString());
+                                        String logResultJson = HttpUtil.requestPostJson(Constant.HTTP_USER_LOGIN_BY_PASSWORD_URL, logroot.toString());
+                                        if(JsonUtil.parseErrorCode(logResultJson).equals(Constant.RETURN_JSON_ERRORCODE_VALUE_SUCCEED)){
+                                            String token =JsonUtil.parseToken(logResultJson);
+                                            String clientId=JsonUtil.parseClientID(logResultJson);
 
-                                        message.what = Constant.USER_CHECKCODE_SUCCESS;
-                                        LogUtil.d(Constant.USER_LOGIN_SUCCEED);
 
+                                            SharedPreferences.Editor editor = getSharedPreferences(Constant.DB_USER_TABLENAME, MODE_PRIVATE).edit();
+                                            editor.putString(Constant.WEBSOCKET_MESSAGE_CLIENTID,clientId);
+                                            editor.putString(Constant.USER_REGISTER_NUMBER,phoneNumber);
+                                            editor.putString(Constant.USER_DATA_FIELD_TOKEN, token);
+                                            editor.putString(Constant.USER_DATA_FIELD_PASSWORD,password);
+                                            editor.putLong(Constant.USER_DATA_FIELD_TOKENTIME, System.currentTimeMillis());
+                                            editor.apply();
 
+                                            userData.setClientID(clientId);
+                                            userData.setPassword(password);
+
+                                            message.what = Constant.USER_CHECKCODE_SUCCESS;
+                                            LogUtil.d("修改成功");
+                                        }
                                     }else{
                                         message.what = Constant.USER_CHECKCODE_ERROR_EXCEPTION;
-                                        LogUtil.d(Constant.USER_CHECKCODE_ERROR_EXCEPTION_MESSAGE);
+                                        LogUtil.d("修改失败 : "+resultJson);
+                                        String errorDesc = JsonUtil.parseErrorDesc(resultJson);
+                                        /*Toast.makeText(ChangePasswordActivity.this, errorDesc, Toast.LENGTH_LONG).show();*/
                                     }
 
                                 }else{
@@ -196,8 +194,8 @@ public class LoginActivity extends AppCompatActivity {
                 });
             }
         });
-    }
 
+    }
     //处理获取验证码handler
     Handler handler = new Handler(){
         @Override
@@ -205,8 +203,8 @@ public class LoginActivity extends AppCompatActivity {
 
             switch (msg.what){
                 case Constant.USER_GET_CHECKCODE:
-                    loginBtn.setClickable(true);
-                    loginBtn.setEnabled(true);
+                    changePasswordBtn.setClickable(true);
+                    changePasswordBtn.setEnabled(true);
                     checkcodeBtn.setClickable(false);
                     checkcodeBtn.setEnabled(false);
                     /* 倒计时60秒，一次1秒  在此期间不能在此点击获取验证码按钮 */
@@ -226,28 +224,29 @@ public class LoginActivity extends AppCompatActivity {
 
                     break;
                 case Constant.USER_GET_CHECKCODE_EXCEPTION:
-                    Toast.makeText(LoginActivity.this, Constant.USER_GET_CHECKCODE_EXCEPTION_MESSAGE, Toast.LENGTH_LONG).show();
+                    Toast.makeText(ChangePasswordActivity.this, Constant.USER_GET_CHECKCODE_EXCEPTION_MESSAGE, Toast.LENGTH_LONG).show();
                     break;
                 case Constant.USER_JSON_EXCEPTION:
-                    Toast.makeText(LoginActivity.this, Constant.USER_JSON_EXCEPTION_MESSAGE, Toast.LENGTH_LONG).show();
+                    Toast.makeText(ChangePasswordActivity.this, Constant.USER_JSON_EXCEPTION_MESSAGE, Toast.LENGTH_LONG).show();
                     break;
                 case Constant.USER_CHECKCODE_ERROR_EXCEPTION:
-                    Toast.makeText(LoginActivity.this, Constant.USER_CHECKCODE_ERROR_EXCEPTION_MESSAGE, Toast.LENGTH_LONG).show();
+                    //Toast.makeText(RegisterCodeActivity.this, Constant.USER_CHECKCODE_ERROR_EXCEPTION_MESSAGE, Toast.LENGTH_LONG).show();
+                    Toast.makeText(ChangePasswordActivity.this, "修改密码失败", Toast.LENGTH_LONG).show();
                     break;
                 case Constant.USER_CHECKCODE_SUCCESS:
-                    //直接跳转到主函数
-                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
-
+                    Toast.makeText(ChangePasswordActivity.this, "密码修改成功", Toast.LENGTH_LONG).show();
+                    //直接结束这个activity，到设置函数
+                    finish();
 
                     //开启服务，创建websocket连接
-                    /*Intent intent = new Intent(LoginActivity.this, WebSocketService.class);
+                   /* Intent intent = new Intent(RegisterCodeActivity.this, WebSocketService.class);
                     intent.putExtra(Constant.SERVICE_TIMER_TYPE, Constant.SERVICE_TIMER_TYPE_WEBSOCKET);
                     startService(intent);
                     ThreadPoolManager.getThreadPoolManager().submitTask(new Runnable() {
                         @Override
                         public void run() {
                             // 检查该用户是否注册
-                            UserSqliteHelper userSqliteHelper = new UserSqliteHelper(LoginActivity.this);
+                            UserSqliteHelper userSqliteHelper = new UserSqliteHelper(RegisterCodeActivity.this);
                             User user = userSqliteHelper.getUser(phoneNumber);
                             LogUtil.d(UserData.getUserData().getNumber());
                             User user2 = new User(UserData.getUserData().getNumber(),"123456");//没有改之前的用户数据库表代码，随机写了一个密码替代
@@ -284,6 +283,5 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
     };
-
 
 }
