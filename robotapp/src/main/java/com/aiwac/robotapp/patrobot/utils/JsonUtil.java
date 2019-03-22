@@ -1,11 +1,14 @@
 package com.aiwac.robotapp.patrobot.utils;
 
 
+import android.util.Log;
+
 import com.aiwac.robotapp.commonlibrary.bean.WifiInfo;
 import com.aiwac.robotapp.commonlibrary.common.Constant;
 import com.aiwac.robotapp.commonlibrary.exception.JsonException;
 import com.aiwac.robotapp.commonlibrary.utils.LogUtil;
 import com.aiwac.robotapp.patrobot.bean.BaseEntity;
+import com.aiwac.robotapp.patrobot.bean.aVDetail;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -305,6 +308,35 @@ public class JsonUtil {
             throw new JsonException(Constant.JSON_PARSE_EXCEPTION, e);
         }
     }*/
+
+    //解析json 获取讲座  视音频的详细信息
+    public static aVDetail parseAVDetailInfo(String jsonStr){
+        String errorCode = JsonUtil.parseErrorCode(jsonStr);
+        if(errorCode.equals(Constant.MESSAGE_ERRORCODE_2000)) {
+
+            try {
+                JSONObject root = new JSONObject(jsonStr);
+
+                aVDetail  lectureAVDetail = new  aVDetail();
+
+                lectureAVDetail.setLectureID(root.getString(Constant.WEBSOCKET_MESSAGE_ACCOUNT));
+                lectureAVDetail.setBusinessType(root.getString(Constant.WEBSOCKET_MESSAGE_CODE));
+                lectureAVDetail.setClientType(root.getString(Constant.WEBSOCKET_MESSAGE_CLIENTTYPE));
+                lectureAVDetail.setUniqueID(root.getString(Constant.WEBSOCKET_MESSAGE_UUID));
+
+                lectureAVDetail.setLink(root.getString(Constant.WEBSOCKET_MESSAGE_LECTURE_AV_LINK));
+
+                return lectureAVDetail;
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.d("TAG",Constant.JSON_PARSE_EXCEPTION);
+                throw new JsonException(Constant.JSON_PARSE_EXCEPTION, e);
+            }
+        }else {
+            return null;
+        }
+    }
 
 
 }

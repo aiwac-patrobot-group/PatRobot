@@ -24,6 +24,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".activity.setting.ScanCodeActivity"></activity>
+        <activity android:name=".activity.videoplayer.AudioPlayActivity"></activity>
+        <activity android:name=".activity.videoplayer.VideoPlayActivity" />
+        <activity android:name=".activity.videoplayer.VideoDetailActivity" />
+        <activity android:name=".activity.videoplayer.audioDetailActivity" />
+        <activity android:name=".activity.videoplayer.VideoAudioActivity" />
         <activity android:name=".activity.setting.SettingActivity" />
         <activity android:name=".activity.loginandregister.LoginByPasswordActivity" />
         <activity android:name=".activity.loginandregister.RegisterCodeActivity" />

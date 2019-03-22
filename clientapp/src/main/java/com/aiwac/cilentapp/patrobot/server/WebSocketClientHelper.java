@@ -4,6 +4,8 @@ package com.aiwac.cilentapp.patrobot.server;
 import android.content.Context;
 
 import com.aiwac.cilentapp.patrobot.bean.User;
+import com.aiwac.cilentapp.patrobot.bean.aVDetail;
+import com.aiwac.cilentapp.patrobot.bean.videoAbstractInfo;
 import com.aiwac.cilentapp.patrobot.utils.JsonUtil;
 import com.aiwac.robotapp.commonlibrary.bean.MessageEvent;
 import com.aiwac.robotapp.commonlibrary.common.Constant;
@@ -28,6 +30,9 @@ public class WebSocketClientHelper extends WebSocketClient {
 
     private Context context;
     private User user;
+    protected videoAbstractInfo videoAllInfo;
+    protected videoAbstractInfo audioAllInfo;
+    protected aVDetail aVDetail;
 
 
 
@@ -45,6 +50,20 @@ public class WebSocketClientHelper extends WebSocketClient {
 
     public void setContext(Context context) {
         this.context = context;
+    }
+
+    public videoAbstractInfo getLectureVideoAllInfo(){
+        return videoAllInfo;
+    }
+    public videoAbstractInfo getLectureAudioAllInfo(){
+        return  audioAllInfo;
+    }
+    public aVDetail getAudioDetail(){
+        return aVDetail;
+    }
+
+    public aVDetail getVideoDetail(){
+        return aVDetail;
     }
 
 

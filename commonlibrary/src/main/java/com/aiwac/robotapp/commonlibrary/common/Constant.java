@@ -322,4 +322,22 @@ public class Constant {
     public final static String WEBSOCKET_BUSSINESS_MACADDRESS_SUCCEEDED="bindMacSucceeded";
     public final static String WEBSOCKET_BUSSINESS_MACADDRESS_FAILED="bindMacfailed";
 
+
+    //视频音频相关
+    public final static String WEBSOCKET_BUSINESS_DOWNLOAD_LECTURE = "正在加载讲座资源，稍等...";
+    public final static String WEBSOCKET_MESSAGE_ACCOUNT = "account";
+    public final static String WEBSOCKET_MESSAGE_CODE = "code";
+    public final static String WEBSOCKET_MESSAGE_LECTUREID = "lectureID";
+    public final static String WEBSOCKET_MESSAGE_HEALTH_TEST_RESULT = "resultID";
+    public final static String WEBSOCKET_LECTURE_AUDIO_ABSTRACT_TYPE_CODE = "0009";   //类型查询 讲座音频摘要
+    public final static String WEBSOCKET_LECTURE_VIDEO_ABSTRACT_TYPE_CODE = "0010";   //类型查询 讲座视频摘要
+    public final static String WEBSOCKET_VIDEO_DETAIL_TYPE_CODE = "0011";   //类型查询 视频 详情
+    public final static String WEBSOCKET_AUDIO_DETAIL_TYPE_CODE = "0012";   //类型查询 音频 详情
+    public final static String WEBSOCKET_LECTURE_AV_DETAIL_TYPE_CODE = "0013";
+    public final static String WEBSOCKET_MESSAGE_SYSYTEM_CLIENTTYPE = "robot";
+    public final static String WEBSOCKET_MESSAGE_LECTURE_AV_LINK = "link";
+
+
+    public final static String WEBSOCKET_MESSAGE_DATA  = "data";
+
 }
