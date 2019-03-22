@@ -23,8 +23,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.setting.ScanCodeActivity"></activity>
-        <activity android:name=".activity.videoplayer.AudioPlayActivity"></activity>
+        <activity android:name=".activity.setting.ChangePasswordActivity"></activity>
+        <activity android:name=".activity.setting.PersonalActivity" />
+        <activity android:name=".activity.setting.ScanCodeActivity" />
+        <activity android:name=".activity.videoplayer.AudioPlayActivity" />
         <activity android:name=".activity.videoplayer.VideoPlayActivity" />
         <activity android:name=".activity.videoplayer.VideoDetailActivity" />
         <activity android:name=".activity.videoplayer.audioDetailActivity" />

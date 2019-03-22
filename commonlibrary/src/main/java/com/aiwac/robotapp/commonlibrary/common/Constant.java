@@ -295,6 +295,8 @@ public class Constant {
     //http登录注册相关
     public final static String HTTP_CHECKCODE_URL = HTTP_BASE_URL + "/account/get/identifycode";
     public final static String HTTP_USER_REGISTER_RUL = HTTP_BASE_URL + "/account/register";
+    public final static String HTTP_USER_CHANGE_PASSWORD_RUL = HTTP_BASE_URL + "/account/modify/password/withidentifycode";
+
     public final static String HTTP_USER_LOGIN_IDENTIFYCODE_BASEURL = HTTP_BASE_URL + "/account/login/withidentifycode";
     public final static String HTTP_USER_LOGIN_BY_PASSWORD_URL=HTTP_BASE_URL + "/account/login/withpassword";
 

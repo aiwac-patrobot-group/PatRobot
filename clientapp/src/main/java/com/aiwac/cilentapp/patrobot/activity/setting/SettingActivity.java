@@ -36,7 +36,7 @@ public class SettingActivity extends AppCompatActivity {
         findViewById(R.id.btn_setting_person).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                startActivity(new Intent(SettingActivity.this,PersonalActivity.class));
             }
         });
         //跳转到应用升级

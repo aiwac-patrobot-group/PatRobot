@@ -2,7 +2,6 @@ package com.aiwac.cilentapp.patrobot.activity.loginandregister;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
@@ -22,7 +21,6 @@ import com.aiwac.cilentapp.patrobot.utils.JsonUtil;
 import com.aiwac.robotapp.commonlibrary.common.Constant;
 import com.aiwac.robotapp.commonlibrary.task.ThreadPoolManager;
 import com.aiwac.robotapp.commonlibrary.utils.LogUtil;
-import com.aiwac.robotapp.commonlibrary.utils.StringUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -45,7 +43,7 @@ public class LoginByPasswordActivity extends AppCompatActivity {
 
 
     private void initView(){
-        numberEdit = (AutoCompleteTextView) findViewById(R.id.register_number_edit);
+        numberEdit = (AutoCompleteTextView) findViewById(R.id.change_password_number_edit);
         loginBtn = (Button) findViewById(R.id.login_bypassword_button);
         loginPassword=findViewById(R.id.login_password_edit);
 
