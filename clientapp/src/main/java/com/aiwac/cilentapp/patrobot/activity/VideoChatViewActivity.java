@@ -1,6 +1,7 @@
 package com.aiwac.cilentapp.patrobot.activity;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 import com.aiwac.cilentapp.patrobot.R;
 import com.aiwac.cilentapp.patrobot.database.UserData;
 import com.aiwac.cilentapp.patrobot.server.WebSocketApplication;
+import com.aiwac.cilentapp.patrobot.sport.MoveControlService;
 import com.aiwac.cilentapp.patrobot.utils.JsonUtil;
 import com.aiwac.robotapp.commonlibrary.common.Constant;
 import com.aiwac.robotapp.commonlibrary.task.ThreadPoolManager;
@@ -30,6 +32,7 @@ import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
 import io.agora.rtc.video.VideoCanvas;
 import io.agora.rtc.video.VideoEncoderConfiguration;
+import me.caibou.rockerview.DirectionView;
 import zuo.biao.library.util.JSON;
 
 public class VideoChatViewActivity extends AppCompatActivity {
@@ -90,6 +93,9 @@ public class VideoChatViewActivity extends AppCompatActivity {
             token = s.getString(Constant.USER_DATA_FIELD_TOKEN,"");
             LogUtil.d(token);
             sendCommand();
+            //设置运动监听
+            setControlDirection();
+
             initAgoraEngineAndJoinChannel();
         }
     }
@@ -108,7 +114,20 @@ public class VideoChatViewActivity extends AppCompatActivity {
             }
         });
     }
+    //设置运动监听
+    private void setControlDirection(){
+        //启动服务
+        startService(new Intent(VideoChatViewActivity.this, MoveControlService.class));
 
+        //设置监听
+        DirectionView dv = findViewById(R.id.direct_control);
+        dv.setDirectionChangeListener(new DirectionView.DirectionChangeListener() {
+            @Override
+            public void onDirectChange(DirectionView.Direction direction) {
+                MoveControlService.getInstance().getMessage(direction.toString());
+            }
+        });
+    }
     private void initAgoraEngineAndJoinChannel() {
         initializeAgoraEngine();
         setupVideoProfile();
@@ -266,8 +285,8 @@ public class VideoChatViewActivity extends AppCompatActivity {
         mRtcEngine.setupRemoteVideo(new VideoCanvas(surfaceView, VideoCanvas.RENDER_MODE_FIT, uid));
 
         surfaceView.setTag(uid); // for mark purpose
-        View tipMsg = findViewById(R.id.quick_tips_when_use_agora_sdk); // optional UI
-        tipMsg.setVisibility(View.GONE);
+        //View tipMsg = findViewById(R.id.quick_tips_when_use_agora_sdk); // optional UI
+        //tipMsg.setVisibility(View.GONE);
     }
 
     private void leaveChannel() {
@@ -278,8 +297,8 @@ public class VideoChatViewActivity extends AppCompatActivity {
         FrameLayout container = (FrameLayout) findViewById(R.id.remote_video_view_container);
         container.removeAllViews();
 
-        View tipMsg = findViewById(R.id.quick_tips_when_use_agora_sdk); // optional UI
-        tipMsg.setVisibility(View.VISIBLE);
+        //View tipMsg = findViewById(R.id.quick_tips_when_use_agora_sdk); // optional UI
+        //tipMsg.setVisibility(View.VISIBLE);
     }
 
     private void onRemoteUserVideoMuted(int uid, boolean muted) {

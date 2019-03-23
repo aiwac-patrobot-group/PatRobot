@@ -248,8 +248,8 @@ public class VideoChatViewActivity extends AppCompatActivity {
         mRtcEngine.setupRemoteVideo(new VideoCanvas(surfaceView, VideoCanvas.RENDER_MODE_FIT, uid));
 
         surfaceView.setTag(uid); // for mark purpose
-        View tipMsg = findViewById(R.id.quick_tips_when_use_agora_sdk); // optional UI
-        tipMsg.setVisibility(View.GONE);
+        //View tipMsg = findViewById(R.id.quick_tips_when_use_agora_sdk); // optional UI
+        ///tipMsg.setVisibility(View.GONE);
     }
 
     private void leaveChannel() {
@@ -260,8 +260,8 @@ public class VideoChatViewActivity extends AppCompatActivity {
         FrameLayout container = (FrameLayout) findViewById(R.id.remote_video_view_container);
         container.removeAllViews();
 
-        View tipMsg = findViewById(R.id.quick_tips_when_use_agora_sdk); // optional UI
-        tipMsg.setVisibility(View.VISIBLE);
+        //View tipMsg = findViewById(R.id.quick_tips_when_use_agora_sdk); // optional UI
+        //tipMsg.setVisibility(View.VISIBLE);
     }
 
     private void onRemoteUserVideoMuted(int uid, boolean muted) {

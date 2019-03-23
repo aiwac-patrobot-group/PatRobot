@@ -31,7 +31,7 @@
         android:layout_marginBottom="@dimen/activity_vertical_margin"
         android:orientation="vertical">
 
-        <TextView
+<!--        <TextView
             android:id="@+id/quick_tips_when_use_agora_sdk"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -39,7 +39,7 @@
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginStart="@dimen/activity_horizontal_margin"
             android:gravity="center_vertical|start"
-            android:text="1. Default channel name is demoChannel1\n2. Waiting for remote users\n3. This demo only supports 1v1 video calling" />
+            android:text="1. Default channel name is demoChannel1\n2. Waiting for remote users\n3. This demo only supports 1v1 video calling" />-->
 
         <LinearLayout
             android:layout_width="match_parent"
