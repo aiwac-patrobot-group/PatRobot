@@ -13,6 +13,7 @@ import com.aiwac.robotapp.patrobot.bean.MessageTransform;
 import com.aiwac.robotapp.patrobot.bean.aVDetail;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.UUID;
@@ -310,7 +311,40 @@ public class JsonUtil {
             throw new JsonException(Constant.JSON_PARSE_EXCEPTION, e);
         }
     }*/
+    //解析消息转发的data json字符串
+    public static String parseMessageTransData(String json){
+        try {
+            JSONObject root = new JSONObject(json);
+            return root.getString(Constant.WEBSOCKET_MESSAGE_TRANSFORM);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.d("TAG",Constant.JSON_PARSE_EXCEPTION);
+            throw new JsonException(Constant.JSON_PARSE_EXCEPTION, e);
+        }
+    }
 
+    //解析消息转发的data里的 commantType json字符串
+    public static String parseCommantType(String data){
+        try {
+            JSONObject root = new JSONObject(data);
+            return root.getString(Constant.WEBSOCKET_COMMAND_TYPE);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.d("TAG",Constant.JSON_PARSE_EXCEPTION);
+            throw new JsonException(Constant.JSON_PARSE_EXCEPTION, e);
+        }
+    }
+    //解析1001指令，获取uuid
+    public static String parseUUID(String data){
+        try {
+            JSONObject root = new JSONObject(data);
+            return root.getString(Constant.WEBSOCKET_COMMAND_VIDEO_UUID);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.d("TAG",Constant.JSON_PARSE_EXCEPTION);
+            throw new JsonException(Constant.JSON_PARSE_EXCEPTION, e);
+        }
+    }
 
 
     //解析json 获取讲座  视音频的详细信息

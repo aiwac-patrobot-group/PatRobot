@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.aiwac.cilentapp.patrobot.R;
+import com.aiwac.cilentapp.patrobot.database.UserData;
 import com.aiwac.cilentapp.patrobot.server.WebSocketApplication;
 import com.aiwac.cilentapp.patrobot.utils.JsonUtil;
 import com.aiwac.robotapp.commonlibrary.common.Constant;
@@ -29,11 +30,12 @@ import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
 import io.agora.rtc.video.VideoCanvas;
 import io.agora.rtc.video.VideoEncoderConfiguration;
+import zuo.biao.library.util.JSON;
 
 public class VideoChatViewActivity extends AppCompatActivity {
 
     private String token="";
-    private String uuid=UUID.randomUUID().toString();
+    private String uuid= (Integer.parseInt(UserData.getUserData().getClientID())+1)+"";
 
     private static final String LOG_TAG = VideoChatViewActivity.class.getSimpleName();
 
@@ -163,6 +165,23 @@ public class VideoChatViewActivity extends AppCompatActivity {
         leaveChannel();
         RtcEngine.destroy();
         mRtcEngine = null;
+        sendCloseChatToRobot();
+    }
+    //发送结束指令
+    private void sendCloseChatToRobot(){
+        ThreadPoolManager.getThreadPoolManager().submitTask(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    String jsonStr= JsonUtil.commendEndVideoChat();
+                    WebSocketApplication.getWebSocketApplication().getWebSocketHelper().send(jsonStr);
+                    LogUtil.d("发送结束视频通话指令成功");
+                } catch (Exception e){
+                    e.printStackTrace();
+                    LogUtil.d( "发送结束视频通话指令失败");
+                }
+            }
+        });
     }
 
     public void onLocalVideoMuteClicked(View view) {
@@ -228,11 +247,11 @@ public class VideoChatViewActivity extends AppCompatActivity {
         SurfaceView surfaceView = RtcEngine.CreateRendererView(getBaseContext());
         surfaceView.setZOrderMediaOverlay(true);
         container.addView(surfaceView);
-        mRtcEngine.setupLocalVideo(new VideoCanvas(surfaceView, VideoCanvas.RENDER_MODE_FIT, 0));
+        mRtcEngine.setupLocalVideo(new VideoCanvas(surfaceView, VideoCanvas.RENDER_MODE_FIT, Integer.parseInt(uuid)));
     }
 
     private void joinChannel() {
-        mRtcEngine.joinChannel(null, "demoChannel1", "Extra Optional Data", 0); // if you do not specify the uid, we will generate the uid for you
+        mRtcEngine.joinChannel(null, "demoChannel1", "Extra Optional Data", Integer.parseInt(uuid)); // if you do not specify the uid, we will generate the uid for you
     }
 
     private void setupRemoteVideo(int uid) {

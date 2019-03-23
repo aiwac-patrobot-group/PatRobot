@@ -17,7 +17,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.aiwac.robotapp.commonlibrary.bean.MessageEvent;
 import com.aiwac.robotapp.commonlibrary.common.Constant;
 import com.aiwac.robotapp.commonlibrary.utils.ActivityUtil;
 import com.aiwac.robotapp.commonlibrary.utils.LogUtil;
@@ -25,6 +27,10 @@ import com.aiwac.robotapp.commonlibrary.utils.WifiUtil;
 import com.aiwac.robotapp.patrobot.R;
 import com.aiwac.robotapp.patrobot.service.WebSocketService;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -57,6 +63,8 @@ public class MainActivity extends AppCompatActivity {
 
         Vitamio.isInitialized(getContext());
 
+        //注册消息
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -291,10 +299,27 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void Event(MessageEvent messageEvent) {
+        if(messageEvent.getTo().equals(Constant.WEBSOCKET_COMMAND_GET_UUID)){
+            //获得了uuid，准备打开视频通话
+            String uuid = messageEvent.getMessage();
+            Intent intent = new Intent(MainActivity.this,VideoChatViewActivity.class);
+            intent.putExtra(Constant.WEBSOCKET_COMMAND_GET_UUID,uuid);
+            startActivity(intent);
+        }
+
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         // 此处为android 6.0以上动态授权的回调，用户自行实现。
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

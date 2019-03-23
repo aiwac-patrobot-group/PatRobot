@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.aiwac.robotapp.commonlibrary.bean.MessageEvent;
 import com.aiwac.robotapp.commonlibrary.common.Constant;
 import com.aiwac.robotapp.commonlibrary.utils.LogUtil;
 import com.aiwac.robotapp.patrobot.R;
@@ -16,6 +17,7 @@ import com.aiwac.robotapp.patrobot.bean.aVDetail;
 import com.aiwac.robotapp.patrobot.utils.JsonUtil;
 
 
+import org.greenrobot.eventbus.EventBus;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.drafts.Draft;
 import org.java_websocket.drafts.Draft_6455;
@@ -141,10 +143,23 @@ public class WebSocketClientHelper extends WebSocketClient {
 
                 }
 
-            }else if((businessType.equals(Constant.WEBSOCKET_MESSAGE_TRANSFORM_CODE))){
-                messageTransform = JsonUtil.parseMessageTransform(json);
+            }else if((businessType.equals(Constant.WEBSOCKET_MESSAGE_TRANSFORM_CODE))){//指令转发
+                String dataJsonStr=JsonUtil.parseMessageTransData(json);
+                String commantType=JsonUtil.parseCommantType(dataJsonStr);
+                if(commantType.equals(Constant.WEBSOCKET_COMMAND_VIDEO_CODE)){//指令是1001，开启视频通话
+                    String uuid=JsonUtil.parseUUID(dataJsonStr);
+                    //通知MainActivity跳转到语音通话
+                    MessageEvent messageEvent = new MessageEvent(Constant.WEBSOCKET_COMMAND_GET_UUID, uuid);
+                    EventBus.getDefault().post(messageEvent);
+                }if(commantType.equals(Constant.WEBSOCKET_COMMAND_END_VIDEO_CODE)){//指令是1002，结束视频通话
+                    //通知MainActivity跳转到语音通话
+                    MessageEvent messageEvent = new MessageEvent(Constant.WEBSOCKET_COMMAND_END_VIDEO);
+                    EventBus.getDefault().post(messageEvent);
+                }
+
+                /*messageTransform = JsonUtil.parseMessageTransform(json);
                 String messageType[] = messageTransform.getData().split("：");
-                dealMessageTransform(messageType);
+                dealMessageTransform(messageType);*/
             }
 
         }catch (Exception e){
