@@ -92,17 +92,17 @@ public class MainActivity extends AppCompatActivity {
         btn_player.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-        //        Intent intent = new Intent(MainActivity.this, VideoAudioActivity.class);
-//                startActivity(intent);
-
-                Intent intent = new Intent(MainActivity.this, VideoPlayActivity.class);
-
-//                    //测试
-                   link  = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
-//                    //测试
-                Log.d("lecture",link);
-                intent.putExtra("Link",link);
+                Intent intent = new Intent(MainActivity.this, VideoAudioActivity.class);
                 startActivity(intent);
+
+                //Intent intent = new Intent(MainActivity.this, VideoPlayActivity.class);
+
+//                    //测试
+              //     link  = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
+//                    //测试
+              //  Log.d("lecture",link);
+               // intent.putExtra("Link",link);
+               // startActivity(intent);
             }
         });
 

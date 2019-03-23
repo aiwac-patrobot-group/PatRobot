@@ -42,7 +42,7 @@ public class videoFragment extends Fragment {
     private List<videoInfo> data = new ArrayList<>();
     private LectureAdapter lectureAdapter;
     protected GridView lectureGridView;
-    videoAbstractInfo lectureCourseAbstractInfo;
+    videoAbstractInfo videoListInfo;
 
     public static videoFragment newInstance(int columnCount) {
         videoFragment fragment = new videoFragment();
@@ -56,9 +56,9 @@ public class videoFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //获取已经到达 的讲座组消息数据，信息请求在 LectureActivtiy  被发送
-        getLectureVideoAbstractAsync loadCourseGroupAsync = new getLectureVideoAbstractAsync();
-        loadCourseGroupAsync.execute();
+        //获取已经到达的视频信息
+       getLectureVideoAbstractAsync loadCourseGroupAsync = new getLectureVideoAbstractAsync();
+       loadCourseGroupAsync.execute();
 
         //Vitamio.isInitialized(getContext());
 
@@ -104,30 +104,33 @@ public class videoFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                final videoInfo lectureCourseClicked = data.get(i);
+                final videoInfo videoClicked = data.get(i);
 
-//                向后台请求讲座音视频的详细内容
-                ThreadPoolManager.getThreadPoolManager().submitTask(new Runnable() {
-                    @Override
-                    public void run() {
-                        try{
-                            Log.d("lecture", " LectureID："+lectureCourseClicked.getLectureID());
-                            WebSocketApplication.getWebSocketApplication().send(JsonUtil.aVDetail2Json( lectureCourseClicked.getLectureID()));
-                        }catch (Exception e){
-                            e.printStackTrace();
-                            Log.d("lecture", "异常：向后台请求讲座音视频的详细内容 ");
-                        }
-                    }
-                });
+////                向后台请求讲座音视频的详细内容
+//                ThreadPoolManager.getThreadPoolManager().submitTask(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        try{
+//                            Log.d("lecture", " LectureID："+lectureCourseClicked.getLectureID());
+//                            WebSocketApplication.getWebSocketApplication().send(JsonUtil.aVDetail2Json( lectureCourseClicked.getLectureID()));
+//                        }catch (Exception e){
+//                            e.printStackTrace();
+//                            Log.d("lecture", "异常：向后台请求讲座音视频的详细内容 ");
+//                        }
+//                    }
+//                });
 
                 Intent intent = new Intent(getContext(), VideoDetailActivity.class);
 
+//                intent.putExtra("type",lectureCourseClicked.getType());
+//                intent.putExtra("id",lectureCourseClicked.getLectureID());
                 //图片单独发
-                Bitmap receive = lectureCourseClicked.getCover();
+                String receive = videoClicked.getCover();
                 intent.putExtra("bitmap", receive);
                 //把相应的属性设空
-                lectureCourseClicked.setCover( ImageUtil.getBitmap("1111"));
-                intent.putExtra("videoInfo",lectureCourseClicked);
+                //lectureCourseClicked.setCover( ImageUtil.getBitmap("1111"));
+                intent.putExtra("videoInfo",videoClicked);
+
 
                 startActivity(intent);
 
@@ -193,12 +196,16 @@ public class videoFragment extends Fragment {
 
             TextView lecture_name = view.findViewById(R.id.lecture_gridview_name);
             ImageView cover_image = view.findViewById(R.id.lecture_gridview_cover_image);
+            TextView video_des = view.findViewById(R.id.lecture_gridview_describe);
 
-            videoInfo lectureCourse = this.lectureCourses.get(position);  //取出一节讲座的信息
+            videoInfo lectureCourse = this.lectureCourses.get(position);  //取出一个视频的信息
 
-            lecture_name.setText(lectureCourse.getName());
+            lecture_name.setText(lectureCourse.getTitle());
             //集成需要加入
-            cover_image.setImageBitmap(lectureCourse.getCover());
+            //cover_image.setImageBitmap(lectureCourse.getCover());
+            video_des.setText(lectureCourse.getDescription());
+
+
 
             return view;
         }
@@ -221,17 +228,17 @@ public class videoFragment extends Fragment {
             dialog.show();
         }
 
-        // 获取已经到达的讲座摘要数据
+        // 获取已经到达的视频数据
         @Override
         protected Boolean doInBackground(Void... params) {
             try {
 
-                for (int i = 0; i < 5; i++) {
+                for (int i = 0; i < 10; i++) {
                     Thread.sleep(500);
-                    lectureCourseAbstractInfo = WebSocketApplication.getWebSocketApplication().getWebSocketHelperVideoAllInfo();
+                    videoListInfo = WebSocketApplication.getWebSocketApplication().getWebSocketHelperVideoAllInfo();
 
-                    if (lectureCourseAbstractInfo != null) {
-                        for(  videoInfo item : lectureCourseAbstractInfo.getLectureCourseAbstracts()){
+                    if (videoListInfo != null) {
+                        for(  videoInfo item : videoListInfo.getLectureCourseAbstracts()){
                             data.add(item);
                         }
                         return true;
@@ -248,7 +255,7 @@ public class videoFragment extends Fragment {
         @Override
         protected void onPostExecute(Boolean aBoolean) {
             dialog.cancel();
-            if (aBoolean) {   //加载讲座列表
+            if (aBoolean) {   //加载视频列表
                 lectureAdapter.notifyDataSetChanged();
 
             } else { // 失败。显示空白

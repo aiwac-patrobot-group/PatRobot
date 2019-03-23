@@ -6,8 +6,10 @@ import android.util.Log;
 import com.aiwac.robotapp.commonlibrary.bean.WifiInfo;
 import com.aiwac.robotapp.commonlibrary.common.Constant;
 import com.aiwac.robotapp.commonlibrary.exception.JsonException;
+import com.aiwac.robotapp.commonlibrary.utils.ImageUtil;
 import com.aiwac.robotapp.commonlibrary.utils.LogUtil;
 import com.aiwac.robotapp.patrobot.bean.BaseEntity;
+import com.aiwac.robotapp.patrobot.bean.MessageTransform;
 import com.aiwac.robotapp.patrobot.bean.aVDetail;
 
 import org.json.JSONArray;
@@ -309,6 +311,8 @@ public class JsonUtil {
         }
     }*/
 
+
+
     //解析json 获取讲座  视音频的详细信息
     public static aVDetail parseAVDetailInfo(String jsonStr){
         String errorCode = JsonUtil.parseErrorCode(jsonStr);
@@ -319,8 +323,8 @@ public class JsonUtil {
 
                 aVDetail  lectureAVDetail = new  aVDetail();
 
-                lectureAVDetail.setLectureID(root.getString(Constant.WEBSOCKET_MESSAGE_ACCOUNT));
-                lectureAVDetail.setBusinessType(root.getString(Constant.WEBSOCKET_MESSAGE_CODE));
+                lectureAVDetail.setLectureID(root.getString(Constant.WEBSOCKET_MESSAGE_CLIENTID));
+                lectureAVDetail.setBusinessType(root.getString(Constant.WEBSOCKET_MESSAGE_BUSSINESSTYPE));
                 lectureAVDetail.setClientType(root.getString(Constant.WEBSOCKET_MESSAGE_CLIENTTYPE));
                 lectureAVDetail.setUniqueID(root.getString(Constant.WEBSOCKET_MESSAGE_UUID));
 
@@ -336,6 +340,28 @@ public class JsonUtil {
         }else {
             return null;
         }
+    }
+
+
+    //解析Json  获取音视频链接json
+    public static MessageTransform parseMessageTransform(String jsonStr){
+        try{
+            JSONObject root = new JSONObject(jsonStr);
+            MessageTransform messageTransform = new MessageTransform();
+            messageTransform.setBusinessType(root.getString(Constant.WEBSOCKET_MESSAGE_BUSSINESSTYPE));
+            messageTransform.setClientID(root.getString(Constant.WEBSOCKET_MESSAGE_CLIENTID));
+            messageTransform.setClientType(root.getString(Constant.WEBSOCKET_MESSAGE_CLIENTTYPE));
+            messageTransform.setData(root.getString(Constant.WEBSOCKET_MESSAGE_TRANSFORM));
+            messageTransform.setUniqueID(root.getString(Constant.WEBSOCKET_MESSAGE_UUID));
+            messageTransform.setTime(root.getString(Constant.WEBSOCKET_MESSAGE_TIME));
+            return messageTransform;
+        }catch (Exception e) {
+            e.printStackTrace();
+            Log.d("TAG",Constant.JSON_PARSE_EXCEPTION);
+            throw new JsonException(Constant.JSON_PARSE_EXCEPTION, e);
+        }
+
+
     }
 
 

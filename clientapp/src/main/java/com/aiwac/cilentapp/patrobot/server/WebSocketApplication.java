@@ -155,13 +155,6 @@ public class WebSocketApplication {
         return webSocketHelper.getLectureVideoAllInfo();
     }
 
-    public aVDetail getWebSocketHelperAudioDetail(){
-        return webSocketHelper.getAudioDetail();
-    }
-
-    public aVDetail getWebSocketHelperVideoDetail(){
-        return webSocketHelper.getVideoDetail();
-    }
 
     //在新的线程中开启一个websocket连接
     public void startWebSocketConnection(final Context context){

@@ -23,6 +23,7 @@ import com.aiwac.robotapp.commonlibrary.utils.ActivityUtil;
 import com.aiwac.robotapp.commonlibrary.utils.LogUtil;
 import com.aiwac.robotapp.commonlibrary.utils.WifiUtil;
 import com.aiwac.robotapp.patrobot.R;
+import com.aiwac.robotapp.patrobot.service.WebSocketService;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
 
 import java.io.IOException;
@@ -32,6 +33,10 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Enumeration;
+
+import io.vov.vitamio.Vitamio;
+
+import static com.aiwac.robotapp.patrobot.PatRobotApplication.getContext;
 
 public class MainActivity extends AppCompatActivity {
     private final static  int PERMISSION_REQUEST_COARSE_LOCATION=1;
@@ -50,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
         initView();
         initEvent();
 
+        Vitamio.isInitialized(getContext());
+
     }
 
     @Override
@@ -61,9 +68,9 @@ public class MainActivity extends AppCompatActivity {
         boolean isNet = WifiUtil.checkNet(this); //判断是否连接网络
         if (isNet) {
                 //开启服务，创建websocket连接
-                /*Intent intent = new Intent(this, WebSocketService.class);
+                Intent intent = new Intent(this, WebSocketService.class);
                 intent.putExtra(Constant.SERVICE_TIMER_TYPE, Constant.SERVICE_TIMER_TYPE_WEBSOCKET);
-                startService(intent);*/
+                startService(intent);
                 LogUtil.d("wifi 连接成功");
         } else {
             //没联网
