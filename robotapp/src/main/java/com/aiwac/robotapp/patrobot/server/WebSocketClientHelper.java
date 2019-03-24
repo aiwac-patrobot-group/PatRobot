@@ -11,6 +11,7 @@ import com.aiwac.robotapp.commonlibrary.utils.LogUtil;
 import com.aiwac.robotapp.patrobot.R;
 import com.aiwac.robotapp.patrobot.activity.videoplayer.AudioPlayActivity;
 import com.aiwac.robotapp.patrobot.activity.videoplayer.VideoPlayActivity;
+import com.aiwac.robotapp.patrobot.bean.FeedTime;
 import com.aiwac.robotapp.patrobot.bean.MessageTransform;
 import com.aiwac.robotapp.patrobot.bean.aVDetail;
 import com.aiwac.robotapp.patrobot.utils.JsonUtil;
@@ -37,6 +38,7 @@ public class WebSocketClientHelper extends WebSocketClient {
     protected aVDetail aVDetail;
     protected String link = "noLink";
     protected MessageTransform messageTransform;
+    protected FeedTime feedTime;
 
 
     public Context getContext() {
@@ -101,6 +103,15 @@ public class WebSocketClientHelper extends WebSocketClient {
                 messageTransform = JsonUtil.parseMessageTransform(json);
                 String messageType[] = messageTransform.getData().split("：");
                 dealMessageTransform(messageType);
+            }else if((businessType.equals(Constant.WEBSOCKET_MESSAGE_FEEDTRANSFORM_CODE))){
+                feedTime = JsonUtil.parseFeedNavigateTransform(json);
+                String timeFeed = feedTime.getTimePoints();
+                //得到喂食时间，后续硬件进行处理
+            }else if(businessType.equals(Constant.WEBSOCKET_MESSAGE_NAVIGATETRANSFORM_CODE)){
+                feedTime = JsonUtil.parseFeedNavigateTransform(json);
+                String timeFeed = feedTime.getTimePoints();
+                //得到巡航时间，后续硬件进行处理
+
             }
 
 

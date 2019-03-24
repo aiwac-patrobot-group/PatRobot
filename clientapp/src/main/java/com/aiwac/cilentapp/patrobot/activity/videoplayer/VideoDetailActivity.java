@@ -3,6 +3,7 @@ package com.aiwac.cilentapp.patrobot.activity.videoplayer;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -21,16 +22,19 @@ import com.aiwac.cilentapp.patrobot.R;
 import com.aiwac.cilentapp.patrobot.bean.aVDetail;
 import com.aiwac.cilentapp.patrobot.bean.videoInfo;
 import com.aiwac.cilentapp.patrobot.server.WebSocketApplication;
+import com.aiwac.cilentapp.patrobot.service.TimerService;
 import com.aiwac.cilentapp.patrobot.utils.JsonUtil;
 import com.aiwac.robotapp.commonlibrary.common.Constant;
 import com.aiwac.robotapp.commonlibrary.task.ThreadPoolManager;
+
+
 
 public class VideoDetailActivity extends AppCompatActivity {
 
     protected videoInfo lectureCourseNow;
     protected ImageView lectureCover;
     protected TextView videoTitle, videoDescription;
-    private Button backButton, buttonplay_pause;
+    private Button backButton, buttonplay_pause1,buttonplay_pause2;
     protected String link = "noLink";
 
     @Override
@@ -60,18 +64,67 @@ public class VideoDetailActivity extends AppCompatActivity {
         lectureCover = (ImageView)findViewById(R.id.lecture_cover);
         videoTitle = (TextView)findViewById(R.id.lecture_name);
         videoDescription = (TextView)findViewById(R.id.lecture_description);
-        buttonplay_pause = (Button)findViewById(R.id.buttonPlayPause) ;
-        buttonplay_pause.setSelected(false);
-        buttonplay_pause.setOnClickListener(new View.OnClickListener() {
+        buttonplay_pause1 = (Button)findViewById(R.id.buttonPlayPause) ;
+        buttonplay_pause2 = (Button)findViewById(R.id.buttonPlayPause2);
+        buttonplay_pause1.setSelected(false);
+        buttonplay_pause2.setSelected(false);
+        buttonplay_pause2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                if (buttonplay_pause2.isSelected() == true) {
+//                    buttonplay_pause2.setSelected(false);
+//                    buttonplay_pause2.setText("暂停");
+//                    ThreadPoolManager.getThreadPoolManager().submitTask(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            try {
+//                                WebSocketApplication.getWebSocketApplication().send(JsonUtil.messageTransform2Json("PauseVideo："));
+//                            } catch (Exception e) {
+//                                e.printStackTrace();
+//                                Log.d("tag", "LoadVideoAsync onPostExecute setOnItemClickListener exception");
+//                            }
+//                        }
+//                    });
+//                } else {
+                    if (link.equals("noLink")) {
+                        Toast.makeText(VideoDetailActivity.this, "抱歉，暂无相关资源", Toast.LENGTH_SHORT).show();
+
+                    } else {
+                        //测试
+//                    link  = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
+                        ThreadPoolManager.getThreadPoolManager().submitTask(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    WebSocketApplication.getWebSocketApplication().send(JsonUtil.messageTransform2Json("PlayVideo：" + link));
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    Log.d("tag", "LoadVideoAsync onPostExecute setOnItemClickListener exception");
+                                }
+                            }
+                        });
+                        Toast.makeText(VideoDetailActivity.this, "已发送到机器人端播放", Toast.LENGTH_SHORT).show();
+                        MediaPlayer mediaPlayer = new MediaPlayer();
+                        try{
+                            mediaPlayer.setDataSource(link);
+                            mediaPlayer.prepare();
+                        }catch(Exception o){
+                            o.printStackTrace();
+                        }
+                        long videoTime = mediaPlayer.getDuration();
+                        Intent intentService = new Intent(VideoDetailActivity.this, TimerService.class);
+                        intentService.putExtra("videoDuration",videoTime);
+                        VideoDetailActivity.this.startService(intentService);
+                    }
+                    buttonplay_pause2.setSelected(true);
+                    buttonplay_pause2.setText("继续");
+                }
+           // }
+        });
+        buttonplay_pause1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(buttonplay_pause.isSelected() == true)
-                {
-                    buttonplay_pause.setSelected(false);
-                }
-                else
-                {
-                    buttonplay_pause.setSelected(true);
+                    //buttonplay_pause1.setSelected(true);
 
                     if ( link.equals("noLink" ) )
                     {
@@ -102,9 +155,9 @@ public class VideoDetailActivity extends AppCompatActivity {
 
                     }
 
-                    buttonplay_pause.setSelected(false);
+                    buttonplay_pause1.setSelected(false);
                 }
-            }
+
         });
 
         backButton = (Button)findViewById(R.id.backButton) ;

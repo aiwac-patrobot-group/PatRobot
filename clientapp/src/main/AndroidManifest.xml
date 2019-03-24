@@ -23,7 +23,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.setting.ChangePasswordActivity"></activity>
+        <activity android:name=".activity.feed.TestExpandableListView"></activity>
+        <activity android:name=".activity.navigate.NavigateActivity" />
+        <activity android:name=".activity.feed.FeedActivity" />
+
+        <service
+            android:name=".service.TimerService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity android:name=".activity.setting.ChangePasswordActivity" />
         <activity android:name=".activity.setting.PersonalActivity" />
         <activity android:name=".activity.setting.ScanCodeActivity" />
         <activity android:name=".activity.videoplayer.AudioPlayActivity" />

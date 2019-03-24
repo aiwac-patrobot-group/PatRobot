@@ -13,7 +13,10 @@ import android.view.View;
 import android.widget.Button;
 
 import com.aiwac.cilentapp.patrobot.R;
+import com.aiwac.cilentapp.patrobot.activity.feed.FeedActivity;
+import com.aiwac.cilentapp.patrobot.activity.feed.TestExpandableListView;
 import com.aiwac.cilentapp.patrobot.activity.loginandregister.LoginByPasswordActivity;
+import com.aiwac.cilentapp.patrobot.activity.navigate.NavigateActivity;
 import com.aiwac.cilentapp.patrobot.activity.setting.ScanCodeActivity;
 import com.aiwac.cilentapp.patrobot.activity.setting.SettingActivity;
 import com.aiwac.cilentapp.patrobot.activity.videoplayer.VideoAudioActivity;
@@ -115,6 +118,18 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(MainActivity.this, SettingActivity.class));
+            }
+        });
+        btn_feed.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, FeedActivity.class));
+            }
+        });
+        btn_cruise.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, NavigateActivity.class));
             }
         });
 

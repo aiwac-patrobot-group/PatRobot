@@ -336,6 +336,8 @@ public class Constant {
     public final static String WEBSOCKET_LECTURE_AUDIO_ABSTRACT_TYPE_CODE = "0009";   //类型查询 讲座音频摘要
     public final static String WEBSOCKET_LECTURE_VIDEO_ABSTRACT_TYPE_CODE = "0006";   //类型查询 讲座视频摘要
     public final static String WEBSOCKET_MESSAGE_TRANSFORM_CODE = "0002";   //  消息转发
+    public final static String WEBSOCKET_MESSAGE_FEEDTRANSFORM_CODE = "0003";   //  投食转发
+    public final static String WEBSOCKET_MESSAGE_NAVIGATETRANSFORM_CODE = "0004";   //  巡航转发
     public final static String WEBSOCKET_VIDEO_DETAIL_TYPE_CODE = "0011";   //类型查询 视频 详情
     public final static String WEBSOCKET_AUDIO_DETAIL_TYPE_CODE = "0012";   //类型查询 音频 详情
     public final static String WEBSOCKET_LECTURE_AV_DETAIL_TYPE_CODE = "0013";
@@ -355,6 +357,7 @@ public class Constant {
     public final static String WEBSOCKET_FILE_DESC = "desc";//表示音视频描述
     public final static String WEBSOCKET_FILE_COVER = "cover";//表示封面链接
     public final static String WEBSOCKET_FILE_URL = "url";//表示音视频链接
+    public final static String WEB_SOCKET_TIME_POINTS = "timePoints";//投食时间
 
 
     public final static String WEBSOCKET_MESSAGE_TRANSFORM = "data";//表示转发消息
