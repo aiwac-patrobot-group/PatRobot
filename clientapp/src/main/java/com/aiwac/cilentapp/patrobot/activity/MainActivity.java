@@ -8,19 +8,16 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
 import com.aiwac.cilentapp.patrobot.R;
 import com.aiwac.cilentapp.patrobot.activity.feed.FeedActivity;
-import com.aiwac.cilentapp.patrobot.activity.feed.TestExpandableListView;
 import com.aiwac.cilentapp.patrobot.activity.loginandregister.LoginByPasswordActivity;
 import com.aiwac.cilentapp.patrobot.activity.navigate.NavigateActivity;
 import com.aiwac.cilentapp.patrobot.activity.setting.ScanCodeActivity;
 import com.aiwac.cilentapp.patrobot.activity.setting.SettingActivity;
 import com.aiwac.cilentapp.patrobot.activity.videoplayer.VideoAudioActivity;
-import com.aiwac.cilentapp.patrobot.activity.videoplayer.VideoPlayActivity;
 import com.aiwac.cilentapp.patrobot.database.UserData;
 import com.aiwac.cilentapp.patrobot.service.WebSocketService;
 import com.aiwac.robotapp.commonlibrary.common.Constant;
@@ -130,6 +127,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(MainActivity.this, NavigateActivity.class));
+            }
+        });
+
+        btn_video_chat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this,VideoChatViewActivity.class));
             }
         });
 

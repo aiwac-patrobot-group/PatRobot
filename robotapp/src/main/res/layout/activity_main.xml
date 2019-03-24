@@ -32,4 +32,13 @@
         android:text="MAC:"
         app:layout_constraintTop_toBottomOf="@+id/codeImage"
         tools:layout_editor_absoluteX="38dp" />
+
+    <Button
+        android:id="@+id/btn_video_chat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="视频通话"
+        app:layout_constraintTop_toBottomOf="@+id/tv_mac"
+        tools:layout_editor_absoluteX="16dp" />
 </android.support.constraint.ConstraintLayout>

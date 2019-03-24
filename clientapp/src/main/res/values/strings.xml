@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">clientApp</string>
 
+    <string name="agora_app_id">d7948fcf096e494cbee24c3a04045982</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">手机号</string>

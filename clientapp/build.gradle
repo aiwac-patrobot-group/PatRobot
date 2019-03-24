@@ -23,6 +23,12 @@ android {
         }
     }
 
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['/libs']
+        }
+    }
+
 }
 
 dependencies {
@@ -40,4 +46,7 @@ dependencies {
     implementation 'cn.yipianfengye.android:zxing-library:2.2'
     implementation project(':vitamio')
     implementation project(path: ':vitamio')
+
+    //方向键
+    implementation 'me.caibou.android:rockerview:1.0.0'
 }

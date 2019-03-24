@@ -1,7 +1,6 @@
 package com.aiwac.robotapp.patrobot.activity;
 
 import android.Manifest;
-import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,17 +9,17 @@ import android.graphics.Bitmap;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
-import android.os.SystemClock;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.aiwac.robotapp.commonlibrary.bean.MessageEvent;
 import com.aiwac.robotapp.commonlibrary.common.Constant;
 import com.aiwac.robotapp.commonlibrary.utils.ActivityUtil;
 import com.aiwac.robotapp.commonlibrary.utils.LogUtil;
@@ -29,12 +28,13 @@ import com.aiwac.robotapp.patrobot.R;
 import com.aiwac.robotapp.patrobot.service.WebSocketService;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.ArrayList;
@@ -49,7 +49,8 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_FINE_LOCATION = 0;
 
     String macAddress="";
-    Button btn_setting;
+    Button btnSetting;
+    Button btnVideoChat;
     TextView tvMac;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +63,8 @@ public class MainActivity extends AppCompatActivity {
 
         Vitamio.isInitialized(getContext());
 
+        //注册消息
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -73,9 +76,9 @@ public class MainActivity extends AppCompatActivity {
         boolean isNet = WifiUtil.checkNet(this); //判断是否连接网络
         if (isNet) {
                 //开启服务，创建websocket连接
-                /*Intent intent = new Intent(this, WebSocketService.class);
+                Intent intent = new Intent(this, WebSocketService.class);
                 intent.putExtra(Constant.SERVICE_TIMER_TYPE, Constant.SERVICE_TIMER_TYPE_WEBSOCKET);
-                startService(intent);*/
+                startService(intent);
                 LogUtil.d("wifi 连接成功");
         } else {
             //没联网
@@ -87,16 +90,23 @@ public class MainActivity extends AppCompatActivity {
     private void initView(){
         //设置携带mac地址的图片
         setMacImg();
-        btn_setting=findViewById(R.id.btn_setting);
+        btnSetting =findViewById(R.id.btn_setting);
         tvMac=findViewById(R.id.tv_mac);
         tvMac.setText(macAddress);
+        btnVideoChat=findViewById(R.id.btn_video_chat);
     }
 
     private void initEvent(){
-        btn_setting.setOnClickListener(new View.OnClickListener() {
+        btnSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(MainActivity.this, SettingActivity.class));
+            }
+        });
+        btnVideoChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this,VideoChatViewActivity.class));
             }
         });
     }
@@ -289,10 +299,27 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void Event(MessageEvent messageEvent) {
+        if(messageEvent.getTo().equals(Constant.WEBSOCKET_COMMAND_GET_UUID)){
+            //获得了uuid，准备打开视频通话
+            String uuid = messageEvent.getMessage();
+            Intent intent = new Intent(MainActivity.this,VideoChatViewActivity.class);
+            intent.putExtra(Constant.WEBSOCKET_COMMAND_GET_UUID,uuid);
+            startActivity(intent);
+        }
+
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         // 此处为android 6.0以上动态授权的回调，用户自行实现。
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

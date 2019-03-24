@@ -180,7 +180,7 @@ public class WebSocketApplication {
 
                             if (resultJson != null) {
                                 String errorCode = JsonUtil.parseErrorCode(resultJson);
-                                if (errorCode.equals(Constant.MESSAGE_ERRORCODE_2000)) {
+                                if (errorCode.equals(Constant.MESSAGE_ERRORCODE_200)) {
                                     String token = JsonUtil.parseToken(resultJson);
                                     SharedPreferences.Editor editor = context.getSharedPreferences(Constant.DB_USER_TABLENAME, MODE_PRIVATE).edit();
                                     editor.putString(Constant.USER_DATA_FIELD_TOKEN, token);

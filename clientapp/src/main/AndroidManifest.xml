@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.aiwac.cilentapp.patrobot">
+
     <!-- 浮动通知权限 -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" /> <!-- skin -->
@@ -14,6 +15,7 @@
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" /> <!-- 语音识别 -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
 
     <application
         android:name=".PatClientApplication"
@@ -23,7 +25,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.feed.TestExpandableListView"></activity>
+<<<<<<< HEAD
+
         <activity android:name=".activity.navigate.NavigateActivity" />
         <activity android:name=".activity.feed.FeedActivity" />
 
@@ -31,6 +34,12 @@
             android:name=".service.TimerService"
             android:enabled="true"
             android:exported="true" />
+=======
+        <service
+            android:name=".sport.MoveControlService"
+            android:enabled="true"
+            android:exported="true"></service>
+>>>>>>> 0b4e1b0aa200cf26d9fe6fe4984c6f7ac6a99c84
 
         <activity android:name=".activity.setting.ChangePasswordActivity" />
         <activity android:name=".activity.setting.PersonalActivity" />
@@ -51,6 +60,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activity.VideoChatViewActivity" />
 
         <service
             android:name=".service.WebSocketService"
