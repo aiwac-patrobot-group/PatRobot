@@ -8,7 +8,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -17,17 +16,12 @@ import com.aiwac.cilentapp.patrobot.activity.loginandregister.LoginByPasswordAct
 import com.aiwac.cilentapp.patrobot.activity.setting.ScanCodeActivity;
 import com.aiwac.cilentapp.patrobot.activity.setting.SettingActivity;
 import com.aiwac.cilentapp.patrobot.activity.videoplayer.VideoAudioActivity;
-import com.aiwac.cilentapp.patrobot.activity.videoplayer.VideoPlayActivity;
 import com.aiwac.cilentapp.patrobot.database.UserData;
-import com.aiwac.cilentapp.patrobot.server.WebSocketApplication;
 import com.aiwac.cilentapp.patrobot.service.WebSocketService;
-import com.aiwac.cilentapp.patrobot.utils.JsonUtil;
 import com.aiwac.robotapp.commonlibrary.common.Constant;
 import com.aiwac.robotapp.commonlibrary.utils.LogUtil;
 
 import java.util.ArrayList;
-import java.util.UUID;
-
 import io.vov.vitamio.Vitamio;
 
 
