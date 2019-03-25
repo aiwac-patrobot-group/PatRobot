@@ -25,7 +25,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-<<<<<<< HEAD
 
         <activity android:name=".activity.navigate.NavigateActivity" />
         <activity android:name=".activity.feed.FeedActivity" />
@@ -34,12 +33,13 @@
             android:name=".service.TimerService"
             android:enabled="true"
             android:exported="true" />
-=======
+
         <service
             android:name=".sport.MoveControlService"
             android:enabled="true"
             android:exported="true"></service>
->>>>>>> 0b4e1b0aa200cf26d9fe6fe4984c6f7ac6a99c84
+
+
 
         <activity android:name=".activity.setting.ChangePasswordActivity" />
         <activity android:name=".activity.setting.PersonalActivity" />
