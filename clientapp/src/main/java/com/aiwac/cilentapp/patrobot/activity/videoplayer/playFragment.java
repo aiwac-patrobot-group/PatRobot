@@ -10,14 +10,6 @@ import android.view.ViewGroup;
 
 import com.aiwac.cilentapp.patrobot.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link playFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link playFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class playFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -39,7 +31,6 @@ public class playFragment extends Fragment {
         playFragment fragment = new playFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -60,12 +51,6 @@ public class playFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_play, container, false);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
 
     @Override
     public void onAttach(Context context) {

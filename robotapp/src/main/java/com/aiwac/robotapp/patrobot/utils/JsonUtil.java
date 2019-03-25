@@ -9,6 +9,7 @@ import com.aiwac.robotapp.commonlibrary.exception.JsonException;
 import com.aiwac.robotapp.commonlibrary.utils.ImageUtil;
 import com.aiwac.robotapp.commonlibrary.utils.LogUtil;
 import com.aiwac.robotapp.patrobot.bean.BaseEntity;
+import com.aiwac.robotapp.patrobot.bean.FeedTime;
 import com.aiwac.robotapp.patrobot.bean.MessageTransform;
 import com.aiwac.robotapp.patrobot.bean.aVDetail;
 
@@ -397,6 +398,27 @@ public class JsonUtil {
 
 
     }
+
+    //解析Json  获取投食，巡航时间列表
+    public static FeedTime parseFeedNavigateTransform(String jsonStr){
+        try{
+            JSONObject root = new JSONObject(jsonStr);
+            FeedTime feedTime = new FeedTime();
+            feedTime.setBusinessType(root.getString(Constant.WEBSOCKET_MESSAGE_BUSSINESSTYPE));
+            feedTime.setClientID(root.getString(Constant.WEBSOCKET_MESSAGE_CLIENTID));
+            feedTime.setClientType(root.getString(Constant.WEBSOCKET_MESSAGE_CLIENTTYPE));
+            feedTime.setUniqueID(root.getString(Constant.WEBSOCKET_MESSAGE_UUID));
+            feedTime.setTime(root.getString(Constant.WEBSOCKET_MESSAGE_TIME));
+            feedTime.setTimePoints(root.getString(Constant.WEB_SOCKET_TIME_POINTS));
+            return feedTime;
+        }catch (Exception e) {
+            e.printStackTrace();
+            Log.d("TAG",Constant.JSON_PARSE_EXCEPTION);
+            throw new JsonException(Constant.JSON_PARSE_EXCEPTION, e);
+        }
+    }
+
+
 
 
 }

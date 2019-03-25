@@ -24,4 +24,11 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+
+    <string name="number">0</string>
+    <string name="start">start</string>
+    <string name="stop">stop</string>
+    <string name="pause">pause</string>
+    <string name="resume">resume</string>
+
 </resources>

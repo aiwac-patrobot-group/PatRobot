@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    style="@style/activity_page"
+    android:orientation="vertical"
+    tools:context=".activity.feed.FeedActivity">
+    <RelativeLayout style="@style/topbar_bg"
+        tools:ignore="MissingConstraints">
+
+        <ImageButton style="@style/topbar_return_img" />
+
+        <TextView
+            style="@style/topbar_title"
+            android:layout_centerHorizontal="true"
+            android:text="投食" />
+    </RelativeLayout>
+
+
+    <Button
+        android:id="@+id/addFeedTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:paddingLeft="5dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:text="添加时间" />
+    <ExpandableListView
+        android:id="@+id/el_list"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#ffffff"
+        android:cacheColorHint="#abcdefff"
+        android:listSelector="#cdefabdc"
+        >
+    </ExpandableListView>
+</LinearLayout>
