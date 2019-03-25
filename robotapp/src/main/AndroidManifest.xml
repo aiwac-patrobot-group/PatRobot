@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.aiwac.robotapp.patrobot">
+
     <!-- 浮动通知权限 -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" /> <!-- skin -->
@@ -25,7 +26,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.VideoChatViewActivity"></activity>
+        <service
+            android:name=".service.SportService"
+            android:enabled="true"
+            android:exported="true"></service>
+
+        <activity android:name=".activity.VideoChatViewActivity" />
         <activity android:name=".activity.videoplayer.AudioPlayActivity" />
         <activity android:name=".activity.videoplayer.VideoPlayActivity" />
         <activity android:name=".activity.ConnectWifiActivity" />

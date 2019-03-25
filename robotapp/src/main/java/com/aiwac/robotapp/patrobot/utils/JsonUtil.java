@@ -328,6 +328,7 @@ public class JsonUtil {
     public static String parseCommantType(String data){
         try {
             JSONObject root = new JSONObject(data);
+            LogUtil.d(root.toString());
             return root.getString(Constant.WEBSOCKET_COMMAND_TYPE);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -335,17 +336,19 @@ public class JsonUtil {
             throw new JsonException(Constant.JSON_PARSE_EXCEPTION, e);
         }
     }
-    //解析1001指令，获取uuid
-    public static String parseUUID(String data){
+    //解析1003指令，获取移动方向
+    public static String parseDiretction(String data){
         try {
             JSONObject root = new JSONObject(data);
-            return root.getString(Constant.WEBSOCKET_COMMAND_VIDEO_UUID);
+            return root.getString(Constant.WEBSOCKET_COMMAND_MOVE_DIRECTION);
         } catch (JSONException e) {
             e.printStackTrace();
             Log.d("TAG",Constant.JSON_PARSE_EXCEPTION);
             throw new JsonException(Constant.JSON_PARSE_EXCEPTION, e);
         }
     }
+
+
 
 
     //解析json 获取讲座  视音频的详细信息

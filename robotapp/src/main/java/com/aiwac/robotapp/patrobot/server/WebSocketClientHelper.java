@@ -15,6 +15,7 @@ import com.aiwac.robotapp.patrobot.activity.videoplayer.VideoPlayActivity;
 import com.aiwac.robotapp.patrobot.bean.FeedTime;
 import com.aiwac.robotapp.patrobot.bean.MessageTransform;
 import com.aiwac.robotapp.patrobot.bean.aVDetail;
+import com.aiwac.robotapp.patrobot.service.SportService;
 import com.aiwac.robotapp.patrobot.utils.JsonUtil;
 
 
@@ -156,15 +157,20 @@ public class WebSocketClientHelper extends WebSocketClient {
             }else if((businessType.equals(Constant.WEBSOCKET_MESSAGE_TRANSFORM_CODE))){//指令转发
                 String dataJsonStr=JsonUtil.parseMessageTransData(json);
                 String commantType=JsonUtil.parseCommantType(dataJsonStr);
+                LogUtil.d(commantType);
                 if(commantType.equals(Constant.WEBSOCKET_COMMAND_VIDEO_CODE)){//指令是1001，开启视频通话
-                    String uuid=JsonUtil.parseUUID(dataJsonStr);
                     //通知MainActivity跳转到语音通话
-                    MessageEvent messageEvent = new MessageEvent(Constant.WEBSOCKET_COMMAND_GET_UUID, uuid);
-                    EventBus.getDefault().post(messageEvent);
-                }if(commantType.equals(Constant.WEBSOCKET_COMMAND_END_VIDEO_CODE)){//指令是1002，结束视频通话
+                    LogUtil.d("in");
+                    MessageEvent messageEvent = new MessageEvent(Constant.WEBSOCKET_COMMAND_START_VIDEO,"");
+                    EventBus.getDefault().postSticky(messageEvent);
+                }else if(commantType.equals(Constant.WEBSOCKET_COMMAND_END_VIDEO_CODE)){//指令是1002，结束视频通话
                     //通知MainActivity跳转到语音通话
-                    MessageEvent messageEvent = new MessageEvent(Constant.WEBSOCKET_COMMAND_END_VIDEO);
-                    EventBus.getDefault().post(messageEvent);
+                    MessageEvent messageEvent = new MessageEvent(Constant.WEBSOCKET_COMMAND_END_VIDEO,"");
+                    EventBus.getDefault().postSticky(messageEvent);
+                }else if(commantType.equals(Constant.WEBSOCKET_COMMAND_MOVE_CODE)){//1003,移动
+                    String direction=JsonUtil.parseDiretction(dataJsonStr);
+                    //发送方向的消息
+                    SportService.getInstance().getMessage(direction);
                 }
 
                 /*messageTransform = JsonUtil.parseMessageTransform(json);

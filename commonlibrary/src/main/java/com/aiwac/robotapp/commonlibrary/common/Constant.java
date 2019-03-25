@@ -1,5 +1,7 @@
 package com.aiwac.robotapp.commonlibrary.common;
 
+import android.content.SharedPreferences;
+
 /**
  * Created by 14750 on 2019/2/23.
  */
@@ -373,14 +375,18 @@ public class Constant {
     public final static String WEBSOCKET_COMMAND_VIDEO_CODE="1001";//转发视频通话指令
     public final static String WEBSOCKET_COMMAND_END_VIDEO_CODE="1002";//结束视频通话指令
     public final static String WEBSOCKET_COMMAND_VIDEO_UUID="videoDataUUID";
-    public final static String WEBSOCKET_COMMAND_GET_UUID="robotGetUUID";
+    public final static String WEBSOCKET_COMMAND_START_VIDEO ="startVideoChat";
     public final static String WEBSOCKET_COMMAND_END_VIDEO="endVideoChat";
+
+    public final static String WEBSOCKET_COMMAND_MOVE_CODE="1003";//移动指令
+    public final static String WEBSOCKET_COMMAND_MOVE_DIRECTION="moveDirection";//移动方向
+    public final static String WEBSOCKET_COMMAND_GET_DIRECTION="getDirection";//获得方向
     /*
         "businessType:"0002"
-        data:{
+        data:"{
             "commandType":"1001",
             "videoDataUUID":"aidghaof1243"
-        }
+        }"
     */
 
 }

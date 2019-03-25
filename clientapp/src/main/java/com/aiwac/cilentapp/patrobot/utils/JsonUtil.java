@@ -181,25 +181,11 @@ public class JsonUtil {
      */
     public static String sendMacAddress(String macAddress){
         try {
-            User user = new User();   //rui添加。原String sendMacAddress,且无user
             BaseEntity baseEntity = new BaseEntity();
             baseEntity.setBusinessType(Constant.WEBSOCKET_BUSSINESS_MACADDRESS_CODE);
             JSONObject root=baseEntity2Json(baseEntity);
             root.put(Constant.ROBOT_MAC_ADDRESS,macAddress);
             LogUtil.d(Constant.JSON_GENERATE_SUCCESS+root.toString());
-
-
-            JSONArray jsonArray = root.getJSONArray(Constant.JSON_OBJECT_USER_NAME);
-            // for (int i = 0; i< jsonArray.length(); i++) {
-            //循环遍历，依次取出JSONObject对象
-            //用getInt和getString方法取出对应键值
-            JSONObject jsonObject = jsonArray.getJSONObject(0);
-            user.setId(jsonObject.getInt("id"));
-            user.setNumber(jsonObject.getString("number"));
-
-            LogUtil.d( Constant.JSON_PARSE_SUCCESS + user.toString());
-            // }
-
             return root.toString();
 
         } catch (Exception e) {
@@ -283,8 +269,8 @@ public class JsonUtil {
             JSONObject root=baseEntity2Json(baseEntity);
             JSONObject data=new JSONObject();
             data.put(Constant.WEBSOCKET_COMMAND_TYPE,Constant.WEBSOCKET_COMMAND_VIDEO_CODE);
-            data.put(Constant.WEBSOCKET_COMMAND_VIDEO_UUID,uuid);
-            root.put(Constant.WEBSOCKET_MESSAGE_TRANSFORM,data);
+            //data.put(Constant.WEBSOCKET_COMMAND_VIDEO_UUID,uuid);
+            root.put(Constant.WEBSOCKET_MESSAGE_TRANSFORM,data.toString());
 
             LogUtil.d(Constant.JSON_GENERATE_SUCCESS+root.toString());
             return root.toString();
@@ -306,7 +292,7 @@ public class JsonUtil {
             JSONObject root=baseEntity2Json(baseEntity);
             JSONObject data=new JSONObject();
             data.put(Constant.WEBSOCKET_COMMAND_TYPE,Constant.WEBSOCKET_COMMAND_END_VIDEO_CODE);
-            root.put(Constant.WEBSOCKET_MESSAGE_TRANSFORM,data);
+            root.put(Constant.WEBSOCKET_MESSAGE_TRANSFORM,data.toString());
 
             LogUtil.d(Constant.JSON_GENERATE_SUCCESS+root.toString());
             return root.toString();
@@ -316,6 +302,30 @@ public class JsonUtil {
             throw new JsonException(Constant.JSON_GENERATE_EXCEPTION, e);
         }
     }
+
+    /**
+     * 结束视频通话的指令转发
+     * @return
+     */
+    public static String commendMoveDirection(String direction){
+        try {
+            BaseEntity baseEntity = new BaseEntity();
+            baseEntity.setBusinessType(Constant.WEBSOCKET_MESSAGE_TRANSFORM_CODE);
+            JSONObject root=baseEntity2Json(baseEntity);
+            JSONObject data=new JSONObject();
+            data.put(Constant.WEBSOCKET_COMMAND_TYPE,Constant.WEBSOCKET_COMMAND_MOVE_CODE);
+            data.put(Constant.WEBSOCKET_COMMAND_MOVE_DIRECTION,direction);
+            root.put(Constant.WEBSOCKET_MESSAGE_TRANSFORM,data.toString());
+
+            LogUtil.d(Constant.JSON_GENERATE_SUCCESS+root.toString());
+            return root.toString();
+        } catch (JSONException e) {
+            e.printStackTrace();
+            LogUtil.d(Constant.JSON_GENERATE_EXCEPTION);
+            throw new JsonException(Constant.JSON_GENERATE_EXCEPTION, e);
+        }
+    }
+
 
     //生成查询讲座视频摘要的json
     public static String videoAbstract2Json(){
