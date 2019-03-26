@@ -24,7 +24,6 @@ import com.aiwac.robotapp.commonlibrary.common.Constant;
 import com.aiwac.robotapp.commonlibrary.utils.LogUtil;
 
 import java.util.ArrayList;
-
 import io.vov.vitamio.Vitamio;
 
 

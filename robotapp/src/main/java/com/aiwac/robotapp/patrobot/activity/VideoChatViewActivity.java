@@ -21,6 +21,7 @@ import com.aiwac.robotapp.commonlibrary.bean.MessageEvent;
 import com.aiwac.robotapp.commonlibrary.common.Constant;
 import com.aiwac.robotapp.commonlibrary.utils.LogUtil;
 import com.aiwac.robotapp.patrobot.R;
+import com.aiwac.robotapp.patrobot.service.SportService;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -33,8 +34,6 @@ import io.agora.rtc.video.VideoEncoderConfiguration;
 
 public class VideoChatViewActivity extends AppCompatActivity {
 
-    private String token="";
-    private int uuid=0;
     private static final String LOG_TAG = VideoChatViewActivity.class.getSimpleName();
 
     private static final int PERMISSION_REQ_ID = 22;
@@ -79,25 +78,21 @@ public class VideoChatViewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_chat_view);
-        uuid= getUUID();
         if (checkSelfPermission(REQUESTED_PERMISSIONS[0], PERMISSION_REQ_ID) &&
                 checkSelfPermission(REQUESTED_PERMISSIONS[1], PERMISSION_REQ_ID) &&
                 checkSelfPermission(REQUESTED_PERMISSIONS[2], PERMISSION_REQ_ID)) {
-            //设置token
-            SharedPreferences s = getSharedPreferences(Constant.DB_USER_TABLENAME,MODE_PRIVATE);
-            token = s.getString(Constant.USER_DATA_FIELD_TOKEN,"");
-            LogUtil.d(token);
             initAgoraEngineAndJoinChannel();
         }
 
-
+        setControlDirection();
         //注册消息
         EventBus.getDefault().register(this);
     }
-    private int getUUID(){
-        Intent intent=getIntent();
-        String uuidStr=intent.getStringExtra(Constant.WEBSOCKET_COMMAND_GET_UUID);
-        return Integer.parseInt(uuidStr);
+
+    //设置运动监听
+    private void setControlDirection(){
+        //启动服务
+        startService(new Intent(VideoChatViewActivity.this, SportService.class));
     }
 
     private void initAgoraEngineAndJoinChannel() {
@@ -229,11 +224,11 @@ public class VideoChatViewActivity extends AppCompatActivity {
         SurfaceView surfaceView = RtcEngine.CreateRendererView(getBaseContext());
         surfaceView.setZOrderMediaOverlay(true);
         container.addView(surfaceView);
-        mRtcEngine.setupLocalVideo(new VideoCanvas(surfaceView, VideoCanvas.RENDER_MODE_FIT, uuid));
+        mRtcEngine.setupLocalVideo(new VideoCanvas(surfaceView, VideoCanvas.RENDER_MODE_FIT, 0));
     }
 
     private void joinChannel() {
-        mRtcEngine.joinChannel(null, "demoChannel1", "Extra Optional Data", uuid); // if you do not specify the uid, we will generate the uid for you
+        mRtcEngine.joinChannel(null, "demoChannel1", "Extra Optional Data", 0); // if you do not specify the uid, we will generate the uid for you
     }
 
     private void setupRemoteVideo(int uid) {

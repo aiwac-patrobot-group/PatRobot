@@ -1,52 +1,31 @@
-package com.aiwac.cilentapp.patrobot.sport;
+package com.aiwac.robotapp.patrobot.service;
 
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
-import android.util.Log;
 
-import com.aiwac.cilentapp.patrobot.server.WebSocketApplication;
-import com.aiwac.cilentapp.patrobot.utils.JsonUtil;
-import com.aiwac.robotapp.commonlibrary.task.ThreadPoolManager;
 import com.aiwac.robotapp.commonlibrary.utils.LogUtil;
 
-public class MoveControlService extends Service {
-    private static MoveControlService minstance;
-    public MoveControlService() {
+public class SportService extends Service {
+
+    private static SportService minstance;
+    public SportService() {
         minstance=this;
     }
 
-    public static MoveControlService getInstance(){
+    public static SportService getInstance(){
         return minstance;
     }
-
     @Override
     public IBinder onBind(Intent intent) {
         // TODO: Return the communication channel to the service.
         LogUtil.d("控制机器人移动服务启动");
         throw new UnsupportedOperationException("Not yet implemented");
     }
-    private String command="";
     public void getMessage(String messageCode){
         LogUtil.d(messageCode);
-        this.command=messageCode;
-        sendMoveCommandToRobot();
     }
-    private void sendMoveCommandToRobot(){
-        ThreadPoolManager.getThreadPoolManager().submitTask(new Runnable() {
-            @Override
-            public void run() {
-                try{
-                    String jsonStr= JsonUtil.commendMoveDirection(command);
-                    WebSocketApplication.getWebSocketApplication().getWebSocketHelper().send(jsonStr);
-                    LogUtil.d("发送移动指令成功");
-                } catch (Exception e){
-                    e.printStackTrace();
-                    LogUtil.d( "发送移动指令失败");
-                }
-            }
-        });
-    }
+
 
 
 /*    public void getMessage(String messageCode){

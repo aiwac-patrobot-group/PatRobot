@@ -17,7 +17,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.aiwac.robotapp.commonlibrary.bean.MessageEvent;
 import com.aiwac.robotapp.commonlibrary.common.Constant;
@@ -110,7 +109,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void Event(MessageEvent messageEvent) {
+        if(messageEvent.getTo().equals(Constant.WEBSOCKET_COMMAND_START_VIDEO)){
+            //准备打开视频通话
+            Intent intent = new Intent(MainActivity.this,VideoChatViewActivity.class);
+            startActivity(intent);
+        }
 
+    }
     /**
      * 设置携带mac地址的图片
      */
@@ -299,17 +306,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void Event(MessageEvent messageEvent) {
-        if(messageEvent.getTo().equals(Constant.WEBSOCKET_COMMAND_GET_UUID)){
-            //获得了uuid，准备打开视频通话
-            String uuid = messageEvent.getMessage();
-            Intent intent = new Intent(MainActivity.this,VideoChatViewActivity.class);
-            intent.putExtra(Constant.WEBSOCKET_COMMAND_GET_UUID,uuid);
-            startActivity(intent);
-        }
 
-    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {

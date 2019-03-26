@@ -3,6 +3,7 @@ package com.aiwac.cilentapp.patrobot.activity.videoplayer;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBar;
@@ -27,6 +28,11 @@ import com.aiwac.cilentapp.patrobot.utils.JsonUtil;
 import com.aiwac.robotapp.commonlibrary.common.Constant;
 import com.aiwac.robotapp.commonlibrary.task.ThreadPoolManager;
 
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+import static com.aiwac.cilentapp.patrobot.utils.CacheFileUtil.getURLimage;
 
 
 public class VideoDetailActivity extends AppCompatActivity {
@@ -34,7 +40,7 @@ public class VideoDetailActivity extends AppCompatActivity {
     protected videoInfo lectureCourseNow;
     protected ImageView lectureCover;
     protected TextView videoTitle, videoDescription;
-    private Button backButton, buttonplay_pause1,buttonplay_pause2;
+    private Button backButton, buttonplay_pause1,buttonplay_pause2,buttonplay_pause3;
     protected String link = "noLink";
 
     @Override
@@ -66,37 +72,25 @@ public class VideoDetailActivity extends AppCompatActivity {
         videoDescription = (TextView)findViewById(R.id.lecture_description);
         buttonplay_pause1 = (Button)findViewById(R.id.buttonPlayPause) ;
         buttonplay_pause2 = (Button)findViewById(R.id.buttonPlayPause2);
+        buttonplay_pause3 = (Button)findViewById(R.id.buttonPlayPause3);
         buttonplay_pause1.setSelected(false);
         buttonplay_pause2.setSelected(false);
         buttonplay_pause2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                if (buttonplay_pause2.isSelected() == true) {
-//                    buttonplay_pause2.setSelected(false);
-//                    buttonplay_pause2.setText("暂停");
-//                    ThreadPoolManager.getThreadPoolManager().submitTask(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            try {
-//                                WebSocketApplication.getWebSocketApplication().send(JsonUtil.messageTransform2Json("PauseVideo："));
-//                            } catch (Exception e) {
-//                                e.printStackTrace();
-//                                Log.d("tag", "LoadVideoAsync onPostExecute setOnItemClickListener exception");
-//                            }
-//                        }
-//                    });
-//                } else {
+                if(buttonplay_pause2.getText().equals("机器人端播放")){
                     if (link.equals("noLink")) {
                         Toast.makeText(VideoDetailActivity.this, "抱歉，暂无相关资源", Toast.LENGTH_SHORT).show();
 
                     } else {
                         //测试
 //                    link  = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
+                        buttonplay_pause2.setText("暂停播放");
                         ThreadPoolManager.getThreadPoolManager().submitTask(new Runnable() {
                             @Override
                             public void run() {
                                 try {
-                                    WebSocketApplication.getWebSocketApplication().send(JsonUtil.messageTransform2Json("PlayVideo：" + link));
+                                    WebSocketApplication.getWebSocketApplication().send(JsonUtil.videoPlay2Json(Constant.WEBSOCKET_COMMAND_VIDEO_PLAY_CODE,link));
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                     Log.d("tag", "LoadVideoAsync onPostExecute setOnItemClickListener exception");
@@ -111,53 +105,73 @@ public class VideoDetailActivity extends AppCompatActivity {
                         }catch(Exception o){
                             o.printStackTrace();
                         }
-                        long videoTime = mediaPlayer.getDuration();
-                        Intent intentService = new Intent(VideoDetailActivity.this, TimerService.class);
-                        intentService.putExtra("videoDuration",videoTime);
-                        VideoDetailActivity.this.startService(intentService);
                     }
-                    buttonplay_pause2.setSelected(true);
-                    buttonplay_pause2.setText("继续");
+                }else if(buttonplay_pause2.getText().equals("暂停播放")){
+                    buttonplay_pause2.setText("继续播放");
+                    ThreadPoolManager.getThreadPoolManager().submitTask(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                WebSocketApplication.getWebSocketApplication().send(JsonUtil.videoPlay2Json(Constant.WEBSOCKET_COMMAND_VIDEO_PLAY_CODE,"Pause"));
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                Log.d("tag", "LoadVideoAsync onPostExecute setOnItemClickListener exception");
+                            }
+                        }
+                    });
+
+                }else if(buttonplay_pause2.getText().equals("继续播放")){
+                    buttonplay_pause2.setText("暂停播放");
+                    ThreadPoolManager.getThreadPoolManager().submitTask(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                WebSocketApplication.getWebSocketApplication().send(JsonUtil.videoPlay2Json(Constant.WEBSOCKET_COMMAND_VIDEO_CONTINUE_CODE,"Continue"));
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                Log.d("tag", "LoadVideoAsync onPostExecute setOnItemClickListener exception");
+                            }
+                        }
+                    });
+
                 }
-           // }
+                }
         });
         buttonplay_pause1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    //buttonplay_pause1.setSelected(true);
-
                     if ( link.equals("noLink" ) )
                     {
                         Toast.makeText(VideoDetailActivity.this, "抱歉，暂无相关资源", Toast.LENGTH_SHORT).show();
-
                     }
                     else
                     {
-                        //测试
-//                    link  = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
-                        ThreadPoolManager.getThreadPoolManager().submitTask(new Runnable() {
-                            @Override
-                            public void run() {
-                                try{
-                                    WebSocketApplication.getWebSocketApplication().send( JsonUtil.messageTransform2Json("PlayVideo："+link));
-                                }catch (Exception e){
-                                    e.printStackTrace();
-                                    Log.d("tag", "LoadVideoAsync onPostExecute setOnItemClickListener exception");
-                                }
-                            }
-                        });
-                        //测试
                         Intent intent = new Intent(VideoDetailActivity.this, VideoPlayActivity.class);
-
                         Log.d("Video",link);
                         intent.putExtra("Link",link);
                         startActivity(intent);
-
                     }
 
                     buttonplay_pause1.setSelected(false);
                 }
 
+        });
+        buttonplay_pause3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                buttonplay_pause2.setText("机器人端播放");
+                ThreadPoolManager.getThreadPoolManager().submitTask(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            WebSocketApplication.getWebSocketApplication().send(JsonUtil.videoPlay2Json(Constant.WEBSOCKET_COMMAND_VIDEO_STOP_CODE,link));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Log.d("tag", "LoadVideoAsync onPostExecute setOnItemClickListener exception");
+                        }
+                    }
+                });
+            }
         });
 
         backButton = (Button)findViewById(R.id.backButton) ;
@@ -169,11 +183,13 @@ public class VideoDetailActivity extends AppCompatActivity {
         });
 
         //lectureCover.setImageBitmap(lectureCourseNow.getCover());
-        Bitmap receive=(Bitmap)(getIntent().getParcelableExtra("bitmap"));
+        //Bitmap receive=(Bitmap)(getIntent().getParcelableExtra("bitmap"));
+        Bitmap receive = getURLimage(lectureCourseNow.getCover());
         lectureCover.setImageBitmap(receive);
         videoTitle.setText(lectureCourseNow.getTitle());
         videoDescription.setText(lectureCourseNow.getDescription());
         link = lectureCourseNow.getLink();
 
     }
+
 }

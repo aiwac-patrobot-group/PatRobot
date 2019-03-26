@@ -34,6 +34,8 @@ import java.util.List;
 
 import io.vov.vitamio.Vitamio;
 
+import static com.aiwac.cilentapp.patrobot.utils.CacheFileUtil.getURLimage;
+
 public class videoFragment extends Fragment {
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -202,7 +204,7 @@ public class videoFragment extends Fragment {
 
             lecture_name.setText(lectureCourse.getTitle());
             //集成需要加入
-            //cover_image.setImageBitmap(lectureCourse.getCover());
+            cover_image.setImageBitmap(getURLimage(lectureCourse.getCover()));
             video_des.setText(lectureCourse.getDescription());
 
 

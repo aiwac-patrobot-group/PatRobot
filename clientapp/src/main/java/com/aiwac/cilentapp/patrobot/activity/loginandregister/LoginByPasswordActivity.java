@@ -33,6 +33,7 @@ public class LoginByPasswordActivity extends AppCompatActivity {
     private TextView textToRegister;
     private String phoneNumber;
     private TextView tvToLoginByCode;
+    private String errorDesc="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,7 +115,8 @@ public class LoginByPasswordActivity extends AppCompatActivity {
 
                                     }else{
                                         message.what = Constant.USER_CHECKCODE_ERROR_EXCEPTION;
-                                        LogUtil.d(Constant.USER_CHECKCODE_ERROR_EXCEPTION_MESSAGE);
+                                        errorDesc=JsonUtil.parseErrorDesc(resultJson);
+                                        LogUtil.d(errorDesc);
                                     }
 
                                 }else{
@@ -146,7 +148,7 @@ public class LoginByPasswordActivity extends AppCompatActivity {
                     Toast.makeText(LoginByPasswordActivity.this, Constant.USER_JSON_EXCEPTION_MESSAGE, Toast.LENGTH_LONG).show();
                     break;
                 case Constant.USER_CHECKCODE_ERROR_EXCEPTION:
-                    Toast.makeText(LoginByPasswordActivity.this, Constant.USER_CHECKCODE_ERROR_EXCEPTION_MESSAGE, Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoginByPasswordActivity.this, errorDesc, Toast.LENGTH_LONG).show();
                     break;
                 case Constant.USER_CHECKCODE_SUCCESS:
                     //直接跳转到主函数

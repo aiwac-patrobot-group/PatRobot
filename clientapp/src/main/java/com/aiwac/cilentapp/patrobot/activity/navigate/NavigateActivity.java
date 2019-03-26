@@ -29,6 +29,7 @@ import com.aiwac.robotapp.commonlibrary.task.ThreadPoolManager;
 
 import org.w3c.dom.Text;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class NavigateActivity extends AppCompatActivity {
@@ -95,8 +96,8 @@ public class NavigateActivity extends AppCompatActivity {
                         }
                     }
                 });
-                sTime.setText("9:00");
-                eTime.setText("9:00");
+                sTime.setText("09:00");
+                eTime.setText("09:00");
             }
         });
 
@@ -242,12 +243,13 @@ public class NavigateActivity extends AppCompatActivity {
             @Override
             public void onConfirm(int hourOfDay, int minute) {
                 //toast(hourOfDay + ":" + minute);
+                DecimalFormat df=new DecimalFormat("00");//设置格式
                 if(startEnd.equals("start")){
-                    setStartTime = String.valueOf(hourOfDay)+":"+String.valueOf(minute);
+                    setStartTime = df.format(hourOfDay)+":"+df.format(minute);
                     sTime.setText(setStartTime);
 
                 }else if(startEnd.equals("end")){
-                    setEndTime = String.valueOf(hourOfDay)+":"+String.valueOf(minute);
+                    setEndTime = df.format(hourOfDay)+":"+df.format(minute);
                     eTime.setText(setEndTime);
 
                 }
@@ -256,9 +258,9 @@ public class NavigateActivity extends AppCompatActivity {
             @Override
             public void onCancel() {
                 if(startEnd.equals("start")){
-                    setStartTime = "9:0";
+                    setStartTime = "09:00";
                 }else if(startEnd.equals("end")){
-                    setEndTime = "9:0";
+                    setEndTime = "09:00";
                 };
             }
         });

@@ -31,6 +31,8 @@ import com.aiwac.robotapp.commonlibrary.utils.ImageUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.aiwac.cilentapp.patrobot.utils.CacheFileUtil.getURLimage;
+
 public class audioFragment extends Fragment {
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -185,8 +187,8 @@ public class audioFragment extends Fragment {
 
             lecture_name.setText(audioInfo.getTitle());
 
-            //集成需要加入
-            //cover_image.setImageBitmap(audioInfo.getCover());
+
+            cover_image.setImageBitmap(getURLimage(audioInfo.getCover()));
 
             return view;
         }
