@@ -179,7 +179,7 @@ public class audioDetailActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         try {
-                            WebSocketApplication.getWebSocketApplication().send(JsonUtil.videoPlay2Json(Constant.WEBSOCKET_COMMAND_AUDIO_STOP_CODE,link));
+                            WebSocketApplication.getWebSocketApplication().send(JsonUtil.videoPlay2Json(Constant.WEBSOCKET_COMMAND_AUDIO_STOP_CODE,"Stop"));
                         } catch (Exception e) {
                             e.printStackTrace();
                             Log.d("tag", "LoadVideoAsync onPostExecute setOnItemClickListener exception");
