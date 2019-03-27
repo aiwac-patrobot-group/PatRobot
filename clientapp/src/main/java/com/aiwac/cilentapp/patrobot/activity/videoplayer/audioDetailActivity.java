@@ -3,6 +3,8 @@ package com.aiwac.cilentapp.patrobot.activity.videoplayer;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -24,6 +26,13 @@ import com.aiwac.cilentapp.patrobot.server.WebSocketApplication;
 import com.aiwac.cilentapp.patrobot.utils.JsonUtil;
 import com.aiwac.robotapp.commonlibrary.common.Constant;
 import com.aiwac.robotapp.commonlibrary.task.ThreadPoolManager;
+import com.bumptech.glide.Glide;
+
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+import static com.aiwac.cilentapp.patrobot.utils.CacheFileUtil.getURLimage;
 
 public class audioDetailActivity extends AppCompatActivity {
 
@@ -32,7 +41,7 @@ public class audioDetailActivity extends AppCompatActivity {
     protected ImageView lectureCover;
     protected TextView audioTitle, audioDescription;
     protected String link = "noLink";
-    private Button backButton, buttonplay_pause;
+    private Button backButton, buttonplay_pause,buttonPlay_pause1,buttonPlay_pause2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,10 +57,6 @@ public class audioDetailActivity extends AppCompatActivity {
             actionbar.hide();
         }
 
-//        //获取已经到达 的讲座组消息数据，信息请求在 fragment_lecture_article 被发送
-//        getLectureAudioDetailAsync loadCourseGroupAsync = new getLectureAudioDetailAsync();
-//        loadCourseGroupAsync.execute();
-
         setView();
 
     }
@@ -59,23 +64,16 @@ public class audioDetailActivity extends AppCompatActivity {
 
 
     private void setView() {
-        lectureCourseNow = (videoInfo) getIntent().getSerializableExtra("LectureCourse");
+        lectureCourseNow = (videoInfo) getIntent().getSerializableExtra("audioInfo");
 
         lectureCover = (ImageView)findViewById(R.id.lecture_cover);
         audioTitle = (TextView)findViewById(R.id.lecture_name);
-        //lectureDuration = (TextView)findViewById(R.id.lecture_duration);
-        //lectureUpdateTime = (TextView)findViewById(R.id.lecture_update_time);
         audioDescription = (TextView)findViewById(R.id.lecture_description);
-
-        //集成需要加入
-        //lectureCover.setImageBitmap(lectureCourseNow.getCover());
-        Bitmap receive=(Bitmap)(getIntent().getParcelableExtra("bitmap"));
-        lectureCover.setImageBitmap(receive);
+        buttonPlay_pause1 = (Button)findViewById(R.id.buttonPlayPause);
+        buttonPlay_pause2 = (Button)findViewById(R.id.buttonPlayPause3);
         audioTitle.setText(lectureCourseNow.getTitle());
-        //lectureDuration.setText(lectureCourseNow.getDuration());
-        //lectureUpdateTime.setText(lectureCourseNow.getUpdateTime());
         audioDescription.setText(lectureCourseNow.getDescription());
-
+        Glide.with(audioDetailActivity.this).load(lectureCourseNow.getCover()).into(lectureCover);
         backButton = (Button)findViewById(R.id.backButton) ;
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,58 +81,104 @@ public class audioDetailActivity extends AppCompatActivity {
                 finish();
             }
         });
-
-
         buttonplay_pause = (Button)findViewById(R.id.buttonPlayPause) ;
         buttonplay_pause.setSelected(false);
         buttonplay_pause.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                if(buttonplay_pause.isSelected() == true)
-                {
-                    buttonplay_pause.setSelected(false);
-                }
-                else
-                {
-                    buttonplay_pause.setSelected(true);
-
-                    if ( link.equals("noLink" ) )
-                    {
+            public void onClick(View view) {
+                if(buttonplay_pause.getText().equals("机器人端播放")){
+                    if (link.equals("noLink")) {
                         Toast.makeText(audioDetailActivity.this, "抱歉，暂无相关资源", Toast.LENGTH_SHORT).show();
 
-                    }
-                    else
-                    {
-
+                    } else {
                         //测试
 //                    link  = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
-                        link =lectureCourseNow.getLink();
+                        buttonplay_pause.setText("暂停播放");
                         ThreadPoolManager.getThreadPoolManager().submitTask(new Runnable() {
                             @Override
                             public void run() {
-                                try{
-                                    WebSocketApplication.getWebSocketApplication().send( JsonUtil.messageTransform2Json("PlayAudio："+link));
-                                }catch (Exception e){
+                                try {
+                                    WebSocketApplication.getWebSocketApplication().send(JsonUtil.videoPlay2Json(Constant.WEBSOCKET_COMMAND_AUDIO_PLAY_CODE,link));
+                                } catch (Exception e) {
                                     e.printStackTrace();
-                                    Log.d("tag", "LoadEducationInfoAsync onPostExecute setOnItemClickListener exception");
+                                    Log.d("tag", "LoadVideoAsync onPostExecute setOnItemClickListener exception");
                                 }
                             }
                         });
-
-                        Intent intent = new Intent(audioDetailActivity.this, AudioPlayActivity.class);
-
-//                    //测试
-//                    link  = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
-//                    //测试
-                        Log.d("lecture test",link);
-                        intent.putExtra("Link",link);
-                        startActivity(intent);
+                        Toast.makeText(audioDetailActivity.this, "已发送到机器人端播放", Toast.LENGTH_SHORT).show();
+                        MediaPlayer mediaPlayer = new MediaPlayer();
+                        try{
+                            mediaPlayer.setDataSource(link);
+                            mediaPlayer.prepare();
+                        }catch(Exception o){
+                            o.printStackTrace();
+                        }
                     }
+                }else if(buttonplay_pause.getText().equals("暂停播放")){
+                    buttonplay_pause.setText("继续播放");
+                    ThreadPoolManager.getThreadPoolManager().submitTask(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                WebSocketApplication.getWebSocketApplication().send(JsonUtil.videoPlay2Json(Constant.WEBSOCKET_COMMAND_AUDIO_PLAY_CODE,"Pause"));
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                Log.d("tag", "LoadVideoAsync onPostExecute setOnItemClickListener exception");
+                            }
+                        }
+                    });
 
-                    buttonplay_pause.setSelected(false);
+                }else if(buttonplay_pause.getText().equals("继续播放")){
+                    buttonplay_pause.setText("暂停播放");
+                    ThreadPoolManager.getThreadPoolManager().submitTask(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                WebSocketApplication.getWebSocketApplication().send(JsonUtil.videoPlay2Json(Constant.WEBSOCKET_COMMAND_AUDIO_CONTINUE_CODE,"Continue"));
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                Log.d("tag", "LoadVideoAsync onPostExecute setOnItemClickListener exception");
+                            }
+                        }
+                    });
+                }
+            }
+        });
+
+        buttonPlay_pause1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if ( link.equals("noLink" ) )
+                {
+                    Toast.makeText(audioDetailActivity.this, "抱歉，暂无相关资源", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    Intent intent = new Intent(audioDetailActivity.this, AudioPlayActivity.class);
+                    Log.d("Video",link);
+                    intent.putExtra("Link",link);
+                    startActivity(intent);
                 }
 
+                buttonPlay_pause1.setSelected(false);
+            }
 
+        });
+        buttonPlay_pause2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //buttonPlay_pause2.setText("机器人端播放");
+                ThreadPoolManager.getThreadPoolManager().submitTask(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            WebSocketApplication.getWebSocketApplication().send(JsonUtil.videoPlay2Json(Constant.WEBSOCKET_COMMAND_AUDIO_STOP_CODE,"Stop"));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Log.d("tag", "LoadVideoAsync onPostExecute setOnItemClickListener exception");
+                        }
+                    }
+                });
             }
         });
 
@@ -145,15 +189,12 @@ public class audioDetailActivity extends AppCompatActivity {
                 finish();
             }
         });
-
-        //lectureCover.setImageBitmap(lectureCourseNow.getCover());
-        //Bitmap receive=(Bitmap)(getIntent().getParcelableExtra("bitmap"));
-        lectureCover.setImageBitmap(receive);
         audioTitle.setText(lectureCourseNow.getTitle());
         audioDescription.setText(lectureCourseNow.getDescription());
         link = lectureCourseNow.getLink();
 
     }
+
 
 
 }

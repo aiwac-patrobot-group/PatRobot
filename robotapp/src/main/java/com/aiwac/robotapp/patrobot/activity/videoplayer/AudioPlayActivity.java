@@ -47,7 +47,7 @@ public class AudioPlayActivity extends AppCompatActivity implements View.OnClick
     public final static int SUB_FLAG = -1;
 
     private FrameLayout mVideoLayout;
-    public static VideoView mVideoView;
+    public static VideoView mVideoView2;
     public static RelativeLayout mControlTop;//顶部控制栏
     public static RelativeLayout mControlBottom;//底部控制栏
     private ImageView mIvBack;//返回
@@ -84,7 +84,7 @@ public class AudioPlayActivity extends AppCompatActivity implements View.OnClick
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case UPDATE_PALY_TIME:
-                    long currentPosition = mVideoView.getCurrentPosition();
+                    long currentPosition = mVideoView2.getCurrentPosition();
                     if (currentPosition <= mVideoTotalTime) {
                         //更新时间显示
                         mTvTime.setText(sec2time(currentPosition));
@@ -135,7 +135,7 @@ public class AudioPlayActivity extends AppCompatActivity implements View.OnClick
         }
 
         mVideoLayout = (FrameLayout) findViewById(R.id.video_layout);
-        mVideoView = (VideoView) findViewById(R.id.videoview);
+        mVideoView2 = (VideoView) findViewById(R.id.videoview);
         mControlTop = (RelativeLayout) findViewById(R.id.control_top);
         mControlBottom = (RelativeLayout) findViewById(R.id.control_bottom);
         mIvBack = (ImageView) findViewById(R.id.iv_back);
@@ -168,9 +168,9 @@ public class AudioPlayActivity extends AppCompatActivity implements View.OnClick
         Pair<Integer, Integer> screenPair = ScreenResolution.getResolution(this);
         mScreenWidth = screenPair.first;
         //播放网络资源
-        mVideoView.setVideoPath(mPlayUrl);
+        mVideoView2.setVideoPath(mPlayUrl);
         //设置缓冲大小为0.5M
-        mVideoView.setBufferSize(1024*512);
+        mVideoView2.setBufferSize(1024*512);
 
         initVolumeWithLight();
         addVideoViewListener();
@@ -209,16 +209,16 @@ public class AudioPlayActivity extends AppCompatActivity implements View.OnClick
      */
     private void addVideoViewListener() {
         //准备播放完成
-        mVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+        mVideoView2.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mp) {
                 //获取播放总时长
-                mVideoTotalTime = mVideoView.getDuration();
+                mVideoTotalTime = mVideoView2.getDuration();
             }
         });
 
         //正在缓冲
-        mVideoView.setOnBufferingUpdateListener(new MediaPlayer.OnBufferingUpdateListener() {
+        mVideoView2.setOnBufferingUpdateListener(new MediaPlayer.OnBufferingUpdateListener() {
             @Override
             public void onBufferingUpdate(MediaPlayer mp, int percent) {
                 if (!mIntoSeek)
@@ -228,12 +228,12 @@ public class AudioPlayActivity extends AppCompatActivity implements View.OnClick
                 mHandler.removeMessages(HIDE_TIME);
                 mIvPlay.setImageResource(R.drawable.video_play);
 
-                if (mVideoView.isPlaying())
-                    mVideoView.pause();
+                if (mVideoView2.isPlaying())
+                    mVideoView2.pause();
             }
         });
 
-        mVideoView.setOnInfoListener(new MediaPlayer.OnInfoListener() {
+        mVideoView2.setOnInfoListener(new MediaPlayer.OnInfoListener() {
             @Override
             public boolean onInfo(MediaPlayer mp, int what, int extra) {
 
@@ -247,8 +247,8 @@ public class AudioPlayActivity extends AppCompatActivity implements View.OnClick
                         mHandler.sendEmptyMessageDelayed(HIDE_CONTROL_BAR, HIDE_TIME);
                         mProgressBar.setVisibility(View.GONE);
 
-                        if (!mVideoView.isPlaying())
-                            mVideoView.start();
+                        if (!mVideoView2.isPlaying())
+                            mVideoView2.start();
                         break;
                 }
 
@@ -257,7 +257,7 @@ public class AudioPlayActivity extends AppCompatActivity implements View.OnClick
         });
 
         //视频播放出错
-        mVideoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+        mVideoView2.setOnErrorListener(new MediaPlayer.OnErrorListener() {
             @Override
             public boolean onError(MediaPlayer mp, int what, int extra) {
 
@@ -270,7 +270,7 @@ public class AudioPlayActivity extends AppCompatActivity implements View.OnClick
         });
 
         //视频播放完成
-        mVideoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+        mVideoView2.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
                 Toast.makeText(AudioPlayActivity.this, "视频播放完成", Toast.LENGTH_SHORT).show();
@@ -288,7 +288,7 @@ public class AudioPlayActivity extends AppCompatActivity implements View.OnClick
         mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                long progress = (long) (seekBar.getProgress()*1.0/100*mVideoView.getDuration());
+                long progress = (long) (seekBar.getProgress()*1.0/100*mVideoView2.getDuration());
                 mTvTime.setText(sec2time(progress));
                 mTvTime_end.setText(sec2time(mVideoTotalTime));
             }
@@ -301,8 +301,8 @@ public class AudioPlayActivity extends AppCompatActivity implements View.OnClick
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                long progress = (long) (seekBar.getProgress()*1.0/100*mVideoView.getDuration());
-                mVideoView.seekTo(progress);
+                long progress = (long) (seekBar.getProgress()*1.0/100*mVideoView2.getDuration());
+                mVideoView2.seekTo(progress);
                 mHandler.sendEmptyMessage(UPDATE_PALY_TIME);
             }
         });
@@ -379,7 +379,7 @@ public class AudioPlayActivity extends AppCompatActivity implements View.OnClick
             @Override
             public boolean onSingleTapConfirmed(MotionEvent e) {
 
-                if (!mVideoView.isPlaying())
+                if (!mVideoView2.isPlaying())
                     return false;
 
                 if (mControlBottom.getVisibility() == View.VISIBLE) {
@@ -407,7 +407,7 @@ public class AudioPlayActivity extends AppCompatActivity implements View.OnClick
             mTvFast.setVisibility(View.GONE);
             mIntoSeek = false;
             if (mIsFastFinish) {
-                mVideoView.seekTo(mSeek);
+                mVideoView2.seekTo(mSeek);
                 mIsFastFinish = false;
             }
         }
@@ -420,7 +420,7 @@ public class AudioPlayActivity extends AppCompatActivity implements View.OnClick
         switch (view.getId()) {
             case R.id.iv_back:
 //                if (mIsFullScreen) {
-//                    if (mVideoView.isPlaying()) {
+//                    if (mVideoView2.isPlaying()) {
 //                        mHandler.removeMessages(HIDE_CONTROL_BAR);
 //                        mHandler.sendEmptyMessageDelayed(HIDE_CONTROL_BAR, HIDE_TIME);
 //                    }
@@ -433,14 +433,14 @@ public class AudioPlayActivity extends AppCompatActivity implements View.OnClick
                 break;
 
             case R.id.iv_play:
-                if (mVideoView.isPlaying()) {
-                    mVideoView.pause();
+                if (mVideoView2.isPlaying()) {
+                    mVideoView2.pause();
                     mIvPlay.setImageResource(R.drawable.video_play);
                     mHandler.removeMessages(UPDATE_PALY_TIME);
                     mHandler.removeMessages(HIDE_CONTROL_BAR);
                     showControlBar();
                 } else {
-                    mVideoView.start();
+                    mVideoView2.start();
                     mIvPlay.setImageResource(R.drawable.video_pause);
                     mHandler.sendEmptyMessage(UPDATE_PALY_TIME);
                     mHandler.sendEmptyMessageDelayed(HIDE_CONTROL_BAR, HIDE_TIME);
@@ -453,7 +453,7 @@ public class AudioPlayActivity extends AppCompatActivity implements View.OnClick
 //                } else {
 //                    setupFullScreen();
 //                }
-//                if (mVideoView.isPlaying()) {
+//                if (mVideoView2.isPlaying()) {
 //                    mHandler.removeMessages(HIDE_CONTROL_BAR);
 //                    mHandler.sendEmptyMessageDelayed(HIDE_CONTROL_BAR, HIDE_TIME);
 //                }
@@ -466,7 +466,7 @@ public class AudioPlayActivity extends AppCompatActivity implements View.OnClick
      */
     private void onSeekChange(float x1, float x2) {
 
-        long currentPosition = mVideoView.getCurrentPosition();
+        long currentPosition = mVideoView2.getCurrentPosition();
         long seek=0;
 
         if (x1 - x2 > 200) {//向左滑
@@ -474,22 +474,22 @@ public class AudioPlayActivity extends AppCompatActivity implements View.OnClick
                 currentPosition = 0;
                 seek = 0;
                 setFashText(seek);
-                mVideoView.seekTo(currentPosition);
+                mVideoView2.seekTo(currentPosition);
             } else {
                 float ducation = (x1 - x2);
-                mVideoView.seekTo(currentPosition - (long)ducation*10);
+                mVideoView2.seekTo(currentPosition - (long)ducation*10);
                 seek = currentPosition - (long)ducation*10;
                 setFashText(seek);
             }
         } else if (x2 - x1 > 200) { //向右滑动
-            if (currentPosition+10000>mVideoView.getDuration()) {
-                currentPosition = mVideoView.getDuration();
-                mVideoView.seekTo(currentPosition);
+            if (currentPosition+10000>mVideoView2.getDuration()) {
+                currentPosition = mVideoView2.getDuration();
+                mVideoView2.seekTo(currentPosition);
                 seek = currentPosition;
                 setFashText(seek);
             } else {
                 float ducation = x2 - x1;
-                mVideoView.seekTo(currentPosition+(long)ducation*10);
+                mVideoView2.seekTo(currentPosition+(long)ducation*10);
                 seek = currentPosition+(long)ducation*10;
                 setFashText(seek);
             }
@@ -499,7 +499,7 @@ public class AudioPlayActivity extends AppCompatActivity implements View.OnClick
 
     private void setFashText(long seek) {
         String showTime = StringUtils.generateTime(seek) +
-                "/" + StringUtils.generateTime(mVideoView.getDuration());
+                "/" + StringUtils.generateTime(mVideoView2.getDuration());
         mTvFast.setText(showTime);
         mSeek = seek;
         mIsFastFinish = true;
@@ -588,7 +588,7 @@ public class AudioPlayActivity extends AppCompatActivity implements View.OnClick
         mVideoLayout.getLayoutParams().height = metrics.heightPixels;
 
         //设置为全屏拉伸
-        mVideoView.setVideoLayout(VideoView.VIDEO_LAYOUT_SCALE, 0);
+        mVideoView2.setVideoLayout(VideoView.VIDEO_LAYOUT_SCALE, 0);
         mIvIsFullScreen.setImageResource(R.drawable.not_fullscreen);
 
         mIsFullScreen = true;
@@ -610,7 +610,7 @@ public class AudioPlayActivity extends AppCompatActivity implements View.OnClick
         mVideoLayout.getLayoutParams().height = (int) height;
 
         //设置为全屏
-        mVideoView.setVideoLayout(VideoView.VIDEO_LAYOUT_SCALE, 0);
+        mVideoView2.setVideoLayout(VideoView.VIDEO_LAYOUT_SCALE, 0);
         mIvIsFullScreen.setImageResource(R.drawable.play_fullscreen);
 
         mIsFullScreen = false;
@@ -639,14 +639,14 @@ public class AudioPlayActivity extends AppCompatActivity implements View.OnClick
     protected void onStop() {
         super.onStop();
         //如果还在播放，则暂停
-        if (mVideoView.isPlaying())
-            mVideoView.pause();
+        if (mVideoView2.isPlaying())
+            mVideoView2.pause();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         //释放资源
-        mVideoView.stopPlayback();
+        mVideoView2.stopPlayback();
     }
 }

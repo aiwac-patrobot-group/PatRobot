@@ -6,7 +6,7 @@ public class FeedTime {
     protected String clientType;
     protected String uniqueID;
     protected String time;
-    protected String timePoints;
+    protected String timePoints[];
 
     public String getClientID() {
         return clientID;
@@ -48,11 +48,11 @@ public class FeedTime {
         this.time = time;
     }
 
-    public String getTimePoints() {
+    public String[] getTimePoints() {
         return timePoints;
     }
 
-    public void setTimePoints(String timePoints) {
+    public void setTimePoints(String timePoints[]) {
         this.timePoints = timePoints;
     }
 }

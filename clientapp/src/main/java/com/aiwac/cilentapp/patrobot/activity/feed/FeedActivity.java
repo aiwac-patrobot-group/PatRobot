@@ -29,6 +29,7 @@ import com.aiwac.cilentapp.patrobot.utils.BasisTimesUtils;
 import com.aiwac.cilentapp.patrobot.utils.JsonUtil;
 import com.aiwac.robotapp.commonlibrary.task.ThreadPoolManager;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class FeedActivity extends AppCompatActivity {
@@ -222,7 +223,8 @@ public class FeedActivity extends AppCompatActivity {
             public void onConfirm(int hourOfDay, int minute) {
                 //toast(hourOfDay + ":" + minute);
                 //feedNum++;
-                setTime = String.valueOf(hourOfDay)+":"+String.valueOf(minute);
+                DecimalFormat df=new DecimalFormat("00");//设置格式
+                setTime = df.format(hourOfDay)+":"+df.format(minute);
                 feedTimes.add(setTime);
 
             }

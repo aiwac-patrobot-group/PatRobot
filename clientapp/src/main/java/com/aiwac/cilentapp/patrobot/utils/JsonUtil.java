@@ -373,8 +373,8 @@ public class JsonUtil {
         }
     }
 
-    // 生成消息转发请求json
-    public static String messageTransform2Json(String transformMessage){
+    // 生成视频播放消息转发请求json
+    public static String videoPlay2Json(String dataCode,String transformMessage){
 
         JSONObject root = new JSONObject();
         try{
@@ -384,7 +384,36 @@ public class JsonUtil {
             root.put(Constant.WEBSOCKET_MESSAGE_CLIENTTYPE,Constant.WEBSOCKET_MESSAGE_TYPE_Client);
             root.put(Constant.WEBSOCKET_MESSAGE_TIME,System.currentTimeMillis() + "");
             root.put(Constant.WEBSOCKET_MESSAGE_UUID, UUID.randomUUID().toString());
-            root.put(Constant.WEBSOCKET_MESSAGE_TRANSFORM,transformMessage);
+            JSONObject data=new JSONObject();
+            data.put(Constant.WEBSOCKET_COMMAND_TYPE,Constant.WEBSOCKET_COMMAND_VIDEO_PLAY_CODE);
+            data.put(Constant.WEBSOCKET_COMMAND_VIDEO_LINK_CODE,transformMessage);
+            root.put(Constant.WEBSOCKET_MESSAGE_TRANSFORM,data.toString());
+            Log.d("make",root.toString());
+            LogUtil.d( Constant.JSON_GENERATE_SUCCESS + root.toString());
+            return root.toString();
+
+        }catch (Exception e){
+            e.printStackTrace();
+            LogUtil.d(Constant.JSON_GENERATE_EXCEPTION);
+            throw new JsonException(Constant.JSON_GENERATE_EXCEPTION,e);
+
+        }
+    }
+    // 生成音频播放消息转发请求json
+    public static String audioPlay2Json(String transformMessage){
+
+        JSONObject root = new JSONObject();
+        try{
+            User user = new User();
+            root.put(Constant.WEBSOCKET_MESSAGE_CLIENTID, user.clientId);
+            root.put(Constant.WEBSOCKET_MESSAGE_BUSSINESSTYPE,Constant.WEBSOCKET_MESSAGE_TRANSFORM_CODE);
+            root.put(Constant.WEBSOCKET_MESSAGE_CLIENTTYPE,Constant.WEBSOCKET_MESSAGE_TYPE_Client);
+            root.put(Constant.WEBSOCKET_MESSAGE_TIME,System.currentTimeMillis() + "");
+            root.put(Constant.WEBSOCKET_MESSAGE_UUID, UUID.randomUUID().toString());
+            JSONObject data=new JSONObject();
+            data.put(Constant.WEBSOCKET_COMMAND_TYPE,Constant.WEBSOCKET_COMMAND_AUDIO_PLAY_CODE);
+            data.put(Constant.WEBSOCKET_COMMAND_VIDEO_LINK_CODE,transformMessage);
+            root.put(Constant.WEBSOCKET_MESSAGE_TRANSFORM,data.toString());
             Log.d("make",root.toString());
             LogUtil.d( Constant.JSON_GENERATE_SUCCESS + root.toString());
             return root.toString();

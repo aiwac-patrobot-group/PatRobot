@@ -32,10 +32,13 @@
             android:name=".service.TimerService"
             android:enabled="true"
             android:exported="true" />
+
         <service
             android:name=".sport.MoveControlService"
             android:enabled="true"
             android:exported="true" />
+
+
 
         <activity android:name=".activity.setting.ChangePasswordActivity" />
         <activity android:name=".activity.setting.PersonalActivity" />

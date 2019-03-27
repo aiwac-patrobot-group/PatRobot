@@ -330,7 +330,7 @@ public class Constant {
 
 
     //视频音频相关
-    public final static String WEBSOCKET_BUSINESS_DOWNLOAD_LECTURE = "正在加载讲座资源，稍等...";
+    public final static String WEBSOCKET_BUSINESS_DOWNLOAD_LECTURE = "正在加载资源，稍等...";
     public final static String WEBSOCKET_MESSAGE_ACCOUNT = "account";
     public final static String WEBSOCKET_MESSAGE_CODE = "code";
     public final static String WEBSOCKET_MESSAGE_LECTUREID = "lectureID";
@@ -381,6 +381,16 @@ public class Constant {
     public final static String WEBSOCKET_COMMAND_MOVE_CODE="1003";//移动指令
     public final static String WEBSOCKET_COMMAND_MOVE_DIRECTION="moveDirection";//移动方向
     public final static String WEBSOCKET_COMMAND_GET_DIRECTION="getDirection";//获得方向
+
+    public final static String WEBSOCKET_COMMAND_VIDEO_PLAY_CODE="1004";//视频播放指令
+    public final static String WEBSOCKET_COMMAND_AUDIO_PLAY_CODE="1005";//音频播放指令
+    public final static String WEBSOCKET_COMMAND_VIDEO_PAUSE_CODE="1006";//视频暂停指令
+    public final static String WEBSOCKET_COMMAND_AUDIO_PAUSE_CODE="1007";//音频暂停指令
+    public final static String WEBSOCKET_COMMAND_VIDEO_CONTINUE_CODE="1008";//视频继续播放指令
+    public final static String WEBSOCKET_COMMAND_AUDIO_CONTINUE_CODE="1009";//音频继续播放指令
+    public final static String WEBSOCKET_COMMAND_VIDEO_STOP_CODE="1010";//视频停止播放指令
+    public final static String WEBSOCKET_COMMAND_AUDIO_STOP_CODE="1011";//音频停止播放指令
+    public final static String WEBSOCKET_COMMAND_VIDEO_LINK_CODE="link";//音视频链接
     /*
         "businessType:"0002"
         data:"{
