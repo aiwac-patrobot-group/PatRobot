@@ -1,13 +1,9 @@
 package com.aiwac.cilentapp.patrobot.activity.videoplayer;
 
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,12 +23,7 @@ import com.aiwac.cilentapp.patrobot.service.TimerService;
 import com.aiwac.cilentapp.patrobot.utils.JsonUtil;
 import com.aiwac.robotapp.commonlibrary.common.Constant;
 import com.aiwac.robotapp.commonlibrary.task.ThreadPoolManager;
-
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
-import static com.aiwac.cilentapp.patrobot.utils.CacheFileUtil.getURLimage;
+import com.bumptech.glide.Glide;
 
 
 public class VideoDetailActivity extends AppCompatActivity {
@@ -181,11 +172,7 @@ public class VideoDetailActivity extends AppCompatActivity {
                 finish();
             }
         });
-
-        //lectureCover.setImageBitmap(lectureCourseNow.getCover());
-        //Bitmap receive=(Bitmap)(getIntent().getParcelableExtra("bitmap"));
-        Bitmap receive = getURLimage(lectureCourseNow.getCover());
-        lectureCover.setImageBitmap(receive);
+        Glide.with(VideoDetailActivity.this).load(lectureCourseNow.getCover()).into(lectureCover);
         videoTitle.setText(lectureCourseNow.getTitle());
         videoDescription.setText(lectureCourseNow.getDescription());
         link = lectureCourseNow.getLink();

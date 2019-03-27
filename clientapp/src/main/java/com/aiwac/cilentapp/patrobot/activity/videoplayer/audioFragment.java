@@ -27,6 +27,7 @@ import com.aiwac.cilentapp.patrobot.utils.JsonUtil;
 import com.aiwac.robotapp.commonlibrary.common.Constant;
 import com.aiwac.robotapp.commonlibrary.task.ThreadPoolManager;
 import com.aiwac.robotapp.commonlibrary.utils.ImageUtil;
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -182,14 +183,13 @@ public class audioFragment extends Fragment {
 
             TextView lecture_name = view.findViewById(R.id.lecture_gridview_name);
             ImageView cover_image = view.findViewById(R.id.lecture_gridview_cover_image);
+            TextView audio_des = view.findViewById(R.id.lecture_gridview_describe);
 
             videoInfo audioInfo = this.lectureCourses.get(position);  //取出一个音频信息
 
             lecture_name.setText(audioInfo.getTitle());
-
-
-            cover_image.setImageBitmap(getURLimage(audioInfo.getCover()));
-
+            audio_des.setText(audioInfo.getDescription());
+            Glide.with(this.mContext).load(audioInfo.getCover()).into(cover_image);
             return view;
         }
     }
@@ -245,7 +245,7 @@ public class audioFragment extends Fragment {
         @Override
         protected void onPostExecute(Boolean aBoolean) {
             dialog.cancel();
-            if (aBoolean) {   //加载讲座列表
+            if (aBoolean) {   //加载列表
                 lectureAdapter.notifyDataSetChanged();
 
             } else { // 失败。显示空白

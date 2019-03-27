@@ -26,6 +26,7 @@ import com.aiwac.cilentapp.patrobot.server.WebSocketApplication;
 import com.aiwac.cilentapp.patrobot.utils.JsonUtil;
 import com.aiwac.robotapp.commonlibrary.common.Constant;
 import com.aiwac.robotapp.commonlibrary.task.ThreadPoolManager;
+import com.bumptech.glide.Glide;
 
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -47,7 +48,7 @@ public class audioDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_video_detail);
+        setContentView(R.layout.activity_audio_detail);
 
 
         //隐藏标题栏
@@ -63,25 +64,17 @@ public class audioDetailActivity extends AppCompatActivity {
 
 
     private void setView() {
-        lectureCourseNow = (videoInfo) getIntent().getSerializableExtra("LectureCourse");
+        lectureCourseNow = (videoInfo) getIntent().getSerializableExtra("audioInfo");
 
         lectureCover = (ImageView)findViewById(R.id.lecture_cover);
         audioTitle = (TextView)findViewById(R.id.lecture_name);
         audioDescription = (TextView)findViewById(R.id.lecture_description);
         buttonPlay_pause1 = (Button)findViewById(R.id.buttonPlayPause);
         buttonPlay_pause2 = (Button)findViewById(R.id.buttonPlayPause3);
-
-        //集成需要加入
-        //lectureCover.setImageBitmap(lectureCourseNow.getCover());
-        Bitmap receive=(Bitmap)(getIntent().getParcelableExtra("bitmap"));
-        lectureCover.setImageBitmap(receive);
         audioTitle.setText(lectureCourseNow.getTitle());
-        //lectureDuration.setText(lectureCourseNow.getDuration());
-        //lectureUpdateTime.setText(lectureCourseNow.getUpdateTime());
         audioDescription.setText(lectureCourseNow.getDescription());
-
+        Glide.with(audioDetailActivity.this).load(lectureCourseNow.getCover()).into(lectureCover);
         backButton = (Button)findViewById(R.id.backButton) ;
-        //buttonPlay_pause1 = (Button)findViewById(R.id.buttonPlayPause3);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -174,7 +167,7 @@ public class audioDetailActivity extends AppCompatActivity {
         buttonPlay_pause2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                buttonPlay_pause2.setText("机器人端播放");
+                //buttonPlay_pause2.setText("机器人端播放");
                 ThreadPoolManager.getThreadPoolManager().submitTask(new Runnable() {
                     @Override
                     public void run() {
@@ -196,8 +189,6 @@ public class audioDetailActivity extends AppCompatActivity {
                 finish();
             }
         });
-        receive = getURLimage(lectureCourseNow.getCover());
-        lectureCover.setImageBitmap(receive);
         audioTitle.setText(lectureCourseNow.getTitle());
         audioDescription.setText(lectureCourseNow.getDescription());
         link = lectureCourseNow.getLink();

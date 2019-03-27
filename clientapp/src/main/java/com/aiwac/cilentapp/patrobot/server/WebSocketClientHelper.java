@@ -128,11 +128,13 @@ public class WebSocketClientHelper extends WebSocketClient {
        LogUtil.printJson( Constant.WEBSOCKET_MESSAGE_FROM_SERVER ,json,"##");
 
         try {
-
             String businessType = JsonUtil.parseBusinessType(json);
-
             if (businessType.equals(Constant.WEBSOCKET_LECTURE_VIDEO_ABSTRACT_TYPE_CODE)) {
-                videoAllInfo = JsonUtil.parseLectureAVAbstractInfo(json);
+                if(JsonUtil.parseLectureAVAbstractInfo(json).getLectureCourseAbstracts().get(0).getType().equals("video")){
+                    videoAllInfo = JsonUtil.parseLectureAVAbstractInfo(json);
+                }else if(JsonUtil.parseLectureAVAbstractInfo(json).getLectureCourseAbstracts().get(0).getType().equals("audio")){
+                    audioAllInfo = JsonUtil.parseLectureAVAbstractInfo(json);
+                }
             } else if (businessType.equals(Constant.WEBSOCKET_BUSSINESS_MACADDRESS_CODE)) {  //绑定机器人mac地址
                 if (JsonUtil.parseErrorCode(json).equals(Constant.RETURN_JSON_ERRORCODE_VALUE_SUCCEED)) {
                     //发送消息广播

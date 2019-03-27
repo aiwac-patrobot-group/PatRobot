@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -28,6 +29,8 @@ import com.aiwac.cilentapp.patrobot.utils.JsonUtil;
 import com.aiwac.robotapp.commonlibrary.common.Constant;
 import com.aiwac.robotapp.commonlibrary.task.ThreadPoolManager;
 import com.aiwac.robotapp.commonlibrary.utils.ImageUtil;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -203,12 +206,11 @@ public class videoFragment extends Fragment {
             videoInfo lectureCourse = this.lectureCourses.get(position);  //取出一个视频的信息
 
             lecture_name.setText(lectureCourse.getTitle());
-            //集成需要加入
-            cover_image.setImageBitmap(getURLimage(lectureCourse.getCover()));
+            //cover_image.setImageBitmap(BitmapFactory.decodeFile(lectureCourse.getCover()));
+            //cover_image.setImageBitmap(getURLimage(lectureCourse.getCover()));
             video_des.setText(lectureCourse.getDescription());
 
-
-
+            Glide.with(this.mContext).load(lectureCourse.getCover()).into(cover_image);
             return view;
         }
     }

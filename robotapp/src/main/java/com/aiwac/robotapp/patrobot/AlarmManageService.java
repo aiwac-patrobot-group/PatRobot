@@ -24,33 +24,34 @@ public class AlarmManageService {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context,requestCode,intent,0);
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        if(flag ==0){
-            if(bundle.getString("type").equals("feed")){
-                hour = Integer.valueOf(bundle.getString("type").split(":")[0]).intValue();
-                minute = Integer.valueOf(bundle.getString("type").split(":")[1]).intValue();
-            }else if(bundle.getString("type").equals("navigate")){
-                String startTime = bundle.getString("type").split("-")[0];
-                hour = Integer.valueOf(startTime.split(":")[0]).intValue();
-                minute = Integer.valueOf(startTime.split(":")[1]).intValue();
+        for(int i = 0; i <time.length;i ++){
+            if(flag == 0){
+                if(bundle.getString("type").equals("feed")){
+                    hour = Integer.valueOf(time[i].split(":")[0]).intValue();
+                    minute = Integer.valueOf(time[i].split(":")[1]).intValue();
+                }else if(bundle.getString("type").equals("navigate")){
+                    String startTime = time[i].split("-")[0];
+                    hour = Integer.valueOf(startTime.split(":")[0]).intValue();
+                    minute = Integer.valueOf(startTime.split(":")[1]).intValue();
+                }
+            }else if(flag == 1){
+                if(bundle.getString("type").equals("feed")){
+                    hour = Integer.valueOf(time[i].split(":")[0]).intValue();
+                    minute = Integer.valueOf(time[i].split(":")[1]).intValue()+30;
+                }else if(bundle.getString("type").equals("navigate")){
+                    String endTime = time[i].split("-")[1];
+                    hour = Integer.valueOf(endTime.split(":")[0]).intValue();
+                    minute = Integer.valueOf(endTime.split(":")[1]).intValue();
+                }
             }
-        }else if(flag == 1){
-            if(bundle.getString("type").equals("feed")){
-                hour = Integer.valueOf(bundle.getString("type").split(":")[0]).intValue();
-                minute = Integer.valueOf(bundle.getString("type").split(":")[1]).intValue()+30;
-            }else if(bundle.getString("type").equals("navigate")){
-                String endTime = bundle.getString("type").split("-")[1];
-                hour = Integer.valueOf(endTime.split(":")[0]).intValue();
-                minute = Integer.valueOf(endTime.split(":")[1]).intValue();
-            }
+            calendar.set(Calendar.HOUR, hour);
+            calendar.set(Calendar.MINUTE, minute);
+            calendar.set(Calendar.SECOND, 0);
+            //注册新提醒
+            alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            alarmManager.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
+            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),DAY,pendingIntent);
         }
-
-        calendar.set(hour, 0);
-        calendar.set(minute, 0);
-        calendar.set(Calendar.SECOND, 0);
-        //注册新提醒
-        alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
-        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),DAY,pendingIntent);
     }
 
 }
