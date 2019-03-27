@@ -23,7 +23,7 @@ import com.aiwac.robotapp.patrobot.service.SportService;
 import com.aiwac.robotapp.patrobot.utils.JsonUtil;
 
 
-
+import org.greenrobot.eventbus.EventBus;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.drafts.Draft;
 import org.java_websocket.drafts.Draft_6455;
@@ -182,11 +182,11 @@ public class WebSocketClientHelper extends WebSocketClient {
                     //通知MainActivity跳转到语音通话
                     LogUtil.d("in");
                     MessageEvent messageEvent = new MessageEvent(Constant.WEBSOCKET_COMMAND_START_VIDEO,"");
-                    //EventBus.getDefault().postSticky(messageEvent);
+                    EventBus.getDefault().postSticky(messageEvent);
                 }else if(commantType.equals(Constant.WEBSOCKET_COMMAND_END_VIDEO_CODE)){//指令是1002，结束视频通话
                     //通知MainActivity跳转到语音通话
                     MessageEvent messageEvent = new MessageEvent(Constant.WEBSOCKET_COMMAND_END_VIDEO,"");
-                    //EventBus.getDefault().postSticky(messageEvent);
+                    EventBus.getDefault().postSticky(messageEvent);
                 }else if(commantType.equals(Constant.WEBSOCKET_COMMAND_MOVE_CODE)){//1003,移动
                     String direction=JsonUtil.parseDiretction(dataJsonStr);
                     //发送方向的消息
