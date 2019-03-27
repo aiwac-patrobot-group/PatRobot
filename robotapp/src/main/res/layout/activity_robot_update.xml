@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/activity_page" >
+
+    <LinearLayout style="@style/ll_vertical_match_match" >
+
+
+        <RelativeLayout
+            style="@style/match_match"
+            android:layout_weight="1" >
+
+            <ScrollView style="@style/match_match" >
+
+                <LinearLayout style="@style/ll_vertical_match_match" >
+
+                    <ImageView
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:layout_margin="15dp"
+                        android:src="@drawable/ic_launcher" />
+
+                    <TextView
+                        android:id="@+id/tv_app_version_text"
+                        style="@style/text_big_black"
+                        android:layout_marginBottom="5dp"
+                        android:text="当前版本" />
+                    <TextView
+                        android:id="@+id/tv_app_version"
+                        style="@style/text_big_black"
+                        android:layout_marginBottom="30dp"
+                        android:text="1.0" />
+                    <Button
+                        android:id="@+id/btn_check_update"
+                        android:layout_width="100dp"
+                        android:layout_height="match_parent"
+                        android:onClick="updateDiy3"
+                        android:text="检查更新"/>
+
+                </LinearLayout>
+            </ScrollView>
+        </RelativeLayout>
+    </LinearLayout>
+
+
+</FrameLayout>

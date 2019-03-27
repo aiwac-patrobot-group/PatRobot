@@ -397,8 +397,6 @@ public class JsonUtil {
         }
     }
 
-
-
 /*    public static User jsonToPersonInfo(String json){
         User user = new User();
         try{

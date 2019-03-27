@@ -49,4 +49,9 @@ dependencies {
 
     //方向键
     implementation 'me.caibou.android:rockerview:1.0.0'
+
+    //升级
+    implementation 'com.qianwen:update-app:3.5.2'
+    implementation 'com.lzy.net:okgo:3.0.4'
+    implementation 'com.qianwen:okhttp-utils:3.8.0'
 }

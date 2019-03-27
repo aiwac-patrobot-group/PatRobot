@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.aiwac.robotapp.patrobot.R;
+import com.aiwac.robotapp.patrobot.activity.update.RobotUpdateActivity;
 
 public class SettingActivity extends AppCompatActivity {
 
@@ -20,6 +21,13 @@ public class SettingActivity extends AppCompatActivity {
                 Intent wifiIntent = new Intent(SettingActivity.this, ConnectWifiActivity.class);
                 wifiIntent.putExtra("from", "setting");
                 startActivity(wifiIntent);
+            }
+        });
+
+        findViewById(R.id.btn_robot_app_update).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(SettingActivity.this, RobotUpdateActivity.class));
             }
         });
 

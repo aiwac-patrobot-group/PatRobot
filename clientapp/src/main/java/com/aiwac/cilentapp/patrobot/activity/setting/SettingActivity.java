@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.aiwac.cilentapp.patrobot.R;
+import com.aiwac.cilentapp.patrobot.activity.update.UpdateActivity;
 import com.aiwac.cilentapp.patrobot.server.WebSocketApplication;
 import com.aiwac.robotapp.commonlibrary.common.Constant;
 import com.aiwac.robotapp.commonlibrary.task.ThreadPoolManager;
@@ -43,7 +44,7 @@ public class SettingActivity extends AppCompatActivity {
         findViewById(R.id.btn_setting_update).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                startActivity(new Intent(SettingActivity.this, UpdateActivity.class));
             }
         });
     }
