@@ -483,7 +483,7 @@ public class JsonUtil {
             return null;
         }
     }
-    // 生成投食转发请求json
+    // 生成投食时间json
     public static String feedTransform2Json(String feedTime[]){
 
         JSONObject root = new JSONObject();
@@ -494,7 +494,59 @@ public class JsonUtil {
             root.put(Constant.WEBSOCKET_MESSAGE_CLIENTTYPE,Constant.WEBSOCKET_MESSAGE_TYPE_Client);
             root.put(Constant.WEBSOCKET_MESSAGE_TIME,System.currentTimeMillis() + "");
             root.put(Constant.WEBSOCKET_MESSAGE_UUID, UUID.randomUUID().toString());
-            root.put(Constant.WEB_SOCKET_TIME_POINTS,feedTime);
+
+            JSONArray timeArray=new JSONArray();
+            for(String time:feedTime){
+                timeArray.put(time);
+            }
+            root.put(Constant.WEB_SOCKET_TIME_POINTS,timeArray);
+            Log.d("make",root.toString());
+            LogUtil.d( Constant.JSON_GENERATE_SUCCESS + root.toString());
+            return root.toString();
+
+        }catch (Exception e){
+            e.printStackTrace();
+            LogUtil.d(Constant.JSON_GENERATE_EXCEPTION);
+            throw new JsonException(Constant.JSON_GENERATE_EXCEPTION,e);
+
+        }
+    }
+    //解析投食时间
+    public static String[] parseFeedTime(String json){
+        try{
+            JSONObject root = new JSONObject(json);
+            JSONArray jsonArray=root.getJSONArray(Constant.WEB_SOCKET_TIME_POINTS);
+            String [] feedtime=new String[jsonArray.length()];
+            for(int i=0;i<jsonArray.length();i++){
+                feedtime[i]=jsonArray.get(i).toString();
+            }
+
+            return feedtime;
+        }catch (Exception e){
+            e.printStackTrace();
+            LogUtil.d(Constant.JSON_PARSE_EXCEPTION);
+            throw new JsonException(Constant.JSON_PARSE_EXCEPTION, e);
+        }
+    }
+
+
+    // 生成巡航时间json
+    public static String navigateTransform2Json(String feedTime[]){
+
+        JSONObject root = new JSONObject();
+        try{
+            User user = new User();
+            root.put(Constant.WEBSOCKET_MESSAGE_CLIENTID, user.clientId);
+            root.put(Constant.WEBSOCKET_MESSAGE_BUSSINESSTYPE,Constant.WEBSOCKET_MESSAGE_NAVIGATETRANSFORM_CODE);
+            root.put(Constant.WEBSOCKET_MESSAGE_CLIENTTYPE,Constant.WEBSOCKET_MESSAGE_TYPE_Client);
+            root.put(Constant.WEBSOCKET_MESSAGE_TIME,System.currentTimeMillis() + "");
+            root.put(Constant.WEBSOCKET_MESSAGE_UUID, UUID.randomUUID().toString());
+
+            JSONArray timeArray=new JSONArray();
+            for(String time:feedTime){
+                timeArray.put(time);
+            }
+            root.put(Constant.WEB_SOCKET_TIME_POINTS,timeArray);
             Log.d("make",root.toString());
             LogUtil.d( Constant.JSON_GENERATE_SUCCESS + root.toString());
             return root.toString();
@@ -507,8 +559,26 @@ public class JsonUtil {
         }
     }
 
+
+    //向服务器获取时间列表
+    public static String time2Json(String autoType){
+        try{
+            BaseEntity baseEntity=new BaseEntity();
+            baseEntity.setBusinessType(Constant.WEBSOCKET_SOCKET_GET_TIME_LIST);
+            JSONObject root =baseEntity2Json(baseEntity);
+            root.put(Constant.WEBSOCKET_SOCKET_AUTOTYPE,autoType);
+            LogUtil.d( Constant.JSON_GENERATE_SUCCESS + root.toString());
+            return root.toString();
+        }catch (Exception e){
+            e.printStackTrace();
+            LogUtil.d(Constant.JSON_GENERATE_EXCEPTION);
+            throw new JsonException(Constant.JSON_GENERATE_EXCEPTION,e);
+
+        }
+    }
+
     // 生成投食转发请求json
-    public static String navigateTransform2Json(String NavigateTime[]){
+/*    public static String navigateTransform2Json(String NavigateTime[]){
 
         JSONObject root = new JSONObject();
         try{
@@ -529,6 +599,6 @@ public class JsonUtil {
             throw new JsonException(Constant.JSON_GENERATE_EXCEPTION,e);
 
         }
-    }
+    }*/
 
 }

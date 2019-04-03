@@ -345,6 +345,11 @@ public class Constant {
     public final static String WEBSOCKET_LECTURE_AV_DETAIL_TYPE_CODE = "0013";
     public final static String WEBSOCKET_MESSAGE_SYSYTEM_CLIENTTYPE = "robot";
     public final static String WEBSOCKET_MESSAGE_LECTURE_AV_LINK = "link";
+    public final static String WEBSOCKET_SOCKET_GET_TIME_LIST = "0005";   //  获取巡航喂食时间段
+    public final static String WEBSOCKET_SOCKET_AUTOTYPE = "autoType";
+    public final static String WEBSOCKET_SOCKET_AUTOTYPE_AUTO_CONTROL = "autotrol";
+    public final static String WEBSOCKET_SOCKET_AUTOTYPE_AUTO_FEED = "autofeed";
+
 
 
     public final static String WEBSOCKET_MESSAGE_TYPE_Client = "1";//表示手机客户端
@@ -377,6 +382,16 @@ public class Constant {
     public final static String WEBSOCKET_COMMAND_VIDEO_UUID="videoDataUUID";
     public final static String WEBSOCKET_COMMAND_START_VIDEO ="startVideoChat";
     public final static String WEBSOCKET_COMMAND_END_VIDEO="endVideoChat";
+
+    public final static String WEBSOCKET_COMMAND_VIDEO_PAUSE ="pauseVideo";
+    public final static String WEBSOCKET_COMMAND_AUDIO_PAUSSE ="pauseAudio";
+
+    public final static String WEBSOCKET_COMMAND_VIDEO_STOP ="stopAudio";
+    public final static String WEBSOCKET_COMMAND_AUDIO_STOP ="stopAudio";
+
+    public final static String WEBSOCKET_COMMAND_VIDEO_CONTINUE ="continueAudio";
+    public final static String WEBSOCKET_COMMAND_AUDIO_CONTINUE ="continueAudio";
+
 
     public final static String WEBSOCKET_COMMAND_MOVE_CODE="1003";//移动指令
     public final static String WEBSOCKET_COMMAND_MOVE_DIRECTION="moveDirection";//移动方向

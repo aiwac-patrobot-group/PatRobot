@@ -16,6 +16,7 @@ import com.aiwac.cilentapp.patrobot.R;
 import com.aiwac.cilentapp.patrobot.server.WebSocketApplication;
 import com.aiwac.cilentapp.patrobot.utils.JsonUtil;
 import com.aiwac.robotapp.commonlibrary.task.ThreadPoolManager;
+import com.aiwac.robotapp.commonlibrary.utils.LogUtil;
 
 public class VideoAudioActivity extends AppCompatActivity {
 
@@ -118,9 +119,10 @@ public class VideoAudioActivity extends AppCompatActivity {
             public void run() {
                 try{
                     WebSocketApplication.getWebSocketApplication().send(JsonUtil.videoAbstract2Json());
+                    LogUtil.d("发送视频请求");
                 }catch (Exception e){
                     e.printStackTrace();
-                    Log.d("tag", "LoadVideoAsync onPostExecute setOnItemClickListener exception");
+                    LogUtil.d( "LoadVideoAsync onPostExecute setOnItemClickListener exception");
                 }
             }
         });
@@ -131,6 +133,7 @@ public class VideoAudioActivity extends AppCompatActivity {
             public void run() {
                 try{
                     WebSocketApplication.getWebSocketApplication().send( JsonUtil.audioAbstract2Json());
+                    LogUtil.d("发送音频请求");
                 }catch (Exception e){
                     e.printStackTrace();
                     Log.d("tag", "LoadAudioAsync onPostExecute setOnItemClickListener exception");

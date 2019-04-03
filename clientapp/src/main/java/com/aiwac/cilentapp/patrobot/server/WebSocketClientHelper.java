@@ -13,6 +13,7 @@ import com.aiwac.cilentapp.patrobot.bean.videoAbstractInfo;
 import com.aiwac.cilentapp.patrobot.utils.JsonUtil;
 import com.aiwac.robotapp.commonlibrary.bean.MessageEvent;
 import com.aiwac.robotapp.commonlibrary.common.Constant;
+import com.aiwac.robotapp.commonlibrary.task.ThreadPoolManager;
 import com.aiwac.robotapp.commonlibrary.utils.LogUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -123,32 +124,39 @@ public class WebSocketClientHelper extends WebSocketClient {
 
     @Override
     public void onMessage(final String json) {
+        LogUtil.printJson( Constant.WEBSOCKET_MESSAGE_FROM_SERVER ,json,"##");
         //处理具体逻辑
+        //ping  pong
+        if(json.equals("ping")){
+            WebSocketApplication.getWebSocketApplication().send("pong");
+        }else{
 
-       LogUtil.printJson( Constant.WEBSOCKET_MESSAGE_FROM_SERVER ,json,"##");
-
-        try {
-            String businessType = JsonUtil.parseBusinessType(json);
-            if (businessType.equals(Constant.WEBSOCKET_LECTURE_VIDEO_ABSTRACT_TYPE_CODE)) {
-                if(JsonUtil.parseLectureAVAbstractInfo(json).getLectureCourseAbstracts().get(0).getType().equals("video")){
-                    videoAllInfo = JsonUtil.parseLectureAVAbstractInfo(json);
-                }else if(JsonUtil.parseLectureAVAbstractInfo(json).getLectureCourseAbstracts().get(0).getType().equals("audio")){
-                    audioAllInfo = JsonUtil.parseLectureAVAbstractInfo(json);
+            try {
+                String businessType = JsonUtil.parseBusinessType(json);
+                if (businessType.equals(Constant.WEBSOCKET_LECTURE_VIDEO_ABSTRACT_TYPE_CODE)) {
+                    if(JsonUtil.parseLectureAVAbstractInfo(json).getLectureCourseAbstracts().get(0).getType().equals("video")){
+                        videoAllInfo = JsonUtil.parseLectureAVAbstractInfo(json);
+                    }else if(JsonUtil.parseLectureAVAbstractInfo(json).getLectureCourseAbstracts().get(0).getType().equals("audio")){
+                        audioAllInfo = JsonUtil.parseLectureAVAbstractInfo(json);
+                    }
+                } else if (businessType.equals(Constant.WEBSOCKET_BUSSINESS_MACADDRESS_CODE)) {  //绑定机器人mac地址
+                    if (JsonUtil.parseErrorCode(json).equals(Constant.RETURN_JSON_ERRORCODE_VALUE_SUCCEED)) {
+                        //发送消息广播
+                        EventBus.getDefault().postSticky(new MessageEvent(Constant.WEBSOCKET_BUSSINESS_MACADDRESS_SUCCEEDED, json));
+                    } else {
+                        //mac绑定失败
+                        EventBus.getDefault().postSticky(new MessageEvent(Constant.WEBSOCKET_BUSSINESS_MACADDRESS_FAILED, json));
+                    }
+                }else if(businessType.equals(Constant.WEBSOCKET_SOCKET_GET_TIME_LIST)) {//获取时间段
+                    LogUtil.d("获得时间段");
+                    MessageEvent messageEvent = new MessageEvent(Constant.WEBSOCKET_SOCKET_GET_TIME_LIST, json);
+                    EventBus.getDefault().postSticky(messageEvent);
                 }
-            } else if (businessType.equals(Constant.WEBSOCKET_BUSSINESS_MACADDRESS_CODE)) {  //绑定机器人mac地址
-                if (JsonUtil.parseErrorCode(json).equals(Constant.RETURN_JSON_ERRORCODE_VALUE_SUCCEED)) {
-                    //发送消息广播
-                    EventBus.getDefault().postSticky(new MessageEvent(Constant.WEBSOCKET_BUSSINESS_MACADDRESS_SUCCEEDED, json));
-                } else {
-                    //mac绑定失败
-                    EventBus.getDefault().postSticky(new MessageEvent(Constant.WEBSOCKET_BUSSINESS_MACADDRESS_FAILED, json));
-                }
-
-
+            }catch (Exception e){
+                e.printStackTrace();
+                LogUtil.d( "onMessage : " + e.getMessage());
             }
-        }catch (Exception e){
-            e.printStackTrace();
-            LogUtil.d( "onMessage : " + e.getMessage());
+
         }
 
     }

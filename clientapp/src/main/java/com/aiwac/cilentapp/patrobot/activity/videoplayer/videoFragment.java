@@ -29,6 +29,7 @@ import com.aiwac.cilentapp.patrobot.utils.JsonUtil;
 import com.aiwac.robotapp.commonlibrary.common.Constant;
 import com.aiwac.robotapp.commonlibrary.task.ThreadPoolManager;
 import com.aiwac.robotapp.commonlibrary.utils.ImageUtil;
+import com.aiwac.robotapp.commonlibrary.utils.LogUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
@@ -240,6 +241,7 @@ public class videoFragment extends Fragment {
                 for (int i = 0; i < 10; i++) {
                     Thread.sleep(500);
                     videoListInfo = WebSocketApplication.getWebSocketApplication().getWebSocketHelperVideoAllInfo();
+
 
                     if (videoListInfo != null) {
                         for(  videoInfo item : videoListInfo.getLectureCourseAbstracts()){

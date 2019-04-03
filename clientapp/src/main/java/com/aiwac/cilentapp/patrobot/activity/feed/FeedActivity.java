@@ -11,23 +11,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
-import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 import com.aiwac.cilentapp.patrobot.R;
 import com.aiwac.cilentapp.patrobot.server.WebSocketApplication;
 import com.aiwac.cilentapp.patrobot.utils.BasisTimesUtils;
 import com.aiwac.cilentapp.patrobot.utils.JsonUtil;
+import com.aiwac.robotapp.commonlibrary.bean.MessageEvent;
+import com.aiwac.robotapp.commonlibrary.common.Constant;
 import com.aiwac.robotapp.commonlibrary.task.ThreadPoolManager;
+import com.aiwac.robotapp.commonlibrary.utils.LogUtil;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -64,22 +67,13 @@ public class FeedActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String tempTime = showTimerPicker();
-                if(!tempTime.equals("")){
-                    ThreadPoolManager.getThreadPoolManager().submitTask(new Runnable() {
-                        @Override
-                        public void run() {
-                            try{
-                                WebSocketApplication.getWebSocketApplication().send( JsonUtil.feedTransform2Json(feedTimes.toArray(new String[feedTimes.size()])));
-                            }catch (Exception e){
-                                e.printStackTrace();
-                                Log.d("tag", "FeedTransform exception");
-                            }
-                        }
-                    });
-                }
 
             }
         });
+
+
+        //注册消息
+        EventBus.getDefault().register(this);
 
         mView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
         {
@@ -126,7 +120,42 @@ public class FeedActivity extends AppCompatActivity {
             }
 
         });
+
+
+        initFeedTimeFromServer();
+
     }
+
+
+    //从服务器获取时间列表
+    private void initFeedTimeFromServer(){
+        ThreadPoolManager.getThreadPoolManager().submitTask(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    WebSocketApplication.getWebSocketApplication().send(JsonUtil.time2Json(Constant.WEBSOCKET_SOCKET_AUTOTYPE_AUTO_FEED));
+                }catch (Exception e){
+                    e.printStackTrace();
+                    Log.d("tag", "FeedTransform exception");
+                }
+            }
+        });
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void Event(MessageEvent messageEvent) {
+        if(messageEvent.getTo().equals(Constant.WEBSOCKET_SOCKET_GET_TIME_LIST)){
+            String json = messageEvent.getMessage();
+            LogUtil.d("onevent"+json);
+            String []timeResult=JsonUtil.parseFeedTime(json);
+            for(String time:timeResult){
+                feedTimes.add(time);
+            }
+        }
+
+    }
+
+
     class MyAdapter extends BaseExpandableListAdapter {
 
         //自己定义一个获得textview的方法
@@ -226,7 +255,8 @@ public class FeedActivity extends AppCompatActivity {
                 DecimalFormat df=new DecimalFormat("00");//设置格式
                 setTime = df.format(hourOfDay)+":"+df.format(minute);
                 feedTimes.add(setTime);
-
+                //发送给服务器
+                sendTimeToServer(setTime);
             }
 
             @Override
@@ -235,6 +265,33 @@ public class FeedActivity extends AppCompatActivity {
             }
         });
         return setTime;
+    }
+
+
+    private void sendTimeToServer(String tempTime){
+
+        if(!tempTime.equals("")){
+            ThreadPoolManager.getThreadPoolManager().submitTask(new Runnable() {
+                @Override
+                public void run() {
+                    try{
+                        String time[]=feedTimes.toArray(new String[feedTimes.size()]);
+                        WebSocketApplication.getWebSocketApplication().send( JsonUtil.feedTransform2Json(time));
+                    }catch (Exception e){
+                        e.printStackTrace();
+                        Log.d("tag", "FeedTransform exception");
+                    }
+                }
+            });
+        }
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+        feedTimes.clear();
     }
 
 }

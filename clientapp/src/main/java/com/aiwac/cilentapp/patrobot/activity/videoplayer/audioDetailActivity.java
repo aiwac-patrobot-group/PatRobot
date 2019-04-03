@@ -81,7 +81,7 @@ public class audioDetailActivity extends AppCompatActivity {
                 finish();
             }
         });
-        buttonplay_pause = (Button)findViewById(R.id.buttonPlayPause) ;
+        buttonplay_pause = (Button)findViewById(R.id.buttonPlayPause2) ;
         buttonplay_pause.setSelected(false);
         buttonplay_pause.setOnClickListener(new View.OnClickListener() {
             @Override

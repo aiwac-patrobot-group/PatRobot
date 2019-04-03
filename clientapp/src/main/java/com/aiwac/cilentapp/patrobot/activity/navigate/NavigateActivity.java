@@ -25,8 +25,14 @@ import com.aiwac.cilentapp.patrobot.activity.feed.FeedActivity;
 import com.aiwac.cilentapp.patrobot.server.WebSocketApplication;
 import com.aiwac.cilentapp.patrobot.utils.BasisTimesUtils;
 import com.aiwac.cilentapp.patrobot.utils.JsonUtil;
+import com.aiwac.robotapp.commonlibrary.bean.MessageEvent;
+import com.aiwac.robotapp.commonlibrary.common.Constant;
 import com.aiwac.robotapp.commonlibrary.task.ThreadPoolManager;
+import com.aiwac.robotapp.commonlibrary.utils.LogUtil;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.w3c.dom.Text;
 
 import java.text.DecimalFormat;
@@ -89,7 +95,7 @@ public class NavigateActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         try{
-                            WebSocketApplication.getWebSocketApplication().send( JsonUtil.feedTransform2Json(navigateTimes.toArray(new String[navigateTimes.size()])));
+                            WebSocketApplication.getWebSocketApplication().send( JsonUtil.navigateTransform2Json(navigateTimes.toArray(new String[navigateTimes.size()])));
                         }catch (Exception e){
                             e.printStackTrace();
                             Log.d("tag", "endTime Navigate exception");
@@ -122,7 +128,7 @@ public class NavigateActivity extends AppCompatActivity {
                                 @Override
                                 public void run() {
                                     try{
-                                        WebSocketApplication.getWebSocketApplication().send( JsonUtil.feedTransform2Json(navigateTimes.toArray(new String[navigateTimes.size()])));
+                                        WebSocketApplication.getWebSocketApplication().send( JsonUtil.navigateTransform2Json(navigateTimes.toArray(new String[navigateTimes.size()])));
                                     }catch (Exception e){
                                         e.printStackTrace();
                                         Log.d("tag", "endTime Navigate exception");
@@ -147,6 +153,30 @@ public class NavigateActivity extends AppCompatActivity {
 
         });
 
+
+        initNavigateTimeFromServer();
+
+
+
+        //注册消息
+        EventBus.getDefault().register(this);
+
+    }
+
+
+    //从服务器获取时间列表
+    private void initNavigateTimeFromServer(){
+        ThreadPoolManager.getThreadPoolManager().submitTask(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    WebSocketApplication.getWebSocketApplication().send(JsonUtil.time2Json(Constant.WEBSOCKET_SOCKET_AUTOTYPE_AUTO_CONTROL));
+                }catch (Exception e){
+                    e.printStackTrace();
+                    Log.d("tag", "FeedTransform exception");
+                }
+            }
+        });
     }
 
     class MyAdapter extends BaseExpandableListAdapter {
@@ -272,4 +302,22 @@ public class NavigateActivity extends AppCompatActivity {
         return "";
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void Event(MessageEvent messageEvent) {
+        if(messageEvent.getTo().equals(Constant.WEBSOCKET_SOCKET_GET_TIME_LIST)){
+            String json = messageEvent.getMessage();
+            LogUtil.d("onevent"+json);
+            String []timeResult=JsonUtil.parseFeedTime(json);
+            for(String time:timeResult){
+                navigateTimes.add(time);
+            }
+        }
+
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+        navigateTimes.clear();
+    }
 }
