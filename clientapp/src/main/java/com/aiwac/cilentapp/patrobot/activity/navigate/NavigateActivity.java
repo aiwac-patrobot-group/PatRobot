@@ -19,6 +19,7 @@ import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.aiwac.cilentapp.patrobot.R;
 import com.aiwac.cilentapp.patrobot.activity.feed.FeedActivity;
@@ -52,6 +53,8 @@ public class NavigateActivity extends AppCompatActivity {
     private String setEndTime = "";
     private String startTime1 = "9:0";
     private String endTIme1 = "9:0";
+    private MyAdapter adapter;
+
     ExpandableListView mView;
     //private int navigateNum = 0;
     //获得制定组的位置、指定子列表项处的字列表项数据
@@ -61,7 +64,9 @@ public class NavigateActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigate);
         mView = (ExpandableListView) findViewById(R.id.el_list);
-        mView.setAdapter(new MyAdapter());
+
+        adapter = new MyAdapter();
+        mView.setAdapter(adapter);
         startTime_bt = (Button)findViewById(R.id.startTime);
         endTime_bt = (Button)findViewById(R.id.endTime);
         addTime_bt = (Button)findViewById(R.id.addNavigateTime);
@@ -90,18 +95,30 @@ public class NavigateActivity extends AppCompatActivity {
         addTime_bt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                navigateTimes.add(sTime.getText()+"-"+eTime.getText());
-                ThreadPoolManager.getThreadPoolManager().submitTask(new Runnable() {
-                    @Override
-                    public void run() {
-                        try{
-                            WebSocketApplication.getWebSocketApplication().send( JsonUtil.navigateTransform2Json(navigateTimes.toArray(new String[navigateTimes.size()])));
-                        }catch (Exception e){
-                            e.printStackTrace();
-                            Log.d("tag", "endTime Navigate exception");
+                int setTime[] = new int[4];
+                setTime[0] = Integer.parseInt(sTime.getText().toString().split(":")[0]);
+                setTime[1] = Integer.parseInt(sTime.getText().toString().split(":")[1]);
+                setTime[2] = Integer.parseInt(eTime.getText().toString().split(":")[0]);
+                setTime[3] = Integer.parseInt(eTime.getText().toString().split(":")[1]);
+                if(setTime[2]*60+setTime[3] <= setTime[0]*60+setTime[1]){
+                    Toast.makeText(NavigateActivity.this,"巡航时间不合理",Toast.LENGTH_SHORT).show();
+                }else if((setTime[2]*60+setTime[3]) - (setTime[0]*60+setTime[1])>=30){
+                    Toast.makeText(NavigateActivity.this,"巡航时间在30分钟以内",Toast.LENGTH_SHORT).show();
+                }else{
+                    navigateTimes.add(sTime.getText()+"-"+eTime.getText());
+                    adapter.notifyDataSetChanged();
+                    ThreadPoolManager.getThreadPoolManager().submitTask(new Runnable() {
+                        @Override
+                        public void run() {
+                            try{
+                                WebSocketApplication.getWebSocketApplication().send( JsonUtil.navigateTransform2Json(navigateTimes.toArray(new String[navigateTimes.size()])));
+                            }catch (Exception e){
+                                e.printStackTrace();
+                                Log.d("tag", "endTime Navigate exception");
+                            }
                         }
-                    }
-                });
+                    });
+                }
                 sTime.setText("09:00");
                 eTime.setText("09:00");
             }
@@ -121,9 +138,12 @@ public class NavigateActivity extends AppCompatActivity {
                     builder.setMessage("确定删除?");
                     builder.setTitle("提示");
                     builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             navigateTimes.remove(childPosition);
+                            adapter.notifyDataSetChanged();
+
                             ThreadPoolManager.getThreadPoolManager().submitTask(new Runnable() {
                                 @Override
                                 public void run() {

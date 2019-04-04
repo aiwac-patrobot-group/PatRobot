@@ -113,25 +113,16 @@ public class VideoPlayActivity extends AppCompatActivity implements View.OnClick
     public void Event(MessageEvent messageEvent) {
         if(messageEvent.getTo().equals(Constant.WEBSOCKET_COMMAND_VIDEO_PAUSE)){
             LogUtil.d("video pause");
-            /*if (mVideoView1.isPlaying()) {
+            if (mVideoView1.isPlaying()) {
                 mVideoView1.pause();
                 mIvPlay.setImageResource(R.drawable.video_play);
                 mHandler.removeMessages(UPDATE_PALY_TIME);
                 mHandler.removeMessages(HIDE_CONTROL_BAR);
                 showControlBar();
-            }*/
-        }else  if(messageEvent.getTo().equals(Constant.WEBSOCKET_COMMAND_AUDIO_PAUSSE)){
-            LogUtil.d("audio pause");
-            /*if (mVideoView1.isPlaying()) {
-                mVideoView1.pause();
-                mIvPlay.setImageResource(R.drawable.video_play);
-                mHandler.removeMessages(UPDATE_PALY_TIME);
-                mHandler.removeMessages(HIDE_CONTROL_BAR);
-                showControlBar();
-            }*/
+            }
         }else  if(messageEvent.getTo().equals(Constant.WEBSOCKET_COMMAND_VIDEO_STOP)){
             LogUtil.d("video stop");
-            /*if (mIsFullScreen) {
+            if (mIsFullScreen) {
                 if (mVideoView1.isPlaying()) {
                     mHandler.removeMessages(HIDE_CONTROL_BAR);
                     mHandler.sendEmptyMessageDelayed(HIDE_CONTROL_BAR, HIDE_TIME);
@@ -140,36 +131,15 @@ public class VideoPlayActivity extends AppCompatActivity implements View.OnClick
             } else {
                 finish();
             }
-            finish();*/
-
-        }else  if(messageEvent.getTo().equals(Constant.WEBSOCKET_COMMAND_AUDIO_STOP)){
-            LogUtil.d("audio stop");
-            /*if (mIsFullScreen) {
-                if (mVideoView1.isPlaying()) {
-                    mHandler.removeMessages(HIDE_CONTROL_BAR);
-                    mHandler.sendEmptyMessageDelayed(HIDE_CONTROL_BAR, HIDE_TIME);
-                }
-                setupUnFullScreen();
-            } else {
-                finish();
-            }
-
-            finish();*/
+            finish();
 
         }else if(messageEvent.getTo().equals(Constant.WEBSOCKET_COMMAND_VIDEO_CONTINUE)) {
             LogUtil.d("video play");
-           /* mVideoView1.start();
+            mVideoView1.start();
             mIvPlay.setImageResource(R.drawable.video_pause);
             mHandler.sendEmptyMessage(UPDATE_PALY_TIME);
-            mHandler.sendEmptyMessageDelayed(HIDE_CONTROL_BAR, HIDE_TIME);*/
-        }else if(messageEvent.getTo().equals(Constant.WEBSOCKET_COMMAND_AUDIO_CONTINUE)){
-            LogUtil.d("audio play");
-            /*mVideoView1.start();
-            mIvPlay.setImageResource(R.drawable.video_pause);
-            mHandler.sendEmptyMessage(UPDATE_PALY_TIME);
-            mHandler.sendEmptyMessageDelayed(HIDE_CONTROL_BAR, HIDE_TIME);*/
+            mHandler.sendEmptyMessageDelayed(HIDE_CONTROL_BAR, HIDE_TIME);
         }
-
     }
 
     /**

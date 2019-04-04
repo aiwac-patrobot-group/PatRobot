@@ -143,7 +143,9 @@ public class MainActivity extends AppCompatActivity {
             return strMac;
         } else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N
                 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            strMac = getMacAddress(context);
+            //LogUtil.d("获取MAC信息");
+            //strMac = getMacAddress(context);
+            strMac = getMacDefault(context);
             return strMac;
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             strMac = getMachineHardwareAddress();

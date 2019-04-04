@@ -42,7 +42,7 @@ public class WebSocketClientHelper extends WebSocketClient {
     protected aVDetail aVDetail;
     protected String link = "noLink";
     protected MessageTransform messageTransform;
-    protected FeedTime feedTime;
+    protected FeedTime feedTime,navigateTime;
 
 
     public Context getContext() {
@@ -115,68 +115,47 @@ public class WebSocketClientHelper extends WebSocketClient {
         }else {
             try {
                 String businessType = JsonUtil.parseBusinessType(json);
-//            if ((businessType.equals(Constant.WEBSOCKET_VIDEO_DETAIL_TYPE_CODE))) //视频详细信息到达
-//            {
-//                aVDetail = JsonUtil.parseAVDetailInfo(json);
-//                if (aVDetail != null) {
-//                    link = aVDetail.getLink();
-//
-//                    Log.d("lecture","link: "+link);
-//                }
-//
-//                if ( !link.equals("noLink" ) )
-//                {
-//                    Vitamio.isInitialized(context);
-//                    Toast.makeText(context, "播放视频", Toast.LENGTH_SHORT).show();
-//                    Intent intent =new Intent(context, VideoPlayActivity.class);
-//                    //link  = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
-//                    //测试
-//                    Log.d("lecture",link);
-//                    intent.putExtra("Link",link);
-//                    context.startActivity(intent);
-//
-//                }
-//
-//            }else if ((businessType.equals(Constant.WEBSOCKET_AUDIO_DETAIL_TYPE_CODE))) //音频详细信息到达
-//            {
-//                aVDetail = JsonUtil.parseAVDetailInfo(json);
-//                if (aVDetail != null) {
-//                    link = aVDetail.getLink();
-//
-//                    Log.d("lecture","link: "+link);
-//                }
-//
-//                if ( !link.equals("noLink" ) )
-//                {
-//                    Vitamio.isInitialized(context);
-//                    Toast.makeText(context, "播放音频", Toast.LENGTH_SHORT).show();
-//                    Intent intent =new Intent(context, AudioPlayActivity.class);
-//                    //link  = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
-//                    //测试
-//                    Log.d("lecture",link);
-//                    intent.putExtra("Link",link);
-//                    context.startActivity(intent);
-//
-//                }
-//
-//            }else
-                if ((businessType.equals(Constant.WEBSOCKET_MESSAGE_FEEDTRANSFORM_CODE))) {
+                if (businessType.equals(Constant.WEBSOCKET_MESSAGE_FEEDTRANSFORM_CODE)) {
                     feedTime = JsonUtil.parseFeedNavigateTransform(json);
+
                     String timeFeed[] = feedTime.getTimePoints();
+                    LogUtil.d("收到投食信息");
                     Bundle bundle = new Bundle();
                     bundle.putString("type", "feed");
                     bundle.putString("condition", "start");
-                    AlarmManageService.addAlarm(context, 0, bundle, timeFeed, 0);
-                    AlarmManageService.addAlarm(context, 0, bundle, timeFeed, 1);
+                    AlarmManageService.addAlarm1(context, bundle, timeFeed, 0);
+                    AlarmManageService.addAlarm1(context, bundle, timeFeed, 1);
                     //得到喂食时间，后续硬件进行处理
-                } else if (businessType.equals(Constant.WEBSOCKET_MESSAGE_NAVIGATETRANSFORM_CODE)) {
+                } else if(businessType.equals(Constant.WEBSOCKET_SOCKET_GET_TIME_LIST)){//处理服务器发来的投食巡航时间
                     feedTime = JsonUtil.parseFeedNavigateTransform(json);
+                    if(feedTime.getAutoType().equals(Constant.WEBSOCKET_SOCKET_AUTOTYPE_AUTO_FEED)){
+                        String timeFeed[] = feedTime.getTimePoints();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("type", "feed");
+                        bundle.putString("condition", "start");
+                        AlarmManageService.addAlarm1(context,bundle, timeFeed, 0);
+                        AlarmManageService.addAlarm1(context,bundle, timeFeed, 1);
+                        //得到喂食时间，后续硬件进行处理
+                        LogUtil.d("喂食设置成功");
+                    }else if(feedTime.getAutoType().equals(Constant.WEBSOCKET_SOCKET_AUTOTYPE_AUTO_CONTROL)){
+                        String timeFeed[] = feedTime.getTimePoints();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("type", "feed");
+                        bundle.putString("condition", "start");
+                        AlarmManageService.addAlarm2(context,bundle, timeFeed, 0);
+                        AlarmManageService.addAlarm2(context, bundle, timeFeed, 1);
+                        //得到喂食时间，后续硬件进行处理
+                        LogUtil.d("巡航设置成功");
+                    }
+                }else if (businessType.equals(Constant.WEBSOCKET_MESSAGE_NAVIGATETRANSFORM_CODE)) {
+                    navigateTime = JsonUtil.parseFeedNavigateTransform(json);
                     Bundle bundle = new Bundle();
+                    LogUtil.d("收到巡航信息");
                     bundle.putString("type", "navigate");
                     bundle.putString("condition", "start");
-                    String timenavigate[] = feedTime.getTimePoints();
-                    AlarmManageService.addAlarm(context, 0, bundle, timenavigate, 0);
-                    AlarmManageService.addAlarm(context, 0, bundle, timenavigate, 1);
+                    String timenavigate[] = navigateTime.getTimePoints();
+                    AlarmManageService.addAlarm2(context, bundle, timenavigate, 0);
+                    AlarmManageService.addAlarm2(context, bundle, timenavigate, 1);
 
                     //得到巡航时间，后续硬件进行处理
                 } else if ((businessType.equals(Constant.WEBSOCKET_MESSAGE_TRANSFORM_CODE))) {//指令转发

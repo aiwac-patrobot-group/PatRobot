@@ -25,7 +25,13 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.aiwac.robotapp.commonlibrary.bean.MessageEvent;
+import com.aiwac.robotapp.commonlibrary.common.Constant;
+import com.aiwac.robotapp.commonlibrary.utils.LogUtil;
 import com.aiwac.robotapp.patrobot.R;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import io.vov.vitamio.MediaPlayer;
 import io.vov.vitamio.Vitamio;
@@ -159,6 +165,40 @@ public class AudioPlayActivity extends AppCompatActivity implements View.OnClick
         init();
         // 初始
 
+
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void Event(MessageEvent messageEvent) {
+    if(messageEvent.getTo().equals(Constant.WEBSOCKET_COMMAND_AUDIO_PAUSSE)){
+            LogUtil.d("audio pause");
+            if (mVideoView2.isPlaying()) {
+                mVideoView2.pause();
+                mIvPlay.setImageResource(R.drawable.video_play);
+                mHandler.removeMessages(UPDATE_PALY_TIME);
+                mHandler.removeMessages(HIDE_CONTROL_BAR);
+                showControlBar();
+            }
+        }else  if(messageEvent.getTo().equals(Constant.WEBSOCKET_COMMAND_AUDIO_STOP)){
+            LogUtil.d("audio stop");
+            if (mIsFullScreen) {
+                if (mVideoView2.isPlaying()) {
+                    mHandler.removeMessages(HIDE_CONTROL_BAR);
+                    mHandler.sendEmptyMessageDelayed(HIDE_CONTROL_BAR, HIDE_TIME);
+                }
+                setupUnFullScreen();
+            } else {
+                finish();
+            }
+
+            finish();
+
+        }else if(messageEvent.getTo().equals(Constant.WEBSOCKET_COMMAND_AUDIO_CONTINUE)){
+            LogUtil.d("audio play");
+            mVideoView2.start();
+            mIvPlay.setImageResource(R.drawable.video_pause);
+            mHandler.sendEmptyMessage(UPDATE_PALY_TIME);
+            mHandler.sendEmptyMessageDelayed(HIDE_CONTROL_BAR, HIDE_TIME);
+        }
 
     }
 
