@@ -7,6 +7,8 @@ public class FeedTime {
     protected String uniqueID;
     protected String time;
     protected String timePoints[];
+    protected String autoType;
+
 
     public String getClientID() {
         return clientID;
@@ -54,5 +56,12 @@ public class FeedTime {
 
     public void setTimePoints(String timePoints[]) {
         this.timePoints = timePoints;
+    }
+    public String getAutoType() {
+        return autoType;
+    }
+
+    public void setAutoType(String clientID) {
+        this.autoType = autoType;
     }
 }

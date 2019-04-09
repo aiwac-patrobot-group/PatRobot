@@ -42,6 +42,7 @@ public class FeedActivity extends AppCompatActivity {
     //private String[][] times = new String[1][];
     private String setTime = "";
     private int feedNum = 0;
+    private MyAdapter adapter1;
     ExpandableListView mView;
 
 
@@ -57,11 +58,11 @@ public class FeedActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        adapter1 = new MyAdapter();
 
         setContentView(R.layout.activity_feed);
         mView = (ExpandableListView) findViewById(R.id.el_list);
-        mView.setAdapter(new MyAdapter());
+        mView.setAdapter(adapter1);
         addTime_bt = (Button)findViewById(R.id.addFeedTime);
         addTime_bt.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -92,6 +93,7 @@ public class FeedActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             feedTimes.remove(childPosition);
+                            adapter1.notifyDataSetChanged();
                             ThreadPoolManager.getThreadPoolManager().submitTask(new Runnable() {
                                 @Override
                                 public void run() {
@@ -255,6 +257,7 @@ public class FeedActivity extends AppCompatActivity {
                 DecimalFormat df=new DecimalFormat("00");//设置格式
                 setTime = df.format(hourOfDay)+":"+df.format(minute);
                 feedTimes.add(setTime);
+                adapter1.notifyDataSetChanged();
                 //发送给服务器
                 sendTimeToServer(setTime);
             }

@@ -426,6 +426,7 @@ public class JsonUtil {
             feedTime.setClientType(root.getString(Constant.WEBSOCKET_MESSAGE_CLIENTTYPE));
             feedTime.setUniqueID(root.getString(Constant.WEBSOCKET_MESSAGE_UUID));
             feedTime.setTime(root.getString(Constant.WEBSOCKET_MESSAGE_TIME));
+            //feedTime.setAutoType(root.getString(Constant.WEBSOCKET_SOCKET_AUTOTYPE));
             JSONArray jsonArray = root.getJSONArray(Constant.WEB_SOCKET_TIME_POINTS);
             for (int i = 0; i < jsonArray.length(); i++) {
                 times.add((String) jsonArray.get(i));
