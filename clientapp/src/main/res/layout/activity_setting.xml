@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    style="@style/activity_page"
-    tools:context=".activity.setting.SettingActivity">
+    style="@style/activity_page">
 
-    <RelativeLayout style="@style/topbar_bg"
-        tools:ignore="MissingConstraints">
+    <RelativeLayout style="@style/topbar_bg">
 
         <ImageButton style="@style/topbar_return_img" />
 
@@ -18,8 +14,7 @@
 
     <RelativeLayout
         style="@style/match_match"
-        android:layout_weight="1"
-        tools:ignore="MissingConstraints">
+        android:layout_weight="1">
 
 
         <ScrollView style="@style/match_match" >

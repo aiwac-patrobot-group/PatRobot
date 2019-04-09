@@ -185,7 +185,8 @@ public class WebSocketClientHelper extends WebSocketClient {
                             //link  = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
                             //测试
                             LogUtil.d(link);
-                            intent.putExtra("Link", link);
+                            String testLink="http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
+                            intent.putExtra("Link", testLink);
                             context.startActivity(intent);
 
                         }
