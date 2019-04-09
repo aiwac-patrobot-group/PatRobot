@@ -140,7 +140,8 @@ public class WebSocketApplication {
 
     //发送消息
     public void send(String json){
-        LogUtil.printJson("json",json,"##");
+        if(!json.equals("pong"))
+            LogUtil.printJson("json",json,"##");
         webSocketHelper.send(json);
     }
 

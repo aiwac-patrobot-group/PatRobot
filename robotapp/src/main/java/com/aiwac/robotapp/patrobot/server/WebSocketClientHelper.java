@@ -98,7 +98,6 @@ public class WebSocketClientHelper extends WebSocketClient {
     @Override
     public void onMessage(final String json) {
         //处理具体逻辑
-        LogUtil.printJson(Constant.WEBSOCKET_MESSAGE_FROM_SERVER, json, "##");
         //ping  pong
         if(json.equals("ping")){
             ThreadPoolManager.getThreadPoolManager().submitTask(new Runnable() {
@@ -113,6 +112,7 @@ public class WebSocketClientHelper extends WebSocketClient {
                 }
             });
         }else {
+            LogUtil.printJson(Constant.WEBSOCKET_MESSAGE_FROM_SERVER, json, "##");
             try {
                 String businessType = JsonUtil.parseBusinessType(json);
 //            if ((businessType.equals(Constant.WEBSOCKET_VIDEO_DETAIL_TYPE_CODE))) //视频详细信息到达

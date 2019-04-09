@@ -33,7 +33,7 @@ public class RegisterCodeActivity extends AppCompatActivity {
 
     private Button checkcodeBtn;
     private Button registerBtn;
-
+    private String errorDesc="";
     private AutoCompleteTextView numberEdit;
     private EditText checkcodeEidt;
     private TextView toLoginTextView;
@@ -140,62 +140,69 @@ public class RegisterCodeActivity extends AppCompatActivity {
                         LogUtil.d(checkcode + " : " + phoneNumber);
                         Message message = new Message();
                         if(phoneNumber != null && checkcode != null){
-                            JSONObject root = new JSONObject();
-                            try {
-                                root.put(Constant.USER_REGISTER_NUMBER, phoneNumber);
-                                root.put(Constant.USER_REGISTER_CHECKCODE, checkcode);
-                                root.put(Constant.USER_DATA_FIELD_PASSWORD,password);
-                                LogUtil.d(Constant.JSON_GENERATE_SUCCESS + root.toString());
-                                String resultJson = HttpUtil.requestPostJson(Constant.HTTP_USER_REGISTER_RUL, root.toString());
-                                LogUtil.d("resultJson : " + resultJson);
-                                if(resultJson != null) {
-                                    String errorCode = JsonUtil.parseErrorCode(resultJson);
-                                    if(errorCode.equals(Constant.RETURN_JSON_ERRORCODE_VALUE_SUCCEED)){
-                                        //注册成功，保存手机号
-                                        UserData userData = UserData.getUserData();
-                                        userData.setNumber(phoneNumber);
-                                        // 直接登录
-                                        JSONObject logroot = new JSONObject();
-                                        logroot.put(Constant.USER_REGISTER_NUMBER, phoneNumber);
-                                        logroot.put(Constant.USER_DATA_FIELD_PASSWORD,etPassword.getText());
-                                        String logResultJson = HttpUtil.requestPostJson(Constant.HTTP_USER_LOGIN_BY_PASSWORD_URL, logroot.toString());
-                                        if(JsonUtil.parseErrorCode(logResultJson).equals(Constant.RETURN_JSON_ERRORCODE_VALUE_SUCCEED)){
-                                            String token =JsonUtil.parseToken(logResultJson);
-                                            String clientId=JsonUtil.parseClientID(logResultJson);
-
-
-                                            SharedPreferences.Editor editor = getSharedPreferences(Constant.DB_USER_TABLENAME, MODE_PRIVATE).edit();
-                                            editor.putString(Constant.WEBSOCKET_MESSAGE_CLIENTID,clientId);
-                                            editor.putString(Constant.USER_REGISTER_NUMBER,phoneNumber);
-                                            editor.putString(Constant.USER_DATA_FIELD_TOKEN, token);
-                                            editor.putString(Constant.USER_DATA_FIELD_PASSWORD,password);
-                                            editor.putLong(Constant.USER_DATA_FIELD_TOKENTIME, System.currentTimeMillis());
-                                            editor.apply();
-
-                                            userData.setClientID(clientId);
-                                            userData.setPassword(password);
-
-                                            message.what = Constant.USER_CHECKCODE_SUCCESS;
-                                            LogUtil.d("注册成功");
-                                        }
-                                    }else{
-                                        message.what = Constant.USER_CHECKCODE_ERROR_EXCEPTION;
-                                        String errorDesc = JsonUtil.parseErrorDesc(resultJson);
-                                        /*Toast.makeText(RegisterCodeActivity.this, errorDesc, Toast.LENGTH_LONG).show();*/
-                                        LogUtil.d("注册错误 : "+resultJson);
-                                    }
-
-                                }else{
-                                    message.what = Constant.USER_GET_CHECKCODE_EXCEPTION;
-                                    LogUtil.d(Constant.USER_GET_CHECKCODE_EXCEPTION_MESSAGE);
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                                message.what = Constant.USER_JSON_EXCEPTION;
-                                LogUtil.d(Constant.JSON_EXCEPTION);
-                            }finally {
+                            if(password.equals("")){
+                                message.what=Constant.USER_PASSWORD_IS_NULL_CONDE;
                                 handler.sendMessage(message);
+                            }else{
+                                JSONObject root = new JSONObject();
+                                try {
+                                    root.put(Constant.USER_REGISTER_NUMBER, phoneNumber);
+                                    root.put(Constant.USER_REGISTER_CHECKCODE, checkcode);
+                                    root.put(Constant.USER_DATA_FIELD_PASSWORD,password);
+                                    LogUtil.d(Constant.JSON_GENERATE_SUCCESS + root.toString());
+                                    String resultJson = HttpUtil.requestPostJson(Constant.HTTP_USER_REGISTER_RUL, root.toString());
+                                    LogUtil.d("resultJson : " + resultJson);
+                                    if(resultJson != null) {
+                                        String errorCode = JsonUtil.parseErrorCode(resultJson);
+                                        if(errorCode.equals(Constant.RETURN_JSON_ERRORCODE_VALUE_SUCCEED)){
+                                            //注册成功，保存手机号
+                                            UserData userData = UserData.getUserData();
+                                            userData.setNumber(phoneNumber);
+                                            // 直接登录
+                                            JSONObject logroot = new JSONObject();
+                                            logroot.put(Constant.USER_REGISTER_NUMBER, phoneNumber);
+                                            logroot.put(Constant.USER_DATA_FIELD_PASSWORD,etPassword.getText());
+                                            String logResultJson = HttpUtil.requestPostJson(Constant.HTTP_USER_LOGIN_BY_PASSWORD_URL, logroot.toString());
+                                            if(JsonUtil.parseErrorCode(logResultJson).equals(Constant.RETURN_JSON_ERRORCODE_VALUE_SUCCEED)){
+                                                String token =JsonUtil.parseToken(logResultJson);
+                                                String clientId=JsonUtil.parseClientID(logResultJson);
+
+
+                                                SharedPreferences.Editor editor = getSharedPreferences(Constant.DB_USER_TABLENAME, MODE_PRIVATE).edit();
+                                                editor.putString(Constant.WEBSOCKET_MESSAGE_CLIENTID,clientId);
+                                                editor.putString(Constant.USER_REGISTER_NUMBER,phoneNumber);
+                                                editor.putString(Constant.USER_DATA_FIELD_TOKEN, token);
+                                                editor.putString(Constant.USER_DATA_FIELD_PASSWORD,password);
+                                                editor.putLong(Constant.USER_DATA_FIELD_TOKENTIME, System.currentTimeMillis());
+                                                editor.apply();
+
+                                                userData.setClientID(clientId);
+                                                userData.setPassword(password);
+
+                                                message.what = Constant.USER_CHECKCODE_SUCCESS;
+                                                LogUtil.d("注册成功");
+                                            }
+                                        }else{
+                                            message.what = Constant.USER_CHECKCODE_ERROR_EXCEPTION;
+                                            String errorDescJson = JsonUtil.parseErrorDesc(resultJson);
+                                            /*Toast.makeText(RegisterCodeActivity.this, errorDesc, Toast.LENGTH_LONG).show();*/
+                                            LogUtil.d("注册错误 : "+resultJson);
+                                            errorDesc=errorDescJson;
+                                        }
+
+                                    }else{
+                                        message.what = Constant.USER_GET_CHECKCODE_EXCEPTION;
+                                        LogUtil.d(Constant.USER_GET_CHECKCODE_EXCEPTION_MESSAGE);
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                    message.what = Constant.USER_JSON_EXCEPTION;
+                                    LogUtil.d(Constant.JSON_EXCEPTION);
+                                }finally {
+                                    handler.sendMessage(message);
+                                }
                             }
+
 
                         }
                     }
@@ -237,9 +244,12 @@ public class RegisterCodeActivity extends AppCompatActivity {
                 case Constant.USER_JSON_EXCEPTION:
                     Toast.makeText(RegisterCodeActivity.this, Constant.USER_JSON_EXCEPTION_MESSAGE, Toast.LENGTH_LONG).show();
                     break;
+                case Constant.USER_PASSWORD_IS_NULL_CONDE:
+                    Toast.makeText(RegisterCodeActivity.this, Constant.USER_PASSWORD_IS_NOT_NULL, Toast.LENGTH_LONG).show();
+                    break;
                 case Constant.USER_CHECKCODE_ERROR_EXCEPTION:
                     //Toast.makeText(RegisterCodeActivity.this, Constant.USER_CHECKCODE_ERROR_EXCEPTION_MESSAGE, Toast.LENGTH_LONG).show();
-                    Toast.makeText(RegisterCodeActivity.this, "注册失败", Toast.LENGTH_LONG).show();
+                    Toast.makeText(RegisterCodeActivity.this, "注册失败,"+errorDesc, Toast.LENGTH_LONG).show();
                     break;
                 case Constant.USER_CHECKCODE_SUCCESS:
                     Toast.makeText(RegisterCodeActivity.this, "注册成功", Toast.LENGTH_LONG).show();

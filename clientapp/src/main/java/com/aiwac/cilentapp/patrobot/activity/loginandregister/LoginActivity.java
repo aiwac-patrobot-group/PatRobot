@@ -33,7 +33,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private Button checkcodeBtn;
     private Button loginBtn;
-
+    private String errorDesc="";
     private AutoCompleteTextView numberEdit;
     private EditText checkcodeEidt;
     private TextView textToRegister;
@@ -177,6 +177,8 @@ public class LoginActivity extends AppCompatActivity {
                                     }else{
                                         message.what = Constant.USER_CHECKCODE_ERROR_EXCEPTION;
                                         LogUtil.d(Constant.USER_CHECKCODE_ERROR_EXCEPTION_MESSAGE);
+
+                                        errorDesc=JsonUtil.parseErrorDesc(resultJson);
                                     }
 
                                 }else{
@@ -232,7 +234,7 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this, Constant.USER_JSON_EXCEPTION_MESSAGE, Toast.LENGTH_LONG).show();
                     break;
                 case Constant.USER_CHECKCODE_ERROR_EXCEPTION:
-                    Toast.makeText(LoginActivity.this, Constant.USER_CHECKCODE_ERROR_EXCEPTION_MESSAGE, Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoginActivity.this, errorDesc, Toast.LENGTH_LONG).show();
                     break;
                 case Constant.USER_CHECKCODE_SUCCESS:
                     //直接跳转到主函数
