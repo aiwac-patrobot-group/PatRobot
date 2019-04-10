@@ -124,12 +124,12 @@ public class WebSocketClientHelper extends WebSocketClient {
 
     @Override
     public void onMessage(final String json) {
-        LogUtil.printJson( Constant.WEBSOCKET_MESSAGE_FROM_SERVER ,json,"##");
         //处理具体逻辑
         //ping  pong
         if(json.equals("ping")){
             WebSocketApplication.getWebSocketApplication().send("pong");
         }else{
+            LogUtil.printJson( Constant.WEBSOCKET_MESSAGE_FROM_SERVER ,json,"##");
 
             try {
                 String businessType = JsonUtil.parseBusinessType(json);

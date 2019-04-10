@@ -98,7 +98,6 @@ public class WebSocketClientHelper extends WebSocketClient {
     @Override
     public void onMessage(final String json) {
         //处理具体逻辑
-        LogUtil.printJson(Constant.WEBSOCKET_MESSAGE_FROM_SERVER, json, "##");
         //ping  pong
         if(json.equals("ping")){
             ThreadPoolManager.getThreadPoolManager().submitTask(new Runnable() {
@@ -113,6 +112,7 @@ public class WebSocketClientHelper extends WebSocketClient {
                 }
             });
         }else {
+            LogUtil.printJson(Constant.WEBSOCKET_MESSAGE_FROM_SERVER, json, "##");
             try {
                 String businessType = JsonUtil.parseBusinessType(json);
                 if (businessType.equals(Constant.WEBSOCKET_MESSAGE_FEEDTRANSFORM_CODE)||
@@ -168,7 +168,8 @@ public class WebSocketClientHelper extends WebSocketClient {
                             //link  = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
                             //测试
                             LogUtil.d(link);
-                            intent.putExtra("Link", link);
+                            String testLink="http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
+                            intent.putExtra("Link", testLink);
                             context.startActivity(intent);
 
                         }

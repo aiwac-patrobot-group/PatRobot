@@ -286,6 +286,9 @@ public class Constant {
     public final static int USER_CHECKCODE_MILLISINFUTURE = 60 * USER_CHECKCODE_COUNTDOWNINTERVAL; //要倒计时的总时间
 
 
+    public final static int USER_PASSWORD_IS_NULL_CONDE=105;
+    public final static String USER_PASSWORD_IS_NOT_NULL="密码不可为空";
+
     public final static String USER_LOGIN_SUCCEED="用户登录成功";
 
     public final static String USER_MODIFY_PASSWORD_OPT  = "modifyPasswd";
