@@ -3,6 +3,8 @@ package com.aiwac.robotapp.patrobot.server;
 
 import android.content.Context;
 import android.content.Intent;
+
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -11,6 +13,7 @@ import com.aiwac.robotapp.commonlibrary.common.Constant;
 import com.aiwac.robotapp.commonlibrary.task.ThreadPoolManager;
 import com.aiwac.robotapp.commonlibrary.utils.LogUtil;
 import com.aiwac.robotapp.patrobot.AlarmManageService;
+import com.aiwac.robotapp.patrobot.activity.MainActivity;
 import com.aiwac.robotapp.patrobot.activity.videoplayer.AudioPlayActivity;
 import com.aiwac.robotapp.patrobot.activity.videoplayer.VideoPlayActivity;
 import com.aiwac.robotapp.patrobot.bean.FeedTime;
@@ -30,6 +33,8 @@ import java.net.URI;
 import java.util.Map;
 
 import io.vov.vitamio.Vitamio;
+
+import static android.content.Context.MODE_PRIVATE;
 
 
 /**     用于WebSocket客户端通信
@@ -119,28 +124,20 @@ public class WebSocketClientHelper extends WebSocketClient {
                         (businessType.equals(Constant.WEBSOCKET_SOCKET_GET_TIME_LIST)&&
                                 JsonUtil.parseFeedNavigateTransform(json).getAutoType().equals(Constant.WEBSOCKET_SOCKET_AUTOTYPE_AUTO_FEED))) {
                     feedTime = JsonUtil.parseFeedNavigateTransform(json);
-
                     String timeFeed[] = feedTime.getTimePoints();
                     LogUtil.d("收到投食信息");
-                    Bundle bundle = new Bundle();
-                    bundle.putString("type", "feed");
-                    bundle.putString("condition", "start");
-                    AlarmManageService.addAlarm1(context, bundle, timeFeed, 0);
-                    AlarmManageService.addAlarm1(context, bundle, timeFeed, 1);
-                    //得到喂食时间，后续硬件进行处理
+                    setTime(timeFeed,Constant.DB_FEED_TIME);
+                    AlarmManageService.addAlarm1(context, timeFeed, 0);
+                    AlarmManageService.addAlarm1(context, timeFeed, 1);
                 }else if (businessType.equals(Constant.WEBSOCKET_MESSAGE_NAVIGATETRANSFORM_CODE)||
                         (businessType.equals(Constant.WEBSOCKET_SOCKET_GET_TIME_LIST)&&
                                 JsonUtil.parseFeedNavigateTransform(json).getAutoType().equals(Constant.WEBSOCKET_SOCKET_AUTOTYPE_AUTO_CONTROL))) {
                     navigateTime = JsonUtil.parseFeedNavigateTransform(json);
-                    Bundle bundle = new Bundle();
                     LogUtil.d("收到巡航信息");
-                    bundle.putString("type", "navigate");
-                    bundle.putString("condition", "start");
                     String timenavigate[] = navigateTime.getTimePoints();
-                    AlarmManageService.addAlarm2(context, bundle, timenavigate, 0);
-                    AlarmManageService.addAlarm2(context, bundle, timenavigate, 1);
-
-                    //得到巡航时间，后续硬件进行处理
+                    setTime(timenavigate,Constant.DB_NAVIGATE_TIME);
+                    AlarmManageService.addAlarm2(context, timenavigate, 0);
+                    AlarmManageService.addAlarm2(context, timenavigate, 1);
                 } else if ((businessType.equals(Constant.WEBSOCKET_MESSAGE_TRANSFORM_CODE))) {//指令转发
                     String dataJsonStr = JsonUtil.parseMessageTransData(json);
                     String commantType = JsonUtil.parseCommantType(dataJsonStr);
@@ -261,6 +258,17 @@ public class WebSocketClientHelper extends WebSocketClient {
 
             }
         }
+    }
+    /**
+     * 设置时间存储
+     */
+    private void setTime(String time[],String type){
+        SharedPreferences.Editor editor = context.getSharedPreferences(type, MODE_PRIVATE).edit();
+        for(int i=0;i<time.length;i++)
+        {
+            editor.putString(String.valueOf(i),time[i]);
+        }
+        editor.apply();
     }
 
     //判断是否重新安装，是否需要同步

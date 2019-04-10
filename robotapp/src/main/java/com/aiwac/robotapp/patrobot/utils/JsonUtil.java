@@ -439,4 +439,37 @@ public class JsonUtil {
             throw new JsonException(Constant.JSON_PARSE_EXCEPTION, e);
         }
     }
+
+    public static String time2Json(String autoType){
+        try {
+            BaseEntity baseEntity = new BaseEntity();
+            baseEntity.setBusinessType(Constant.WEBSOCKET_SOCKET_GET_TIME_LIST);
+            JSONObject root=BaseEntity2Json(baseEntity);
+            root.put(Constant.WEBSOCKET_SOCKET_AUTOTYPE,autoType);
+            return root.toString();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            LogUtil.d( Constant.JSON_PARSE_EXCEPTION);
+            throw new JsonException(Constant.JSON_PARSE_EXCEPTION, e);
+        }
+    }
+
+    //将BaseEntity对象转换成json
+    public static JSONObject BaseEntity2Json(BaseEntity baseEntity){
+        JSONObject root = new JSONObject();
+        try{
+            root.put(Constant.WEBSOCKET_MESSAGE_CLIENTID, baseEntity.getClientId());
+            root.put(Constant.WEBSOCKET_MESSAGE_BUSSINESSTYPE, baseEntity.getBusinessType());
+            root.put(Constant.WEBSOCKET_MESSAGE_UUID, UUID.randomUUID().toString());
+            root.put(Constant.WEBSOCKET_MESSAGE_CLIENTTYPE, baseEntity.getClientType());
+            root.put(Constant.WEBSOCKET_MESSAGE_TIME, System.currentTimeMillis()+"");
+            //LogUtil.d(Constant.JSON_GENERATE_SUCCESS + root.toString());
+            return root;
+        }catch (Exception e){
+            e.printStackTrace();
+            LogUtil.d(Constant.JSON_GENERATE_EXCEPTION);
+            throw new JsonException(Constant.JSON_GENERATE_EXCEPTION, e);
+        }
+    }
 }

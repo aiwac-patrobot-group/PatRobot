@@ -56,8 +56,9 @@ public class MainActivity extends AppCompatActivity {
         initView();
         initEven();
         initPermission();
-        requestFeedNaviTime();//向机器人发送喂食巡航时间
         Vitamio.isInitialized(this);
+        initNavigateTimeFromServer();
+        initFeedTimeFromServer();
     }
     //判断 是否已经登录，如果没有登录，结束本activity，跳转到登录界面
     private void hasLogged(){
@@ -196,18 +197,32 @@ public class MainActivity extends AppCompatActivity {
         // 此处为android 6.0以上动态授权的回调，用户自行实现。
 
     }
-    private void requestFeedNaviTime(){
-                try{
-                    WebSocketApplication.getWebSocketApplication().send(JsonUtil.time2Json(Constant.WEBSOCKET_SOCKET_AUTOTYPE_AUTO_FEED));
-                }catch (Exception e){
-                    e.printStackTrace();
-                    Log.d("tag", "FeedList exception");
-                }
+    //从服务器获取时间列表
+    private void initNavigateTimeFromServer(){
+        ThreadPoolManager.getThreadPoolManager().submitTask(new Runnable() {
+            @Override
+            public void run() {
                 try{
                     WebSocketApplication.getWebSocketApplication().send(JsonUtil.time2Json(Constant.WEBSOCKET_SOCKET_AUTOTYPE_AUTO_CONTROL));
                 }catch (Exception e){
                     e.printStackTrace();
-                    Log.d("tag", "NavigateList exception");
+                    Log.d("tag", "FeedTransform exception");
                 }
             }
+        });
+    }
+    //从服务器获取时间列表
+    private void initFeedTimeFromServer(){
+        ThreadPoolManager.getThreadPoolManager().submitTask(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    WebSocketApplication.getWebSocketApplication().send(JsonUtil.time2Json(Constant.WEBSOCKET_SOCKET_AUTOTYPE_AUTO_FEED));
+                }catch (Exception e){
+                    e.printStackTrace();
+                    Log.d("tag", "FeedTransform exception");
+                }
+            }
+        });
+    }
 }

@@ -151,6 +151,8 @@ public class Constant {
     public final static String DB_CREATING = "正在创建数据库";
 
     public final static String DB_USER_TABLENAME = "user";
+    public final static String DB_FEED_TIME = "feed";
+    public final static String DB_NAVIGATE_TIME = "navigate";
     public final static String DB_TIMER_TABLENAME = "timer";
     public final static String DB_EDUCATION_NAME= "education";
     public final static String DB_Notification="notification";//本地消息列表

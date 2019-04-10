@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
         //注册消息
         EventBus.getDefault().register(this);
+        requestFeedNaviTime();
     }
     @Override
     protected void onResume() {
@@ -320,5 +321,20 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+    }
+    private void requestFeedNaviTime(){
+        try{
+            WebSocketApplication.getWebSocketApplication().send(JsonUtil.time2Json(Constant.WEBSOCKET_SOCKET_AUTOTYPE_AUTO_FEED));
+            LogUtil.d("toushixinxihuoqu+++++++++++++++++++++++");
+        }catch (Exception e){
+            e.printStackTrace();
+            Log.d("tag", "FeedList exception");
+        }
+        try{
+            WebSocketApplication.getWebSocketApplication().send(JsonUtil.time2Json(Constant.WEBSOCKET_SOCKET_AUTOTYPE_AUTO_CONTROL));
+        }catch (Exception e){
+            e.printStackTrace();
+            Log.d("tag", "NavigateList exception");
+        }
     }
 }

@@ -27,29 +27,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <receiver
-            android:name=".receiver.navigateEndReceiver"
-            android:enabled="true"
-            android:exported="true"></receiver>
-        <receiver
-            android:name=".receiver.navigateStartReceiver"
-            android:enabled="true"
-            android:exported="true" />
-        <receiver
-            android:name=".receiver.feedEndReceiver"
-            android:enabled="true"
-            android:exported="true" />
-        <receiver
-            android:name=".receiver.feedStartReceiver"
+            android:name=".receiver.timeReceiver"
             android:enabled="true"
             android:exported="true" />
 
         <activity android:name=".activity.update.RobotUpdateActivity" />
-
-        <receiver android:name=".receiver.timeReceiver">
-            <intent-filter>
-                <action android:name="MYALARMRECEIVER" />
-            </intent-filter>
-        </receiver>
 
         <service
             android:name=".service.SportService"
