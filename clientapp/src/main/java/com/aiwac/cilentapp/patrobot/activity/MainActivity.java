@@ -8,6 +8,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -19,8 +20,13 @@ import com.aiwac.cilentapp.patrobot.activity.setting.ScanCodeActivity;
 import com.aiwac.cilentapp.patrobot.activity.setting.SettingActivity;
 import com.aiwac.cilentapp.patrobot.activity.videoplayer.VideoAudioActivity;
 import com.aiwac.cilentapp.patrobot.database.UserData;
+
+import com.aiwac.cilentapp.patrobot.server.WebSocketApplication;
 import com.aiwac.cilentapp.patrobot.service.WebSocketService;
+
+import com.aiwac.cilentapp.patrobot.utils.JsonUtil;
 import com.aiwac.robotapp.commonlibrary.common.Constant;
+import com.aiwac.robotapp.commonlibrary.task.ThreadPoolManager;
 import com.aiwac.robotapp.commonlibrary.utils.LogUtil;
 
 import java.util.ArrayList;
@@ -50,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         initView();
         initEven();
         initPermission();
-
+        requestFeedNaviTime();//向机器人发送喂食巡航时间
         Vitamio.isInitialized(this);
     }
     //判断 是否已经登录，如果没有登录，结束本activity，跳转到登录界面
@@ -190,4 +196,18 @@ public class MainActivity extends AppCompatActivity {
         // 此处为android 6.0以上动态授权的回调，用户自行实现。
 
     }
+    private void requestFeedNaviTime(){
+                try{
+                    WebSocketApplication.getWebSocketApplication().send(JsonUtil.time2Json(Constant.WEBSOCKET_SOCKET_AUTOTYPE_AUTO_FEED));
+                }catch (Exception e){
+                    e.printStackTrace();
+                    Log.d("tag", "FeedList exception");
+                }
+                try{
+                    WebSocketApplication.getWebSocketApplication().send(JsonUtil.time2Json(Constant.WEBSOCKET_SOCKET_AUTOTYPE_AUTO_CONTROL));
+                }catch (Exception e){
+                    e.printStackTrace();
+                    Log.d("tag", "NavigateList exception");
+                }
+            }
 }

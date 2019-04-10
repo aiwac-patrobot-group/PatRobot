@@ -98,7 +98,7 @@ public class FeedActivity extends AppCompatActivity {
                                 @Override
                                 public void run() {
                                     try{
-                                        WebSocketApplication.getWebSocketApplication().send( JsonUtil.feedTransform2Json(feedTimes.toArray(new String[feedTimes.size()])));
+                                        WebSocketApplication.getWebSocketApplication().send(JsonUtil.feedTransform2Json(feedTimes.toArray(new String[feedTimes.size()])));
                                     }catch (Exception e){
                                         e.printStackTrace();
                                         Log.d("tag", "FeedTransform exception");

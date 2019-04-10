@@ -13,7 +13,9 @@ import android.util.Log;
 
 import com.aiwac.cilentapp.patrobot.database.UserData;
 import com.aiwac.cilentapp.patrobot.server.WebSocketApplication;
+import com.aiwac.cilentapp.patrobot.utils.JsonUtil;
 import com.aiwac.robotapp.commonlibrary.common.Constant;
+import com.aiwac.robotapp.commonlibrary.task.ThreadPoolManager;
 import com.aiwac.robotapp.commonlibrary.utils.LogUtil;
 import com.aiwac.robotapp.commonlibrary.utils.StringUtil;
 
@@ -44,6 +46,8 @@ public class WebSocketService extends Service{
 
         Log.d(LOG_TAG, "WebSocketService" + Constant.SERVICE_CREATE);
     }
+
+
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {

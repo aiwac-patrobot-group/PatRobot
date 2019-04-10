@@ -559,21 +559,41 @@ public class JsonUtil {
         }
     }
 
+//
+//    //向服务器获取时间列表
+//    public static String time2Json(String autoType){
+//        try{
+//            BaseEntity baseEntity=new BaseEntity();
+//            baseEntity.setBusinessType(Constant.WEBSOCKET_SOCKET_GET_TIME_LIST);
+//            JSONObject root =baseEntity2Json(baseEntity);
+//            root.put(Constant.WEBSOCKET_SOCKET_AUTOTYPE,autoType);
+//            LogUtil.d( Constant.JSON_GENERATE_SUCCESS + root.toString());
+//            return root.toString();
+//        }catch (Exception e){
+//            e.printStackTrace();
+//            LogUtil.d(Constant.JSON_GENERATE_EXCEPTION);
+//            throw new JsonException(Constant.JSON_GENERATE_EXCEPTION,e);
+//
+//        }
+//    }
 
     //向服务器获取时间列表
     public static String time2Json(String autoType){
+        JSONObject root = new JSONObject();
         try{
-            BaseEntity baseEntity=new BaseEntity();
-            baseEntity.setBusinessType(Constant.WEBSOCKET_SOCKET_GET_TIME_LIST);
-            JSONObject root =baseEntity2Json(baseEntity);
+            User user = new User();
+            root.put(Constant.WEBSOCKET_MESSAGE_CLIENTID, user.clientId);
+            root.put(Constant.WEBSOCKET_MESSAGE_BUSSINESSTYPE,Constant.WEBSOCKET_SOCKET_GET_TIME_LIST);
+            root.put(Constant.WEBSOCKET_MESSAGE_CLIENTTYPE,Constant.WEBSOCKET_MESSAGE_TYPE_Client);
+            root.put(Constant.WEBSOCKET_MESSAGE_TIME,System.currentTimeMillis() + "");
+            root.put(Constant.WEBSOCKET_MESSAGE_UUID, UUID.randomUUID().toString());
             root.put(Constant.WEBSOCKET_SOCKET_AUTOTYPE,autoType);
             LogUtil.d( Constant.JSON_GENERATE_SUCCESS + root.toString());
             return root.toString();
         }catch (Exception e){
             e.printStackTrace();
-            LogUtil.d(Constant.JSON_GENERATE_EXCEPTION);
-            throw new JsonException(Constant.JSON_GENERATE_EXCEPTION,e);
-
+            LogUtil.d( Constant.JSON_GENERATE_EXCEPTION);
+            throw new JsonException(Constant.JSON_GENERATE_EXCEPTION, e);
         }
     }
 

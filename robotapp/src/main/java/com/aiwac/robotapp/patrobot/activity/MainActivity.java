@@ -13,6 +13,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -20,11 +21,14 @@ import android.widget.TextView;
 
 import com.aiwac.robotapp.commonlibrary.bean.MessageEvent;
 import com.aiwac.robotapp.commonlibrary.common.Constant;
+import com.aiwac.robotapp.commonlibrary.task.ThreadPoolManager;
 import com.aiwac.robotapp.commonlibrary.utils.ActivityUtil;
 import com.aiwac.robotapp.commonlibrary.utils.LogUtil;
 import com.aiwac.robotapp.commonlibrary.utils.WifiUtil;
 import com.aiwac.robotapp.patrobot.R;
+import com.aiwac.robotapp.patrobot.server.WebSocketApplication;
 import com.aiwac.robotapp.patrobot.service.WebSocketService;
+import com.aiwac.robotapp.patrobot.utils.JsonUtil;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -65,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
         //注册消息
         EventBus.getDefault().register(this);
     }
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -307,9 +310,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-
-
-
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         // 此处为android 6.0以上动态授权的回调，用户自行实现。

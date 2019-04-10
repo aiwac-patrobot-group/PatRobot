@@ -10,6 +10,7 @@ public class feedEndReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        //LogUtil.d(intent.getAction());
         //处理结束投食
         LogUtil.d("结束投食");
     }

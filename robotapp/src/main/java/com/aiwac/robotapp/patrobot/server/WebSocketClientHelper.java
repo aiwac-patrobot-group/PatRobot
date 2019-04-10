@@ -115,7 +115,9 @@ public class WebSocketClientHelper extends WebSocketClient {
         }else {
             try {
                 String businessType = JsonUtil.parseBusinessType(json);
-                if (businessType.equals(Constant.WEBSOCKET_MESSAGE_FEEDTRANSFORM_CODE)) {
+                if (businessType.equals(Constant.WEBSOCKET_MESSAGE_FEEDTRANSFORM_CODE)||
+                        (businessType.equals(Constant.WEBSOCKET_SOCKET_GET_TIME_LIST)&&
+                                JsonUtil.parseFeedNavigateTransform(json).getAutoType().equals(Constant.WEBSOCKET_SOCKET_AUTOTYPE_AUTO_FEED))) {
                     feedTime = JsonUtil.parseFeedNavigateTransform(json);
 
                     String timeFeed[] = feedTime.getTimePoints();
@@ -126,28 +128,9 @@ public class WebSocketClientHelper extends WebSocketClient {
                     AlarmManageService.addAlarm1(context, bundle, timeFeed, 0);
                     AlarmManageService.addAlarm1(context, bundle, timeFeed, 1);
                     //得到喂食时间，后续硬件进行处理
-                } else if(businessType.equals(Constant.WEBSOCKET_SOCKET_GET_TIME_LIST)){//处理服务器发来的投食巡航时间
-                    feedTime = JsonUtil.parseFeedNavigateTransform(json);
-                    if(feedTime.getAutoType().equals(Constant.WEBSOCKET_SOCKET_AUTOTYPE_AUTO_FEED)){
-                        String timeFeed[] = feedTime.getTimePoints();
-                        Bundle bundle = new Bundle();
-                        bundle.putString("type", "feed");
-                        bundle.putString("condition", "start");
-                        AlarmManageService.addAlarm1(context,bundle, timeFeed, 0);
-                        AlarmManageService.addAlarm1(context,bundle, timeFeed, 1);
-                        //得到喂食时间，后续硬件进行处理
-                        LogUtil.d("喂食设置成功");
-                    }else if(feedTime.getAutoType().equals(Constant.WEBSOCKET_SOCKET_AUTOTYPE_AUTO_CONTROL)){
-                        String timeFeed[] = feedTime.getTimePoints();
-                        Bundle bundle = new Bundle();
-                        bundle.putString("type", "feed");
-                        bundle.putString("condition", "start");
-                        AlarmManageService.addAlarm2(context,bundle, timeFeed, 0);
-                        AlarmManageService.addAlarm2(context, bundle, timeFeed, 1);
-                        //得到喂食时间，后续硬件进行处理
-                        LogUtil.d("巡航设置成功");
-                    }
-                }else if (businessType.equals(Constant.WEBSOCKET_MESSAGE_NAVIGATETRANSFORM_CODE)) {
+                }else if (businessType.equals(Constant.WEBSOCKET_MESSAGE_NAVIGATETRANSFORM_CODE)||
+                        (businessType.equals(Constant.WEBSOCKET_SOCKET_GET_TIME_LIST)&&
+                                JsonUtil.parseFeedNavigateTransform(json).getAutoType().equals(Constant.WEBSOCKET_SOCKET_AUTOTYPE_AUTO_CONTROL))) {
                     navigateTime = JsonUtil.parseFeedNavigateTransform(json);
                     Bundle bundle = new Bundle();
                     LogUtil.d("收到巡航信息");

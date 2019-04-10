@@ -439,8 +439,4 @@ public class JsonUtil {
             throw new JsonException(Constant.JSON_PARSE_EXCEPTION, e);
         }
     }
-
-
-
-
 }
