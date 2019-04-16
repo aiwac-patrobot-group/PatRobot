@@ -6,6 +6,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -42,6 +44,24 @@ public class audioDetailActivity extends AppCompatActivity {
     protected TextView audioTitle, audioDescription;
     protected String link = "noLink";
     private Button backButton, buttonplay_pause,buttonPlay_pause1,buttonPlay_pause2;
+    private Handler handler=new Handler(){
+        public void handleMessage(Message msg){
+            super.handleMessage(msg);
+            switch(msg.what){
+                case 1:   //在这里变换按钮为暂停播放
+                    buttonplay_pause.setText("暂停播放");
+                    break;
+                case 2:   //在这里变换按钮为暂停播放
+                    buttonplay_pause.setText("继续播放");
+                    break;
+                case 3:   //在这里变换按钮为机器人端播放
+                    buttonplay_pause.setText("机器人端播放");
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +113,14 @@ public class audioDetailActivity extends AppCompatActivity {
                     } else {
                         //测试
 //                    link  = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
-                        buttonplay_pause.setText("暂停播放");
+                        ThreadPoolManager.getThreadPoolManager().submitTask(new Runnable() {
+                            @Override
+                            public void run() {
+                                Message msg = new Message();
+                                msg.what = 1;//按钮变为暂停播放
+                                handler.sendMessage(msg);
+                            }
+                        });
                         ThreadPoolManager.getThreadPoolManager().submitTask(new Runnable() {
                             @Override
                             public void run() {
@@ -106,21 +133,28 @@ public class audioDetailActivity extends AppCompatActivity {
                             }
                         });
                         Toast.makeText(audioDetailActivity.this, "已发送到机器人端播放", Toast.LENGTH_SHORT).show();
-                        MediaPlayer mediaPlayer = new MediaPlayer();
-                        try{
-                            mediaPlayer.setDataSource(link);
-                            mediaPlayer.prepare();
-                        }catch(Exception o){
-                            o.printStackTrace();
-                        }
+//                        MediaPlayer mediaPlayer = new MediaPlayer();
+//                        try{
+//                            mediaPlayer.setDataSource(link);
+//                            mediaPlayer.prepare();
+//                        }catch(Exception o){
+//                            o.printStackTrace();
+//                        }
                     }
                 }else if(buttonplay_pause.getText().equals("暂停播放")){
-                    buttonplay_pause.setText("继续播放");
+                    ThreadPoolManager.getThreadPoolManager().submitTask(new Runnable() {
+                        @Override
+                        public void run() {
+                            Message msg = new Message();
+                            msg.what = 2;//按钮变为继续播放
+                            handler.sendMessage(msg);
+                        }
+                    });
                     ThreadPoolManager.getThreadPoolManager().submitTask(new Runnable() {
                         @Override
                         public void run() {
                             try {
-                                WebSocketApplication.getWebSocketApplication().send(JsonUtil.videoPlay2Json(Constant.WEBSOCKET_COMMAND_AUDIO_PLAY_CODE,"Pause"));
+                                WebSocketApplication.getWebSocketApplication().send(JsonUtil.videoPlay2Json(Constant.WEBSOCKET_COMMAND_AUDIO_PAUSE_CODE,"Pause"));
                             } catch (Exception e) {
                                 e.printStackTrace();
                                 Log.d("tag", "LoadVideoAsync onPostExecute setOnItemClickListener exception");
@@ -129,7 +163,14 @@ public class audioDetailActivity extends AppCompatActivity {
                     });
 
                 }else if(buttonplay_pause.getText().equals("继续播放")){
-                    buttonplay_pause.setText("暂停播放");
+                    ThreadPoolManager.getThreadPoolManager().submitTask(new Runnable() {
+                        @Override
+                        public void run() {
+                            Message msg = new Message();
+                            msg.what = 1;//按钮变为暂停播放
+                            handler.sendMessage(msg);
+                        }
+                    });
                     ThreadPoolManager.getThreadPoolManager().submitTask(new Runnable() {
                         @Override
                         public void run() {
@@ -167,7 +208,14 @@ public class audioDetailActivity extends AppCompatActivity {
         buttonPlay_pause2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //buttonPlay_pause2.setText("机器人端播放");
+                ThreadPoolManager.getThreadPoolManager().submitTask(new Runnable() {
+                    @Override
+                    public void run() {
+                        Message msg = new Message();
+                        msg.what = 3;//按钮变为暂停播放
+                        handler.sendMessage(msg);
+                    }
+                });
                 ThreadPoolManager.getThreadPoolManager().submitTask(new Runnable() {
                     @Override
                     public void run() {

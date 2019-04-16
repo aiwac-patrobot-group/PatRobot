@@ -28,6 +28,7 @@ import com.aiwac.robotapp.commonlibrary.utils.WifiUtil;
 import com.aiwac.robotapp.patrobot.R;
 import com.aiwac.robotapp.patrobot.server.WebSocketApplication;
 import com.aiwac.robotapp.patrobot.service.WebSocketService;
+import com.aiwac.robotapp.patrobot.utils.AiwacSportApi;
 import com.aiwac.robotapp.patrobot.utils.JsonUtil;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
 
@@ -51,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     private final static  int PERMISSION_REQUEST_COARSE_LOCATION=1;
     private static final int REQUEST_FINE_LOCATION = 0;
 
+
     String macAddress="";
     Button btnSetting;
     Button btnVideoChat;
@@ -68,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
 
         //注册消息
         EventBus.getDefault().register(this);
-        requestFeedNaviTime();
+        //requestFeedNaviTime();
     }
     @Override
     protected void onResume() {

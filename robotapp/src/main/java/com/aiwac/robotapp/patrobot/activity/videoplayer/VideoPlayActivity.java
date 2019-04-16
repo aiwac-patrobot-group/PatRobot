@@ -53,7 +53,7 @@ public class VideoPlayActivity extends AppCompatActivity implements View.OnClick
     public final static int SUB_FLAG = -1;
 
     private FrameLayout mVideoLayout;
-    public static VideoView mVideoView1;
+    public static  VideoView mVideoView1;
     public static RelativeLayout mControlTop;//顶部控制栏
     public static RelativeLayout mControlBottom;//底部控制栏
     private ImageView mIvBack;//返回
@@ -109,10 +109,11 @@ public class VideoPlayActivity extends AppCompatActivity implements View.OnClick
         }
     };
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
+    @Subscribe(threadMode = ThreadMode.MAIN,sticky=true)
     public void Event(MessageEvent messageEvent) {
         if(messageEvent.getTo().equals(Constant.WEBSOCKET_COMMAND_VIDEO_PAUSE)){
             LogUtil.d("video pause");
+            mVideoView1 = (VideoView) findViewById(R.id.videoview);
             if (mVideoView1.isPlaying()) {
                 mVideoView1.pause();
                 mIvPlay.setImageResource(R.drawable.video_play);
@@ -671,5 +672,9 @@ public class VideoPlayActivity extends AppCompatActivity implements View.OnClick
         mVideoView1.stopPlayback();
 
         EventBus.getDefault().unregister(this);
+    }
+
+    public VideoView getvideoView(){
+        return mVideoView1;
     }
 }

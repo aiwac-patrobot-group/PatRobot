@@ -33,6 +33,7 @@ import java.net.URI;
 import java.util.Map;
 
 import io.vov.vitamio.Vitamio;
+import io.vov.vitamio.widget.VideoView;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -165,8 +166,8 @@ public class WebSocketClientHelper extends WebSocketClient {
                             //link  = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
                             //测试
                             LogUtil.d(link);
-                            String testLink="http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
-                            intent.putExtra("Link", testLink);
+                            //String testLink="http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
+                            intent.putExtra("Link", link);
                             context.startActivity(intent);
 
                         }
@@ -184,6 +185,7 @@ public class WebSocketClientHelper extends WebSocketClient {
 
                         }
                     } else if (commantType.equals(Constant.WEBSOCKET_COMMAND_VIDEO_PAUSE_CODE)) {//1006 视频暂停
+                        LogUtil.d("video Pause WebSocket");
                         MessageEvent messageEvent = new MessageEvent(Constant.WEBSOCKET_COMMAND_VIDEO_PAUSE, "");
                         EventBus.getDefault().postSticky(messageEvent);
 

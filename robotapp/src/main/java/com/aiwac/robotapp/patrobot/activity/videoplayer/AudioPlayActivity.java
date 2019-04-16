@@ -30,6 +30,7 @@ import com.aiwac.robotapp.commonlibrary.common.Constant;
 import com.aiwac.robotapp.commonlibrary.utils.LogUtil;
 import com.aiwac.robotapp.patrobot.R;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -164,6 +165,8 @@ public class AudioPlayActivity extends AppCompatActivity implements View.OnClick
 
         init();
         // 初始
+        //注册消息
+        EventBus.getDefault().register(this);
 
 
     }
