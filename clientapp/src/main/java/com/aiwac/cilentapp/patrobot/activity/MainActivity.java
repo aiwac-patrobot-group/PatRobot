@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initView(){
         btn_setting=findViewById(R.id.btn_setting);
-        btn_login =findViewById(R.id.btn_login);
+        //btn_login =findViewById(R.id.btn_login);
         btn_video_chat=findViewById(R.id.btn_video_chat);
         btn_player=findViewById(R.id.btn_player);
         btn_feed=findViewById(R.id.btn_feed);
@@ -110,14 +110,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        btn_login.setOnClickListener(new View.OnClickListener() {
+        /*btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, LoginByPasswordActivity.class);
                 //ActivityUtil.skipActivity(MainActivity.this, LoginActivity.class);
                 startActivity(intent);
             }
-        });
+        });*/
         btn_setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
