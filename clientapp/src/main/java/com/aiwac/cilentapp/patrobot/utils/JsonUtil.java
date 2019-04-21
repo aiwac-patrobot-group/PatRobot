@@ -374,7 +374,7 @@ public class JsonUtil {
     }
 
     // 生成视频播放消息转发请求json
-    public static String videoPlay2Json(String dataCode,String transformMessage){
+    public static String videoPlay2Json(String CommandType,String transformMessage){
 
         JSONObject root = new JSONObject();
         try{
@@ -385,7 +385,7 @@ public class JsonUtil {
             root.put(Constant.WEBSOCKET_MESSAGE_TIME,System.currentTimeMillis() + "");
             root.put(Constant.WEBSOCKET_MESSAGE_UUID, UUID.randomUUID().toString());
             JSONObject data=new JSONObject();
-            data.put(Constant.WEBSOCKET_COMMAND_TYPE,Constant.WEBSOCKET_COMMAND_VIDEO_PLAY_CODE);
+            data.put(Constant.WEBSOCKET_COMMAND_TYPE,CommandType);
             data.put(Constant.WEBSOCKET_COMMAND_VIDEO_LINK_CODE,transformMessage);
             root.put(Constant.WEBSOCKET_MESSAGE_TRANSFORM,data.toString());
             Log.d("make",root.toString());
