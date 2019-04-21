@@ -6,7 +6,17 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".activity.MainActivity">
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        style="@style/topbar_bg"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="0dp">
 
+        <TextView
+            style="@style/topbar_title"
+            android:layout_centerHorizontal="true"
+            android:text="宠物机器人" />
+    </RelativeLayout>
 
     <Button
         android:id="@+id/btn_setting"

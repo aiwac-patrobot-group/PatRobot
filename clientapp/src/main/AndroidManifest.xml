@@ -59,7 +59,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.VideoChatViewActivity" />
+        <activity android:name=".activity.VideoChatViewActivity"
+            />
 
         <service
             android:name=".service.WebSocketService"
