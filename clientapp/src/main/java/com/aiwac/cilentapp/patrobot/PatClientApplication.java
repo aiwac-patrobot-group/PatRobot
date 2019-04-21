@@ -18,9 +18,10 @@ public class PatClientApplication extends BaseApplication {
         // LogcatHelper.getInstance(this).start();
 
         context = getApplicationContext();
+
+
         ZXingLibrary.initDisplayOpinion(this);
         LogUtil.d( context.toString());
-
 
         //更新用的
         OkHttpUtils.getInstance()
