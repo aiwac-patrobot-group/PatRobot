@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.aiwac.cilentapp.patrobot.R;
+import com.aiwac.cilentapp.patrobot.activity.controlrobot.ControlRobotActivity;
 import com.aiwac.cilentapp.patrobot.activity.feed.FeedActivity;
 import com.aiwac.cilentapp.patrobot.activity.loginandregister.LoginByPasswordActivity;
 import com.aiwac.cilentapp.patrobot.activity.navigate.NavigateActivity;
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btn_player;
     private Button btn_feed;
     private Button btn_cruise;
+    private Button btn_contrl_robot;
 //测试视频播放
     protected String link = "noLink";
 
@@ -87,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initView(){
+        btn_contrl_robot=findViewById(R.id.btn_control_robot);
         btn_setting=findViewById(R.id.btn_setting);
         //btn_login =findViewById(R.id.btn_login);
         btn_video_chat=findViewById(R.id.btn_video_chat);
@@ -143,7 +146,12 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, VideoChatViewActivity.class));
             }
         });
-
+        btn_contrl_robot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, ControlRobotActivity.class));
+            }
+        });
     }
     private Intent intentWebsocketService;
     private void initEven(){
