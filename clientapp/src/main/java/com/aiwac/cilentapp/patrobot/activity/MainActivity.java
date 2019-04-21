@@ -18,6 +18,7 @@ import com.aiwac.cilentapp.patrobot.activity.loginandregister.LoginByPasswordAct
 import com.aiwac.cilentapp.patrobot.activity.navigate.NavigateActivity;
 import com.aiwac.cilentapp.patrobot.activity.setting.ScanCodeActivity;
 import com.aiwac.cilentapp.patrobot.activity.setting.SettingActivity;
+import com.aiwac.cilentapp.patrobot.activity.videochat.VideoChatViewActivity;
 import com.aiwac.cilentapp.patrobot.activity.videoplayer.VideoAudioActivity;
 import com.aiwac.cilentapp.patrobot.database.UserData;
 
@@ -139,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
         btn_video_chat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this,VideoChatViewActivity.class));
+                startActivity(new Intent(MainActivity.this, VideoChatViewActivity.class));
             }
         });
 

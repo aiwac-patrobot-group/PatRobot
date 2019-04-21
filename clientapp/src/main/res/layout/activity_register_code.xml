@@ -10,7 +10,8 @@
     tools:context=".activity.loginandregister.RegisterCodeActivity">
     <RelativeLayout style="@style/topbar_bg">
 
-        <ImageButton style="@style/topbar_return_img" />
+        <ImageButton style="@style/topbar_return_img"
+            android:id="@+id/backButton" />
 
         <TextView
             style="@style/topbar_title"

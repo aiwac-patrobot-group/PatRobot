@@ -1,8 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/activity_page" >
 
+    <RelativeLayout style="@style/topbar_bg" >
+
+        <ImageButton style="@style/topbar_return_img"
+            android:id="@+id/backButton"/>
+
+        <TextView
+            style="@style/topbar_title"
+            android:layout_centerHorizontal="true"
+            android:text="版本更新" />
+    </RelativeLayout>
+
     <LinearLayout style="@style/ll_vertical_match_match" >
+
 
 
         <RelativeLayout
@@ -42,4 +54,4 @@
     </LinearLayout>
 
 
-</FrameLayout>
+</LinearLayout>

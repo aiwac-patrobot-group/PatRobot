@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".activity.SettingActivity">
-    <RelativeLayout
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/activity_page">
+    <RelativeLayout style="@style/topbar_bg" >
+
+        <ImageButton style="@style/topbar_return_img"/>
+
+        <TextView
+            style="@style/topbar_title"
+            android:layout_centerHorizontal="true"
+            android:text="设置" />
+    </RelativeLayout>
+
+    <LinearLayout
         style="@style/match_match"
-        android:layout_weight="1"
-        tools:ignore="MissingConstraints">
+        android:layout_weight="1">
 
         <ScrollView style="@style/match_match" >
 
@@ -53,5 +58,5 @@
 
             </LinearLayout>
         </ScrollView>
-    </RelativeLayout>
-</android.support.constraint.ConstraintLayout>
+    </LinearLayout>
+</LinearLayout>
