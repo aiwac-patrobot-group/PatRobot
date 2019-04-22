@@ -19,7 +19,7 @@
         <TextView
             style="@style/topbar_title"
             android:layout_centerHorizontal="true"
-            android:text="版本更新" />
+            android:text="扫描二维码" />
     </RelativeLayout>
 
     <TextView

@@ -5,16 +5,19 @@ import android.content.Intent;
 import android.os.IBinder;
 
 import com.aiwac.robotapp.commonlibrary.utils.LogUtil;
+import com.aiwac.robotapp.patrobot.utils.AiwacSportApi;
 
 public class SportService extends Service {
 
-    private static SportService minstance;
+    private static SportService myInstance;
+    private AiwacSportApi aiwacSportApi;
     public SportService() {
-        minstance=this;
+        myInstance =this;
+        //aiwacSportApi=new AiwacSportApi();
     }
 
     public static SportService getInstance(){
-        return minstance;
+        return myInstance;
     }
     @Override
     public IBinder onBind(Intent intent) {

@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.aiwac.robotapp.commonlibrary.bean.MessageEvent;
 import com.aiwac.robotapp.commonlibrary.common.Constant;
@@ -27,6 +28,7 @@ import com.aiwac.robotapp.commonlibrary.utils.LogUtil;
 import com.aiwac.robotapp.commonlibrary.utils.WifiUtil;
 import com.aiwac.robotapp.patrobot.R;
 import com.aiwac.robotapp.patrobot.server.WebSocketApplication;
+import com.aiwac.robotapp.patrobot.service.SportService;
 import com.aiwac.robotapp.patrobot.service.WebSocketService;
 import com.aiwac.robotapp.patrobot.utils.AiwacSportApi;
 import com.aiwac.robotapp.patrobot.utils.JsonUtil;
@@ -71,6 +73,8 @@ public class MainActivity extends AppCompatActivity {
         //注册消息
         EventBus.getDefault().register(this);
         //requestFeedNaviTime();
+
+        openAiwacSportServer();
     }
     @Override
     protected void onResume() {
@@ -339,4 +343,16 @@ public class MainActivity extends AppCompatActivity {
             Log.d("tag", "NavigateList exception");
         }
     }
+
+    /**
+     * 开启机器人运动服务
+     */
+    private void openAiwacSportServer(){
+        //控制机器人方向
+        startService(new Intent(this, SportService.class));
+
+        //提示
+        Toast.makeText(this,"运动模块开启",Toast.LENGTH_SHORT).show();
+    }
+
 }
