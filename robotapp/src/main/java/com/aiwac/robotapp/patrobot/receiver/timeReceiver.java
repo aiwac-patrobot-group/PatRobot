@@ -48,29 +48,42 @@ public class timeReceiver extends BroadcastReceiver {
         }else if(intent.getAction().equals("navigateStart")) {
             //处理开始巡航
             LogUtil.d("开始巡航");
+            int duration = intent.getIntExtra("Duration",10);
+            long t1 = System.currentTimeMillis();
             aiwacSportApi.aiwacUltrasoundDetectionType(1);
             while(true){
-                //自动巡航
-                if(upDis > 50){
-                    aiwacSportApi.aiwacSportType(1);
-                }else if(leftDis > 50){
-                    aiwacSportApi.aiwacSportType(4);
-                    aiwacSportApi.aiwacSportType(9);
-                }else if(rightDis > 50){
-                    aiwacSportApi.aiwacSportType(8);
-                    aiwacSportApi.aiwacSportType(9);
-                }else if(downDis > 50 ){
-                    aiwacSportApi.aiwacSportType(2);
-                    aiwacSportApi.aiwacSportType(10);
-                }
-                if(intent.getAction().equals("navigateEnd")){//收到停止的广播结束循环
+                long t2 = System.currentTimeMillis();
+                //设定循环执行时长
+                if(t2 - t1 > duration * 60 * 1000){
+                    aiwacSportApi.aiwacUltrasoundDetectionType(0);
+                    aiwacSportApi.aiwacSportType(0);
                     break;
                 }
+                //自动巡航
+                if(upDis > 50){
+                    aiwacSportApi.aiwacSportType(1);//前方无障碍朝前走
+                }else if(leftDis > 50){
+                    aiwacSportApi.aiwacSportType(4);//前方有障碍，左转，朝前走
+                    aiwacSportApi.aiwacSportType(1);
+                }else if(rightDis > 50){
+                    aiwacSportApi.aiwacSportType(8);//前方有障碍，左方有障碍，右转，朝前走
+                    aiwacSportApi.aiwacSportType(1);
+                }else if(downDis > 50 ){
+                    aiwacSportApi.aiwacSportType(2);//前方、左方、右方有障碍，后退，后右
+                    aiwacSportApi.aiwacSportType(2);
+                    aiwacSportApi.aiwacSportType(2);
+                    aiwacSportApi.aiwacSportType(10);
+                }else{//走不通，停止
+                    aiwacSportApi.aiwacUltrasoundDetectionType(0);
+                    aiwacSportApi.aiwacSportType(0);
+                }
+
             }
         }else if(intent.getAction().equals("navigateEnd")) {
             //处理结束巡航
             LogUtil.d("结束巡航");
             aiwacSportApi.aiwacUltrasoundDetectionType(0);
+            aiwacSportApi.aiwacSportType(0);
         }
 
 

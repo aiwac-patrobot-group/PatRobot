@@ -76,6 +76,15 @@ public class AlarmManageService {
                     String startTime = time[i].split("-")[0];
                     hour = Integer.valueOf(startTime.split(":")[0]).intValue();
                     minute = Integer.valueOf(startTime.split(":")[1]).intValue();
+                    //得到巡航的时长
+                    String duration = time[i].split("-")[1];
+                    int endHour = Integer.valueOf(duration.split(":")[0]).intValue();
+                    int endMinute = Integer.valueOf(duration.split(":")[1]).intValue();
+                    if(hour == endHour){
+                        intent.putExtra("Duration",endMinute-minute);
+                    }else{
+                        intent.putExtra("Duration",60-minute+endMinute);
+                    }
                 intent.setAction("navigateStart");
             }else if(flag == 1){
                     String endTime = time[i].split("-")[1];

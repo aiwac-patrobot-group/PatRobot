@@ -42,7 +42,7 @@ public class AiwacSportApi {
 	private  String content  = null ;
 
 	private  String A33Ip = "127.0.0.1";
-	private  int socketPort = 8989;
+	private  int socketPort = 8989;  // A33 C的端口是8989
 	private  String readContent ; //Socket read String
 	private  int stateNetFlag = 0; // 0:没连上，  1：link ok
 	private boolean LinkStatus = true;  // 当前连接状态,
@@ -53,7 +53,7 @@ public class AiwacSportApi {
 	private int APPGetHaLHandleFlag = 0; // 0: 未传入；1: 赋值OK
 
 
-	 private Handler analysisHandler  = new Handler(){
+	private Handler analysisHandler  = new Handler(){
 		public void handleMessage(Message msg) {
 			// TODO Auto-generated method stub
 			if(msg.what == 100)
@@ -61,8 +61,9 @@ public class AiwacSportApi {
 				String analysisContent = msg.obj.toString();
 				Log.i("A33Socket", "analysisContent:"+analysisContent+"++");
 
-				if (analysisContent.substring(0,1).equals("1") == true) // 避障信息
-				{
+				try {
+					if (analysisContent.substring(0,1).equals("1") == true) // 避障信息
+					{
 						if (APPGetHaLHandleFlag == 1) // 已经getAPP 的处理handler
 						{
 							Message ms = new Message();
@@ -71,7 +72,11 @@ public class AiwacSportApi {
 							APPGetHaLHandle.sendMessage(ms);
 							Log.i("A33Socket", "准备发往APP进行处理"+ms.obj.toString()+"++");
 						}
+					}
+				} catch (Exception e) {
+					//Log.i("A33Socket", "准备发往APP进行处理"+ms.obj.toString()+"++");
 				}
+
 			}
 		}
 	};
@@ -79,8 +84,8 @@ public class AiwacSportApi {
 	public AiwacSportApi()
 	{
 		Log.i("A33Socket", "启动  link  ，并检测");
-		this.startAiwacSport();  //网络设置
-		this.linsentingLinkStatus();  // 检测当前连接状态 ，否并 重连
+		this.startAiwacSport();
+		this.linsentingLinkStatus();
 		this.writeSocketFromA33();
 		this.readSocketFromA33();
 	}
@@ -94,7 +99,7 @@ public class AiwacSportApi {
 
 
 	// 检测当前连接状态 ，否并 重连
-	private void linsentingLinkStatus()//调用2
+	private void linsentingLinkStatus()
 	{
 		new Thread()
 		{
@@ -131,24 +136,24 @@ public class AiwacSportApi {
 					{
 						try {
 
-								//socketA33.close();
+							//socketA33.close();
 
-								socketA33 = null;
-								socketA33 = new Socket(A33Ip, socketPort);
+							socketA33 = null;
+							socketA33 = new Socket(A33Ip, socketPort);
 
-								if (socketA33 == null)
-								{
-									Log.i("A33Socket", " 启动重连 link error!");
-									continue;
-								}
-								else
-								{
-									Log.i("A33Socket","启动重连 link ok!");
-									LinkStatus = true ;
-								}
-								os = socketA33.getOutputStream();
-								br = new BufferedReader(new InputStreamReader(socketA33.getInputStream(), "utf-8"));
-								stateNetFlag = 1;
+							if (socketA33 == null)
+							{
+								Log.i("A33Socket", " 启动重连 link error!");
+								continue;
+							}
+							else
+							{
+								Log.i("A33Socket","启动重连 link ok!");
+								LinkStatus = true ;
+							}
+							os = socketA33.getOutputStream();
+							br = new BufferedReader(new InputStreamReader(socketA33.getInputStream(), "utf-8"));
+							stateNetFlag = 1;
 
 						} catch (UnknownHostException e) {
 							e.printStackTrace();
@@ -171,7 +176,7 @@ public class AiwacSportApi {
 	}
 
 
-	private void readSocketFromA33()//调用4
+	private void readSocketFromA33()
 	{
 		new Thread()
 		{
@@ -186,28 +191,28 @@ public class AiwacSportApi {
 				while(true)
 				{
 					try {
-								while(stateNetFlag == 0)  //等待网络连接.
-									;
+						while(stateNetFlag == 0)  //等待网络连接.
+							;
 
-								Log.i("A33Socket", "检测接受情况");
-								if((readContent = br.readLine())!=null)
-								{
-									Message ms = new Message();
-									ms.what = 100;
-									ms.obj = readContent;
-									analysisHandler.sendMessage(ms);
-									Log.i("A33Socket", "收到A33发来的数据"+readContent+"++");
-								}
-
-						} catch (UnknownHostException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-							stateNetFlag = 0;// 马上设置网络情况
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-							stateNetFlag = 0; // 马上设置网络情况
+						Log.i("A33Socket", "检测接受情况");
+						if((readContent = br.readLine())!=null)
+						{
+							Message ms = new Message();
+							ms.what = 100;
+							ms.obj = readContent;
+							analysisHandler.sendMessage(ms);
+							Log.i("A33Socket", "收到A33发来的数据"+readContent+"++");
 						}
+
+					} catch (UnknownHostException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						stateNetFlag = 0;// 马上设置网络情况
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						stateNetFlag = 0; // 马上设置网络情况
+					}
 				}
 			}
 		}.start();
@@ -215,7 +220,7 @@ public class AiwacSportApi {
 	}
 
 
-	private void writeSocketFromA33()  //调用3
+	private void writeSocketFromA33()
 	{
 		new Thread()
 		{
@@ -251,7 +256,7 @@ public class AiwacSportApi {
 
 	}
 
-	private boolean startAiwacSport()//调用1
+	private boolean startAiwacSport()
 	{
 
 		new Thread()
@@ -363,12 +368,12 @@ public class AiwacSportApi {
 
 
 	}
-	
+
 	public void testAiwacStringSend(String testString)
 	{
 		Message ms = new Message();
 		ms.what = 333;
-        String content1  = null ;
+		String content1  = null ;
 		content1 = testString;
 		Log.i("A33Socket", "testString"+content1+"++");
 		ms.obj = content1;
