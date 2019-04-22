@@ -8,7 +8,8 @@
     <RelativeLayout style="@style/topbar_bg"
         tools:ignore="MissingConstraints">
 
-        <ImageButton style="@style/topbar_return_img" />
+        <ImageButton style="@style/topbar_return_img"
+            android:id="@+id/backButton" />
 
         <TextView
             style="@style/topbar_title"
@@ -92,7 +93,20 @@
                     style="@style/content_item_rt_img"
                     android:padding="0dp" />
             </LinearLayout>
+            <View style="@style/divider_horizontal_1px" />
+            <LinearLayout
+                android:id="@+id/btn_personal_change"
+                style="@style/content_item_white" >
 
+                <TextView
+                    style="@style/content_item_lf_tv"
+                    android:layout_weight="1"
+                    android:text="切换账户" />
+
+                <ImageView
+                    style="@style/content_item_rt_img"
+                    android:padding="0dp" />
+            </LinearLayout>
             <View style="@style/divider_horizontal_1px" />
         </LinearLayout>
     </ScrollView>

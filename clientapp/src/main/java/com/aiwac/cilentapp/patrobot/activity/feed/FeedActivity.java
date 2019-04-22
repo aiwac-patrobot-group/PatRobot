@@ -126,6 +126,13 @@ public class FeedActivity extends AppCompatActivity {
 
         initFeedTimeFromServer();
 
+        //返回键
+        findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
 

@@ -32,17 +32,17 @@
         android:layout_height="52dp"
         android:layout_marginTop="16dp"
         android:text="视频通话"
-        app:layout_constraintTop_toBottomOf="@+id/btn_login"
+        app:layout_constraintTop_toBottomOf="@+id/btn_setting"
         tools:layout_editor_absoluteX="14dp" />
 
-    <Button
+    <!--<Button
         android:id="@+id/btn_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="登录"
         app:layout_constraintTop_toBottomOf="@+id/btn_setting"
-        tools:layout_editor_absoluteX="14dp" />
+        tools:layout_editor_absoluteX="14dp" />-->
 
     <Button
         android:id="@+id/btn_player"
@@ -69,5 +69,14 @@
         android:layout_marginTop="8dp"
         android:text="巡航"
         app:layout_constraintTop_toBottomOf="@+id/btn_feed"
+        tools:layout_editor_absoluteX="14dp" />
+
+    <Button
+        android:id="@+id/btn_control_robot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="控制机器人"
+        app:layout_constraintTop_toBottomOf="@+id/btn_cruise"
         tools:layout_editor_absoluteX="14dp" />
 </android.support.constraint.ConstraintLayout>

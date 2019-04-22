@@ -24,7 +24,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.update.UpdateActivity"></activity>
+        <activity android:name=".activity.controlrobot.ControlRobotActivity"></activity>
+        <activity android:name=".activity.update.UpdateActivity" />
         <activity android:name=".activity.navigate.NavigateActivity" />
         <activity android:name=".activity.feed.FeedActivity" />
 
@@ -32,13 +33,10 @@
             android:name=".service.TimerService"
             android:enabled="true"
             android:exported="true" />
-
         <service
             android:name=".sport.MoveControlService"
             android:enabled="true"
             android:exported="true" />
-
-
 
         <activity android:name=".activity.setting.ChangePasswordActivity" />
         <activity android:name=".activity.setting.PersonalActivity" />
@@ -59,7 +57,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.VideoChatViewActivity" />
+        <activity android:name=".activity.videochat.VideoChatViewActivity" />
 
         <service
             android:name=".service.WebSocketService"

@@ -8,7 +8,9 @@ import android.view.View;
 import com.aiwac.robotapp.patrobot.R;
 import com.aiwac.robotapp.patrobot.activity.update.RobotUpdateActivity;
 
-public class SettingActivity extends AppCompatActivity {
+import zuo.biao.library.base.BaseActivity;
+
+public class SettingActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +32,28 @@ public class SettingActivity extends AppCompatActivity {
                 startActivity(new Intent(SettingActivity.this, RobotUpdateActivity.class));
             }
         });
+
+        /*//返回键
+        findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });*/
+    }
+
+    @Override
+    public void initView() {
+
+    }
+
+    @Override
+    public void initData() {
+
+    }
+
+    @Override
+    public void initEvent() {
 
     }
 }

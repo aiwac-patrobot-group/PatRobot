@@ -622,6 +622,13 @@
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">@dimen/topbar_height</item>
     </style>
+<!--    <style name="topbar_bg_scan">
+        <item name="android:background">#328e9c</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">@dimen/topbar_height</item>
+    </style>-->
+
 
     <style name="topbar_top_simple">
         <item name="android:gravity">center_vertical</item>

@@ -39,7 +39,13 @@ public class UpdateActivity extends AppCompatActivity {
 
         TextView tvVersion=findViewById(R.id.tv_app_version);
         tvVersion.setText(AppUpdateUtils.getVersionName(this));
-
+        //返回键
+        findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     /**

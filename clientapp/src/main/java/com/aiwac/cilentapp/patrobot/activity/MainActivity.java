@@ -13,11 +13,13 @@ import android.view.View;
 import android.widget.Button;
 
 import com.aiwac.cilentapp.patrobot.R;
+import com.aiwac.cilentapp.patrobot.activity.controlrobot.ControlRobotActivity;
 import com.aiwac.cilentapp.patrobot.activity.feed.FeedActivity;
 import com.aiwac.cilentapp.patrobot.activity.loginandregister.LoginByPasswordActivity;
 import com.aiwac.cilentapp.patrobot.activity.navigate.NavigateActivity;
 import com.aiwac.cilentapp.patrobot.activity.setting.ScanCodeActivity;
 import com.aiwac.cilentapp.patrobot.activity.setting.SettingActivity;
+import com.aiwac.cilentapp.patrobot.activity.videochat.VideoChatViewActivity;
 import com.aiwac.cilentapp.patrobot.activity.videoplayer.VideoAudioActivity;
 import com.aiwac.cilentapp.patrobot.database.UserData;
 
@@ -40,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btn_player;
     private Button btn_feed;
     private Button btn_cruise;
+    private Button btn_contrl_robot;
 //测试视频播放
     protected String link = "noLink";
 
@@ -86,8 +89,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initView(){
+        btn_contrl_robot=findViewById(R.id.btn_control_robot);
         btn_setting=findViewById(R.id.btn_setting);
-        btn_login =findViewById(R.id.btn_login);
+        //btn_login =findViewById(R.id.btn_login);
         btn_video_chat=findViewById(R.id.btn_video_chat);
         btn_player=findViewById(R.id.btn_player);
         btn_feed=findViewById(R.id.btn_feed);
@@ -109,14 +113,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        btn_login.setOnClickListener(new View.OnClickListener() {
+        /*btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, LoginByPasswordActivity.class);
                 //ActivityUtil.skipActivity(MainActivity.this, LoginActivity.class);
                 startActivity(intent);
             }
-        });
+        });*/
         btn_setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -139,10 +143,15 @@ public class MainActivity extends AppCompatActivity {
         btn_video_chat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this,VideoChatViewActivity.class));
+                startActivity(new Intent(MainActivity.this, VideoChatViewActivity.class));
             }
         });
-
+        btn_contrl_robot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, ControlRobotActivity.class));
+            }
+        });
     }
     private Intent intentWebsocketService;
     private void initEven(){

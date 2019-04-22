@@ -140,6 +140,15 @@ public class LoginByPasswordActivity extends AppCompatActivity {
                 });
             }
         });
+
+
+        //返回键
+        findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     //处理获取验证码handler

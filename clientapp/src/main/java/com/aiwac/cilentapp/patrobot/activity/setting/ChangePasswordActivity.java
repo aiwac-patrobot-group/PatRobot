@@ -57,6 +57,14 @@ public class ChangePasswordActivity extends AppCompatActivity {
         String phoneNumber = s.getString(Constant.USER_REGISTER_NUMBER,"");
         numberEdit.setText(phoneNumber);
         numberEdit.setEnabled(false);
+
+        //返回键
+        findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
 

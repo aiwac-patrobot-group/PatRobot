@@ -5,9 +5,11 @@ import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.aiwac.cilentapp.patrobot.R;
+import com.aiwac.cilentapp.patrobot.activity.loginandregister.LoginByPasswordActivity;
 import com.aiwac.robotapp.commonlibrary.common.Constant;
 
 public class PersonalActivity extends AppCompatActivity {
@@ -43,5 +45,22 @@ public class PersonalActivity extends AppCompatActivity {
                 startActivity(new Intent(PersonalActivity.this,ChangePasswordActivity.class));
             }
         });
+        //设置切换账户的跳转
+        findViewById(R.id.btn_personal_change).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(PersonalActivity.this, LoginByPasswordActivity.class));
+            }
+        });
+
+        //返回键
+        findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+
     }
 }

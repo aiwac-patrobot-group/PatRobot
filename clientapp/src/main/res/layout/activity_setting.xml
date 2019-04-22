@@ -4,7 +4,14 @@
 
     <RelativeLayout style="@style/topbar_bg">
 
-        <ImageButton style="@style/topbar_return_img" />
+        <Button
+            android:layout_width="34dp"
+            android:layout_height="35dp"
+            android:id="@+id/backButton"
+            android:background="@drawable/back2"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"/>
 
         <TextView
             style="@style/topbar_title"

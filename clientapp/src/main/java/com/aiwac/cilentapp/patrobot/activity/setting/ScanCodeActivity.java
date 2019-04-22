@@ -47,6 +47,14 @@ public class ScanCodeActivity extends AppCompatActivity {
         });
         //注册消息
         EventBus.getDefault().register(this);
+
+        //返回键
+        findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
