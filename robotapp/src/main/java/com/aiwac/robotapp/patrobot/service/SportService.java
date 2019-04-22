@@ -4,6 +4,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 
+import com.aiwac.robotapp.commonlibrary.common.Constant;
 import com.aiwac.robotapp.commonlibrary.utils.LogUtil;
 import com.aiwac.robotapp.patrobot.utils.AiwacSportApi;
 
@@ -11,9 +12,10 @@ public class SportService extends Service {
 
     private static SportService myInstance;
     private AiwacSportApi aiwacSportApi;
+    private int type=0b0000;
     public SportService() {
         myInstance =this;
-        //aiwacSportApi=new AiwacSportApi();
+        aiwacSportApi=new AiwacSportApi();
     }
 
     public static SportService getInstance(){
@@ -26,105 +28,99 @@ public class SportService extends Service {
         throw new UnsupportedOperationException("Not yet implemented");
     }
     public void getMessage(String messageCode){
-        LogUtil.d(messageCode);
-    }
-
-
-
-/*    public void getMessage(String messageCode){
-        Log.d(TAG, "getMessage: "+messageCode);
+        LogUtil.d("getMessage: "+messageCode);
         if(messageCode.equals("UP")){
-            Log.d(TAG, "上");
+            //LogUtil.d( "上");
             up();
-        }
-        if(messageCode.equals("DOWN")){
-            Log.d(TAG, "下");
+        }else if(messageCode.equals("DOWN")){
+            //LogUtil.d( "下");
             down();
-        }
-        if(messageCode.equals("LEFT")){
-            Log.d(TAG, "左");
+        }else if(messageCode.equals("LEFT")){
+            //LogUtil.d( "左");
             left();
-        }
-        if(messageCode.equals("RIGHT")){
-            Log.d(TAG, "右");
+        }else if(messageCode.equals("RIGHT")){
+            //LogUtil.d( "右");
             right();
-        }
-        if(messageCode.equals("NONE")){
-            Log.d(TAG, "停止");
+        }else if(messageCode.equals("NONE")){
+            //LogUtil.d( "停止");
             stop();
-        }
-        if(messageCode.equals("UP_AND_LEFT")){
-            Log.d(TAG, "左上");
+        }else if(messageCode.equals(Constant.WEBSOCKET_COMMAND_FEED_START)) {
+            feedOpen();
+        }else if(messageCode.equals(Constant.WEBSOCKET_COMMAND_FEED_STOP)) {
+            feedClose();
+        }else if(messageCode.equals("UP_AND_LEFT")){
+            //LogUtil.d( "左上");
             upAndLeft();
-        }
-        if(messageCode.equals("UP_AND_RIGHT")){
-            Log.d(TAG, "右上");
+        }else if(messageCode.equals("UP_AND_RIGHT")){
+            //LogUtil.d( "右上");
             upAndRight();
-        }
-        if(messageCode.equals("DOWN_AND_LEFT")){
-            Log.d(TAG, "左下");
+        }else if(messageCode.equals("DOWN_AND_LEFT")){
+            //LogUtil.d( "左下");
             downAndLeft();
-        }
-        if(messageCode.equals("DOWN_AND_RIGHT")){
-            Log.d(TAG, "右下");
+        }else if(messageCode.equals("DOWN_AND_RIGHT")){
+            //LogUtil.d( "右下");
             downAndRight();
         }
-
-
-        Log.d(TAG, "getMessage: type:"+type);
+        //LogUtil.d( "getMessage: type:"+type);
     }
 
+    /**
+     * 投食开关
+     */
+    public void feedOpen(){
+        aiwacSportApi.aiwacFeedPetType(0b1);
+    }
+    public void feedClose(){
+        aiwacSportApi.aiwacFeedPetType(0b0);
+    }
+
+    /**
+     * 超声波开关
+     */
+    public void ultrasoundOpen(){
+        aiwacSportApi.aiwacUltrasoundDetectionType(0b1);
+    }
+    public void ultrasoundClose(){
+        aiwacSportApi.aiwacUltrasoundDetectionType(0b0);
+    }
+
+    /**
+     * 运动控制
+     */
     private void  up(){
-        type=type|0b0000001;
+        type=type|0b0001;
         aiwacSportApi.aiwacSportType(type);
     }
     private void  down(){
-        type=type|0b0000010;
+        type=type|0b0010;
         aiwacSportApi.aiwacSportType(type);
     }
     private void  left(){
-        type=type|0b0000100;
+        type=type|0b0100;
         aiwacSportApi.aiwacSportType(type);
     }
     private void  right(){
-        type=type|0b0001000;
+        type=type|0b1000;
         aiwacSportApi.aiwacSportType(type);
     }
     private void upAndLeft(){
-        type=type|0b0000101;
+        type=type|0b0101;
         aiwacSportApi.aiwacSportType(type);
     }
     private void upAndRight(){
-        type=type|0b0001001;
+        type=type|0b1001;
         aiwacSportApi.aiwacSportType(type);
     }
     private void downAndLeft(){
-        type=type|0b0000110;
+        type=type|0b0110;
         aiwacSportApi.aiwacSportType(type);
     }
     private void downAndRight(){
-        type=type|0b0001010;
+        type=type|0b1010;
         aiwacSportApi.aiwacSportType(type);
     }
     private void stop(){
-        type=type&0b1110000;
+        type=type&0b0000;
         aiwacSportApi.aiwacSportType(type);
     }
-    private void openLightOne(){
-        type=type|0b0010000;
-        aiwacSportApi.aiwacSportType(type);
-    }
-    private void openLightTwo(){
-        type=type|0b0100000;
-        aiwacSportApi.aiwacSportType(type);
-    }
-    private void closeLightOne(){
-        type=type&0b1101111;
-        aiwacSportApi.aiwacSportType(type);
-    }
-    private void closeLightTwo(){
-        type=type|0b1011111;
-        aiwacSportApi.aiwacSportType(type);
-    }
-    */
 }

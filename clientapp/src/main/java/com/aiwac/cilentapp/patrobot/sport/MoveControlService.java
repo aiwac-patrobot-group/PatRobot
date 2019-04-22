@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.aiwac.cilentapp.patrobot.server.WebSocketApplication;
 import com.aiwac.cilentapp.patrobot.utils.JsonUtil;
+import com.aiwac.robotapp.commonlibrary.common.Constant;
 import com.aiwac.robotapp.commonlibrary.task.ThreadPoolManager;
 import com.aiwac.robotapp.commonlibrary.utils.LogUtil;
 
@@ -47,6 +48,16 @@ public class MoveControlService extends Service {
             }
         });
     }
+
+    //打开投食
+    public void sendFeedStart(){
+        getMessage(Constant.WEBSOCKET_COMMAND_FEED_START);
+    }
+    //关闭投食
+    public void sendFeedClose(){
+        getMessage(Constant.WEBSOCKET_COMMAND_FEED_STOP);
+    }
+
 
 
 /*    public void getMessage(String messageCode){

@@ -47,14 +47,14 @@ public class VideoAudioActivity extends AppCompatActivity {
     public void selected(){
         videoView.setSelected(false);
         audioView.setSelected(false);
-        playView.setSelected(false);
+       // playView.setSelected(false);
     }
 
     private void setView() {
 
         videoView = findViewById(R.id.topbar_lecture_video);
         audioView = findViewById(R.id.topbar_lecture_music);
-        playView = findViewById(R.id.topbar_play_list);
+        //playView = findViewById(R.id.topbar_play_list);
 
 
         videoView.setSelected(true);
@@ -77,14 +77,14 @@ public class VideoAudioActivity extends AppCompatActivity {
             }
         });
 
-        playView.setOnClickListener(new View.OnClickListener(){
+        /*playView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
                 selected();
                 playView.setSelected(true);
                 addFragment(new playFragment());
             }
-        });
+        });*/
 
         videoView.performClick();
 

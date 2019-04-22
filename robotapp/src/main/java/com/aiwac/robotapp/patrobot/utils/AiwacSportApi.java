@@ -52,6 +52,7 @@ public class AiwacSportApi {
 	private Handler APPGetHaLHandle ;
 	private int APPGetHaLHandleFlag = 0; // 0: 未传入；1: 赋值OK
 
+	private boolean logable=false;
 
 	private Handler analysisHandler  = new Handler(){
 		public void handleMessage(Message msg) {
@@ -59,7 +60,8 @@ public class AiwacSportApi {
 			if(msg.what == 100)
 			{
 				String analysisContent = msg.obj.toString();
-				Log.i("A33Socket", "analysisContent:"+analysisContent+"++");
+				if(logable)
+					Log.i("A33Socket", "analysisContent:"+analysisContent+"++");
 
 				try {
 					if (analysisContent.substring(0,1).equals("1") == true) // 避障信息
@@ -70,7 +72,8 @@ public class AiwacSportApi {
 							ms.what = 100;
 							ms.obj = analysisContent.substring(2);
 							APPGetHaLHandle.sendMessage(ms);
-							Log.i("A33Socket", "准备发往APP进行处理"+ms.obj.toString()+"++");
+							if(logable)
+								Log.i("A33Socket", "准备发往APP进行处理"+ms.obj.toString()+"++");
 						}
 					}
 				} catch (Exception e) {
@@ -82,8 +85,8 @@ public class AiwacSportApi {
 	};
 
 	public AiwacSportApi()
-	{
-		Log.i("A33Socket", "启动  link  ，并检测");
+	{	if(logable)
+ 			Log.i("A33Socket", "启动  link  ，并检测");
 		this.startAiwacSport();
 		this.linsentingLinkStatus();
 		this.writeSocketFromA33();
@@ -106,8 +109,9 @@ public class AiwacSportApi {
 			public void run()
 			{
 				try {
-					sleep(10000);
-					Log.i("A33Socket", "开始检测  连接情况");
+					sleep(1000);
+					if(logable)
+						Log.i("A33Socket", "开始检测  连接情况");
 
 				} catch (InterruptedException e) {
 					e.printStackTrace();
@@ -126,7 +130,8 @@ public class AiwacSportApi {
 						socketA33.sendUrgentData(0xFF);
 					}catch(Exception ex){
 						//连接断开
-						Log.i("A33Socket", "检测到A33Socket连接已断开，尝试重连ing");
+						if(logable)
+							Log.i("A33Socket", "检测到A33Socket连接已断开，尝试重连ing");
 						LinkStatus = false;
 						stateNetFlag = 0;
 					}
@@ -143,12 +148,14 @@ public class AiwacSportApi {
 
 							if (socketA33 == null)
 							{
-								Log.i("A33Socket", " 启动重连 link error!");
+								if(logable)
+									Log.i("A33Socket", " 启动重连 link error!");
 								continue;
 							}
 							else
 							{
-								Log.i("A33Socket","启动重连 link ok!");
+								if(logable)
+									Log.i("A33Socket","启动重连 link ok!");
 								LinkStatus = true ;
 							}
 							os = socketA33.getOutputStream();
@@ -166,7 +173,8 @@ public class AiwacSportApi {
 					}
 					else
 					{
-						Log.i("A33Socket", " 连接健在!");
+						if(logable)
+							Log.i("A33Socket", " 连接健在!");
 					}
 
 				}
@@ -193,15 +201,16 @@ public class AiwacSportApi {
 					try {
 						while(stateNetFlag == 0)  //等待网络连接.
 							;
-
-						Log.i("A33Socket", "检测接受情况");
+						if(logable)
+							Log.i("A33Socket", "检测接受情况");
 						if((readContent = br.readLine())!=null)
 						{
 							Message ms = new Message();
 							ms.what = 100;
 							ms.obj = readContent;
 							analysisHandler.sendMessage(ms);
-							Log.i("A33Socket", "收到A33发来的数据"+readContent+"++");
+							if(logable)
+								Log.i("A33Socket", "收到A33发来的数据"+readContent+"++");
 						}
 
 					} catch (UnknownHostException e) {
@@ -232,18 +241,23 @@ public class AiwacSportApi {
 						// TODO Auto-generated method stub
 						if(msg.what == 333)
 						{
-							try {
-								Log.i("A33Socket", "发送前："+ msg.obj.toString());
-								os.write((msg.obj.toString()).getBytes("utf-8"));
-								Log.i("A33Socket", "发送后："+ msg.obj.toString());
-							} catch (UnsupportedEncodingException e) {
-								e.printStackTrace();
-								Log.i("A33Socket", "发送失败");
-								stateNetFlag = 0; // 马上设置网络情况
-							} catch (IOException e) {
-								e.printStackTrace();
-								Log.i("A33Socket", "发送失败");
-								stateNetFlag = 0; // 马上设置网络情况
+							if (stateNetFlag == 1) // 判断为连接状态再发送
+							{
+								try {
+									if(logable)
+										Log.i("A33Socket", "发送前："+ msg.obj.toString());
+									os.write((msg.obj.toString()).getBytes("utf-8"));
+									if(logable)
+										Log.i("A33Socket", "发送后："+ msg.obj.toString());
+								} catch (UnsupportedEncodingException e) {
+									if(logable)
+										Log.i("A33Socket", "发送失败");
+									stateNetFlag = 0; // 马上设置网络情况
+								} catch (IOException e) {
+									if(logable)
+										Log.i("A33Socket", "发送失败");
+									stateNetFlag = 0; // 马上设置网络情况
+								}
 							}
 
 						}
@@ -263,19 +277,22 @@ public class AiwacSportApi {
 		{
 			public void run()
 			{
-				A33Ip = "127.0.0.1";
-				Log.i("A33Socket", "enter run()!");
+//				A33Ip = "127.0.0.1";
+				if(logable)
+					Log.i("A33Socket", "enter run()!");
 				try {
 					socketA33 = null;
 					socketA33 = new Socket(A33Ip, socketPort);
 
 					if (socketA33 == null)
 					{
-						Log.i("A33Socket", "link error!");
+						if(logable)
+							Log.i("A33Socket", "link error!");
 					}
 					else
 					{
-						Log.i("A33Socket","link ok!");
+						if(logable)
+							Log.i("A33Socket","link ok!");
 						flag=true;
 					}
 
@@ -303,7 +320,8 @@ public class AiwacSportApi {
 		ms.what = 333;
 
 		content = sportCode;
-		Log.i("A33Socket", "sportCode "+content);
+		if(logable)
+			Log.i("A33Socket", "sportCode "+content);
 		ms.obj = content;
 		writeSockethandle.sendMessage(ms);
 	}
@@ -312,53 +330,65 @@ public class AiwacSportApi {
 	{
 		if ((type > 11)||(type == 3) || (type == 7))  // 入参检查
 		{
-			Log.i("A33Socket", "aiwacSportType 参数输入错误 type："+type);
+			if(logable)
+				Log.i("A33Socket", "aiwacSportType 参数输入错误 type："+type);
 			return;
 		}
 
 		int sportTemp = 0;
-		Log.i("A33Socket", "type :"+type);
+		if(logable)
+			Log.i("A33Socket", "type :"+type);
 
 		//ÔË¶¯Ê¶±ð
 		sportTemp = type & 15;
-		Log.i("A33Socket", "sportTemp:"+sportTemp);
+		if(logable)
+			Log.i("A33Socket", "sportTemp:"+sportTemp);
 		switch (sportTemp)
 		{
 			case 1:
 				this.SportClass("#1a.");  // 前
-				Log.i("A33Socket", "SportClass:"+"a");
+				if(logable)
+					Log.i("A33Socket", "SportClass:"+"a");
 				break;
 			case 2:
 				this.SportClass("#1b.");  // 后
-				Log.i("A33Socket", "SportClass:"+"b");
+				if(logable)
+					Log.i("A33Socket", "SportClass:"+"b");
 				break;
 			case 4:
 				this.SportClass("#1c.");  // 左
-				Log.i("A33Socketg", "SportClass:"+"c");
+				if(logable)
+					Log.i("A33Socketg", "SportClass:"+"c");
 				break;
 			case 8:
 				this.SportClass("#1d.");  //右
-				Log.i("A33Socket", "SportClass:"+"d");
+				if(logable)
+					Log.i("A33Socket", "SportClass:"+"d");
 				break;
 			case 9:
 				this.SportClass("#1e.");  // 前+右
-				Log.i("A33Socket", "SportClass:"+"e");
+				if(logable)
+					Log.i("A33Socket", "SportClass:"+"e");
 				break;
 			case 5:
 				this.SportClass("#1f."); // 前+左
-				Log.i("A33Socket", "SportClass:"+"f");
+				if(logable)
+					Log.i("A33Socket", "SportClass:"+"f");
 				break;
 			case 10:
 				this.SportClass("#1g."); //后+右
-				Log.i("A33Socket", "SportClass:"+"g");
+				if(logable)
+					Log.i("A33Socket", "SportClass:"+"g");
 				break;
 			case 6:
 				this.SportClass("#1h."); //后+左
-				Log.i("A33Socket", "h");
+				if(logable)
+					Log.i("A33Socket", "h");
 				break;
 			case 0:
 				this.SportClass("#1i."); // 停止
-				Log.i("A33Socket", "SportClass:"+"i");
+				if(logable)
+					Log.i("A33Socket", "SportClass:"+"i");
 				break;
 			default:
 				break;
@@ -375,7 +405,8 @@ public class AiwacSportApi {
 		ms.what = 333;
 		String content1  = null ;
 		content1 = testString;
-		Log.i("A33Socket", "testString"+content1+"++");
+		if(logable)
+			Log.i("A33Socket", "testString"+content1+"++");
 		ms.obj = content1;
 		writeSockethandle.sendMessage(ms);
 	}
@@ -387,7 +418,8 @@ public class AiwacSportApi {
 		String content1 ;
 		if (type > 1)
 		{
-			Log.i("A33Socket", "aiwacFeedPetType "+"错误输入 type:"+type);
+			if(logable)
+				Log.i("A33Socket", "aiwacFeedPetType "+"错误输入 type:"+type);
 			return ;
 		}
 
@@ -402,7 +434,8 @@ public class AiwacSportApi {
 		{
 			content1 = "#4a."; // 开启投食
 		}
-		Log.i("A33Socket", "aiwacFeedPetType "+content1+"++");
+		if(logable)
+			Log.i("A33Socket", "aiwacFeedPetType "+content1+"++");
 		ms.obj = content1;
 		writeSockethandle.sendMessage(ms);
 	}
@@ -413,7 +446,8 @@ public class AiwacSportApi {
 		String content1 ;
 		if (type > 1)
 		{
-			Log.i("A33Socket", "aiwacUltrasoundDetectionType "+"错误输入  type:"+type);
+			if(logable)
+				Log.i("A33Socket", "aiwacUltrasoundDetectionType "+"错误输入  type:"+type);
 			return ;
 		}
 
@@ -428,7 +462,8 @@ public class AiwacSportApi {
 		{
 			content1 = "#2a."; // 开启超声波探测
 		}
-		Log.i("A33Socket", "aiwacUltrasoundDetectionType "+content1+"++");
+		if(logable)
+			Log.i("A33Socket", "aiwacUltrasoundDetectionType "+content1+"++");
 		ms.obj = content1;
 		writeSockethandle.sendMessage(ms);
 	}

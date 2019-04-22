@@ -81,7 +81,7 @@
                 android:gravity="center"/>
 
         </LinearLayout>
-        <LinearLayout
+        <!--<LinearLayout
             android:id="@+id/bottombar_play"
             android:descendantFocusability= "blocksDescendants"
             android:layout_width="match_parent"
@@ -99,7 +99,7 @@
                 android:textSize = "19sp"
                 android:gravity="center"/>
 
-        </LinearLayout>
+        </LinearLayout>-->
 
 
     </LinearLayout>

@@ -411,6 +411,16 @@ public class Constant {
     public final static String WEBSOCKET_COMMAND_VIDEO_STOP_CODE="1010";//视频停止播放指令
     public final static String WEBSOCKET_COMMAND_AUDIO_STOP_CODE="1011";//音频停止播放指令
     public final static String WEBSOCKET_COMMAND_VIDEO_LINK_CODE="link";//音视频链接
+
+
+    public final static String WEBSOCKET_COMMAND_FEED_START="feedStart";//开始投食
+    public final static String WEBSOCKET_COMMAND_FEED_STOP="feedStop";//停止投食
+
+    public final static String WEBSOCKET_COMMAND_ULTRASOUND_START="ultrasoundStart";//开始超声波
+    public final static String WEBSOCKET_COMMAND_ULTRASOUND_STOP="ultrasoundStop";//停止超声波
+
+
+
     /*
         "businessType:"0002"
         data:"{

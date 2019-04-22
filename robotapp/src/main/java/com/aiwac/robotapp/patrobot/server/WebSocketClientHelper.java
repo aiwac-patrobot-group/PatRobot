@@ -168,6 +168,9 @@ public class WebSocketClientHelper extends WebSocketClient {
                             LogUtil.d(link);
                             //String testLink="http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
                             intent.putExtra("Link", link);
+                            //机器人上加这句
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
                             context.startActivity(intent);
 
                         }
@@ -181,6 +184,10 @@ public class WebSocketClientHelper extends WebSocketClient {
                             //测试
                             LogUtil.d(link);
                             intent.putExtra("Link", link);
+
+                            //机器人上加这句
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
                             context.startActivity(intent);
 
                         }

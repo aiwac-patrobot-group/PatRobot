@@ -31,12 +31,12 @@
                 android:id="@+id/btn_feed"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="投食"/>
+            android:text="开启投食"/>
             <Button
                 android:id="@+id/btn_navigate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="巡航"/>
+                android:text="开启巡航"/>
         </LinearLayout>
 
     </RelativeLayout>
