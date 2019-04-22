@@ -6,6 +6,8 @@ import android.os.Message;
 import android.print.PrinterId;
 import android.util.Log;
 
+import com.aiwac.robotapp.commonlibrary.utils.LogUtil;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -49,10 +51,10 @@ public class AiwacSportApi {
 
 	private Handler  writeSockethandle; // socket write
 
-	private Handler APPGetHaLHandle ;
-	private int APPGetHaLHandleFlag = 0; // 0: 未传入；1: 赋值OK
+	private  Handler APPGetHaLHandle ;
+	public int APPGetHaLHandleFlag = 0; // 0: 未传入；1: 赋值OK
 
-	private boolean logable=false;
+	private boolean logable=true;
 
 	private Handler analysisHandler  = new Handler(){
 		public void handleMessage(Message msg) {
@@ -62,12 +64,13 @@ public class AiwacSportApi {
 				String analysisContent = msg.obj.toString();
 				if(logable)
 					Log.i("A33Socket", "analysisContent:"+analysisContent+"++");
-
 				try {
 					if (analysisContent.substring(0,1).equals("1") == true) // 避障信息
 					{
-						if (APPGetHaLHandleFlag == 1) // 已经getAPP 的处理handler
+						Log.i("A33Socket", "ffff:"+analysisContent+"++"+APPGetHaLHandleFlag);
+						if (APPGetHaLHandleFlag==1) // 已经getAPP 的处理handler
 						{
+							Log.i("A33Socket", "aaaaaa:"+analysisContent+"++");
 							Message ms = new Message();
 							ms.what = 100;
 							ms.obj = analysisContent.substring(2);
@@ -96,6 +99,7 @@ public class AiwacSportApi {
 	// 传入应用程序的handler ，有消息就提醒app
 	public void setAiwacHaLMsgHandler(Handler aiwacAndroidHandler)
 	{
+		LogUtil.d("qqqqq");
 		this.APPGetHaLHandle = aiwacAndroidHandler;
 		APPGetHaLHandleFlag = 1;
 	}
@@ -112,7 +116,6 @@ public class AiwacSportApi {
 					sleep(1000);
 					if(logable)
 						Log.i("A33Socket", "开始检测  连接情况");
-
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -135,17 +138,12 @@ public class AiwacSportApi {
 						LinkStatus = false;
 						stateNetFlag = 0;
 					}
-
-
 					if (LinkStatus == false)   //启动重连
 					{
 						try {
-
 							//socketA33.close();
-
 							socketA33 = null;
 							socketA33 = new Socket(A33Ip, socketPort);
-
 							if (socketA33 == null)
 							{
 								if(logable)
@@ -182,8 +180,6 @@ public class AiwacSportApi {
 			}
 		}.start();
 	}
-
-
 	private void readSocketFromA33()
 	{
 		new Thread()
@@ -247,6 +243,7 @@ public class AiwacSportApi {
 									if(logable)
 										Log.i("A33Socket", "发送前："+ msg.obj.toString());
 									os.write((msg.obj.toString()).getBytes("utf-8"));
+									os.flush();
 									if(logable)
 										Log.i("A33Socket", "发送后："+ msg.obj.toString());
 								} catch (UnsupportedEncodingException e) {

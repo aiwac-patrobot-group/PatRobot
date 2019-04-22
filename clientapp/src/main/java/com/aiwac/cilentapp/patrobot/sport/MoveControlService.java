@@ -57,7 +57,14 @@ public class MoveControlService extends Service {
     public void sendFeedClose(){
         getMessage(Constant.WEBSOCKET_COMMAND_FEED_STOP);
     }
-
+    //开始巡航
+    public void sendNavigateStart(){
+        getMessage(Constant.WEBSOCKET_COMMAND_ULTRASOUND_NAVIGATE_START);
+    }
+    //结束巡航
+    public void sendNavigateStop(){
+        getMessage(Constant.WEBSOCKET_COMMAND_ULTRASOUND_NAVIGATE_STOP);
+    }
 
 
 /*    public void getMessage(String messageCode){

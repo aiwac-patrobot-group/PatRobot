@@ -1,11 +1,13 @@
 package com.aiwac.robotapp.patrobot.service;
 
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 
 import com.aiwac.robotapp.commonlibrary.common.Constant;
 import com.aiwac.robotapp.commonlibrary.utils.LogUtil;
+import com.aiwac.robotapp.patrobot.receiver.timeReceiver;
 import com.aiwac.robotapp.patrobot.utils.AiwacSportApi;
 
 public class SportService extends Service {
@@ -48,6 +50,10 @@ public class SportService extends Service {
             feedOpen();
         }else if(messageCode.equals(Constant.WEBSOCKET_COMMAND_FEED_STOP)) {
             feedClose();
+        }else if(messageCode.equals(Constant.WEBSOCKET_COMMAND_ULTRASOUND_NAVIGATE_START)){
+            navigateStart();
+        }else if(messageCode.equals(Constant.WEBSOCKET_COMMAND_ULTRASOUND_NAVIGATE_STOP)){
+            navigateStop();
         }else if(messageCode.equals("UP_AND_LEFT")){
             //LogUtil.d( "左上");
             upAndLeft();
@@ -83,6 +89,23 @@ public class SportService extends Service {
     public void ultrasoundClose(){
         aiwacSportApi.aiwacUltrasoundDetectionType(0b0);
     }
+
+    /**
+     * 巡航开关
+     */
+    public void navigateStart(){
+        Intent intent = new Intent(getApplicationContext(), timeReceiver.class);
+        intent.putExtra("Duration",30);
+        intent.setAction("navigateStart");
+
+        sendBroadcast(intent);
+    }
+    public void navigateStop(){
+        Intent intent = new Intent(getApplicationContext(), timeReceiver.class);
+        intent.setAction("navigateEnd");
+        sendBroadcast(intent);
+    }
+
 
     /**
      * 运动控制

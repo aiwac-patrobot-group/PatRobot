@@ -61,6 +61,20 @@ public class ControlRobotActivity extends AppCompatActivity {
 
         //设置巡航
         btn_navigate=findViewById(R.id.btn_navigate);
+        btn_navigate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(navigateIsOpen==false){
+                    MoveControlService.getInstance().sendNavigateStart();
+                    btn_navigate.setText("结束巡航");
+                    navigateIsOpen=true;
+                }else{
+                    MoveControlService.getInstance().sendNavigateStop();
+                    btn_navigate.setText("开始巡航");
+                    navigateIsOpen=false;
+                }
+            }
+        });
     }
 
     //设置运动监听

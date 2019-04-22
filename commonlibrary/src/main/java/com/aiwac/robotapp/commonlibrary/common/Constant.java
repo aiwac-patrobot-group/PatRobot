@@ -416,8 +416,8 @@ public class Constant {
     public final static String WEBSOCKET_COMMAND_FEED_START="feedStart";//开始投食
     public final static String WEBSOCKET_COMMAND_FEED_STOP="feedStop";//停止投食
 
-    public final static String WEBSOCKET_COMMAND_ULTRASOUND_START="ultrasoundStart";//开始超声波
-    public final static String WEBSOCKET_COMMAND_ULTRASOUND_STOP="ultrasoundStop";//停止超声波
+    public final static String WEBSOCKET_COMMAND_ULTRASOUND_NAVIGATE_START="ultrasoundStart";//开始超声波,巡航
+    public final static String WEBSOCKET_COMMAND_ULTRASOUND_NAVIGATE_STOP="ultrasoundStop";//停止超声波，巡航
 
 
 
