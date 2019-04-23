@@ -4,10 +4,9 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 
 import com.aiwac.robotapp.commonlibrary.utils.LogUtil;
-import com.aiwac.robotapp.patrobot.receiver.timeReceiver;
+import com.aiwac.robotapp.patrobot.receiver.TimeReceiver;
 
 import java.util.Calendar;
 import java.util.TimeZone;
@@ -20,7 +19,7 @@ public class AlarmManageService {
 
 
     public static void  addAlarm1(Context context, String[] time,int flag){
-        Intent intent = new Intent(context, timeReceiver.class);
+        Intent intent = new Intent(context, TimeReceiver.class);
         PendingIntent pendingIntent;
         for(int i = 0; i <time.length;i ++) {
             if (flag == 0) {
@@ -68,7 +67,7 @@ public class AlarmManageService {
         }
     }
     public  static void addAlarm2(Context context,String[] time,int flag){
-        Intent intent = new Intent(context, timeReceiver.class);
+        Intent intent = new Intent(context, TimeReceiver.class);
         PendingIntent pendingIntent;
 
         for(int i = 0; i <time.length;i ++){

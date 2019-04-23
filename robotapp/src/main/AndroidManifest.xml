@@ -27,7 +27,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <receiver
-            android:name=".receiver.timeReceiver"
+            android:name=".receiver.TimeReceiver"
             android:enabled="true"
             android:exported="true" />
 

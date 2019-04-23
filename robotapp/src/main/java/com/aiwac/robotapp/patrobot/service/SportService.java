@@ -1,13 +1,12 @@
 package com.aiwac.robotapp.patrobot.service;
 
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 
 import com.aiwac.robotapp.commonlibrary.common.Constant;
 import com.aiwac.robotapp.commonlibrary.utils.LogUtil;
-import com.aiwac.robotapp.patrobot.receiver.timeReceiver;
+import com.aiwac.robotapp.patrobot.receiver.TimeReceiver;
 import com.aiwac.robotapp.patrobot.utils.AiwacSportApi;
 
 public class SportService extends Service {
@@ -17,7 +16,7 @@ public class SportService extends Service {
     private int type=0b0000;
     public SportService() {
         myInstance =this;
-        aiwacSportApi=new AiwacSportApi();
+        aiwacSportApi=AiwacSportApi.getInstance();
     }
 
     public static SportService getInstance(){
@@ -89,22 +88,19 @@ public class SportService extends Service {
     public void ultrasoundClose(){
         aiwacSportApi.aiwacUltrasoundDetectionType(0b0);
     }
-
     /**
      * 巡航开关
      */
     public void navigateStart(){
-        Intent intent = new Intent(getApplicationContext(), timeReceiver.class);
+
+        Intent intent = new Intent(getApplicationContext(), TimeReceiver.class);
         intent.putExtra("Duration",30);
         intent.setAction("navigateStart");
-
         sendBroadcast(intent);
     }
     public void navigateStop(){
         LogUtil.d("stop");
-        Intent intent = new Intent(getApplicationContext(), timeReceiver.class);
-        intent.setAction("navigateEnd");
-        sendBroadcast(intent);
+        TimeReceiver.setNavigateFlag(false);
     }
 
 

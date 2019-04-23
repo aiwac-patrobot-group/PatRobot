@@ -3,10 +3,7 @@ package com.aiwac.robotapp.patrobot.utils;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.print.PrinterId;
 import android.util.Log;
-
-import com.aiwac.robotapp.commonlibrary.utils.LogUtil;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,20 +12,29 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.Arrays;
-import java.util.List;
 
 
 // 使用说明
-// 第一步 AiwacSportApi aiwacSportApi = new AiwacSportApi();
+// 第一步 AiwacSportApi aiwacSportApi =  AiwacSportApi.getInstance();  //  单例
 // 第二步  接口使用
 //		1.运动模块的接口 使用portApi.aiwacSportType(type);  其中type 不同的位会有不同的含义，具体看 aiwacSportType 的逻辑
 //			注意：下发的运动指令需要在1.5s 内反复下发，否则底层会自动停止运动
 //		2.投食接口 public void aiwacFeedPetType(int type) 	0 :关闭投食   1: 开启投食
 //			注意：开启和关闭操作必须  成对出现；开啦就要记得关
 //		3.超声波避障
-//			1）先传APP 处理handler     public void setAiwacHaLMsgHandler(Handler aiwacAndroidHandler)
-//				以后上传的数据都需要使用这个接口， ms.what :100 表 超声波探测的数据， ms.obj: 1,018   前方18CM 有障碍，具体看接口EXCEL
+//			1）先设置APP回调函数
+//                    //Type : 消息类型    data ： 具体的数据
+//                   aiwacSportApi.setCallback(new AiwacSportApi.Callback() {
+//                   @Override
+//                   public void newMsgFromA33(int Type, String data) {
+//
+//                          // 具体的处理逻辑
+//
+//                   }
+//               });
+//
+//              Type :100 表 超声波探测的数据， data: 1,018   前方18CM 有障碍，具体看接口EXCEL
+
 //			2）再    public void aiwacUltrasoundDetectionType(int type)  0 :关闭超声波   1: 开启超声波
 //				注意：超声波模块的避障信息 会  在1S 左右上传一次
 
@@ -54,8 +60,12 @@ public class AiwacSportApi {
 	private Handler APPGetHaLHandle ;
 	private int APPGetHaLHandleFlag = 0; // 0: 未传入；1: 赋值OK
 	private Handler analysisHandler ;
+	private String analysisContent;
 
-	public AiwacSportApi()
+	private Callback newDataCallback;
+	private static AiwacSportApi instance = null;  // 单例模式
+
+	private AiwacSportApi()
 	{
 		//Log.i("A33Socket", "启动  link  ，并检测");
 		this.startAiwacSport();
@@ -64,6 +74,15 @@ public class AiwacSportApi {
 		this.readSocketFromA33();
 		this.AnalysisMsgFromA33();
 	}
+
+	public static synchronized AiwacSportApi getInstance(){
+		if (instance == null){
+			//Log.i("A33Socket", "getInstance "+" first");
+			instance = new AiwacSportApi();
+		}
+		return instance;
+	}
+
 
 	// 传入应用程序的handler ，有消息就提醒app
 	public void setAiwacHaLMsgHandler(Handler aiwacAndroidHandler)
@@ -202,28 +221,29 @@ public class AiwacSportApi {
 				analysisHandler = new Handler(){
 					public void handleMessage(Message msg) {
 						// TODO Auto-generated method stub
-						if(msg.what == 100)
-						{
-							String analysisContent = msg.obj.toString();
-							//Log.i("A33Socket", "analysisContent:"+analysisContent+"++");
+						if (msg.what == 100) {
+							analysisContent = msg.obj.toString();
+							//Log.i("A33Socket", "analysisContent:" + analysisContent + "++");
 
-							try {
-								if (analysisContent.substring(0,1).equals("1") == true) // 避障信息
-								{
-									if (APPGetHaLHandleFlag == 1) // 已经getAPP 的处理handler
+							if (newDataCallback != null) {
+								try {
+									if (analysisContent.substring(0, 1).equals("1") == true) // 避障信息  type :100
 									{
-										Message ms = new Message();
-										ms.what = 100;
-										ms.obj = analysisContent.substring(2);
-										APPGetHaLHandle.sendMessage(ms);
-										LogUtil.d("send message:"+ms.obj);
-										//Log.i("A33Socket", "准备发往APP进行处理"+ms.obj.toString()+"++");
+										// 把参数传给APP
+										new Thread()
+										{
+											public void run() {
+												newDataCallback.newMsgFromA33(100, analysisContent.substring(2));
+												//Log.i("A33Socket", "准备发往APP进行处理" + analysisContent.substring(2) + "++");
+											}
+										}.start();
 									}
-								}
-							} catch (Exception e) {
-								//Log.i("A33Socket", "准备发往APP进行处理  出现错误");
-							}
 
+								} catch (Exception e) {
+									//Log.i("A33Socket", "准备发往APP进行处理  出现错误");
+								}
+
+							}
 						}
 					}
 				};
@@ -251,10 +271,10 @@ public class AiwacSportApi {
 							if (stateNetFlag == 1) // 判断为连接状态再发送
 							{
 								try {
-									Log.i("A33Socket", "发送前："+ msg.obj.toString());
+									//Log.i("A33Socket", "发送前："+ msg.obj.toString());
 									os.write((msg.obj.toString()).getBytes("utf-8"));
 									os.flush();
-									Log.i("A33Socket", "发送后："+ msg.obj.toString());
+									//Log.i("A33Socket", "发送后："+ msg.obj.toString());
 								} catch (UnsupportedEncodingException e) {
 									//Log.i("A33Socket", "发送失败");
 									stateNetFlag = 0; // 马上设置网络情况
@@ -449,6 +469,18 @@ public class AiwacSportApi {
 		//Log.i("A33Socket", "aiwacUltrasoundDetectionType "+content1+"++");
 		ms.obj = content1;
 		writeSockethandle.sendMessage(ms);
+	}
+
+
+
+
+	public void setCallback(Callback callback){
+		this.newDataCallback = callback;
+		//Log.i("A33Socket", "get Callback "+" first");
+	}
+
+	public static interface Callback{
+		void newMsgFromA33(int Type,String data);
 	}
 
 }
