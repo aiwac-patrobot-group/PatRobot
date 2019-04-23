@@ -37,6 +37,7 @@ import me.caibou.rockerview.DirectionView;
 public class VideoChatViewActivity extends AppCompatActivity {
 
     private String token="";
+    private boolean isLongClick=false;
     private String uuid= (Integer.parseInt(UserData.getUserData().getClientID())+1)+"";
 
     private static final String LOG_TAG = VideoChatViewActivity.class.getSimpleName();
@@ -128,10 +129,40 @@ public class VideoChatViewActivity extends AppCompatActivity {
         dv.setDirectionChangeListener(new DirectionView.DirectionChangeListener() {
             @Override
             public void onDirectChange(DirectionView.Direction direction) {
-                MoveControlService.getInstance().getMessage(direction.toString());
+                sendMessageToRobot(direction.toString());
             }
         });
     }
+    private void sendMessageToRobot(final String messageCode){
+        ThreadPoolManager.getThreadPoolManager().submitTask(new Runnable() {
+            @Override
+            public void run() {
+                if(messageCode.equals("NONE")){
+                    isLongClick=false;
+                    try{
+                        MoveControlService.getInstance().getMessage(messageCode);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }else {
+                    isLongClick=true;
+                }
+                while (isLongClick){
+                    try{
+                        MoveControlService.getInstance().getMessage(messageCode);
+                        //间隔1s
+                        Thread.sleep(Constant.WEBSOCKET_SEND_DIRECTION_TIME);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+    }
+
+
+
+
     private void initAgoraEngineAndJoinChannel() {
         initializeAgoraEngine();
         setupVideoProfile();

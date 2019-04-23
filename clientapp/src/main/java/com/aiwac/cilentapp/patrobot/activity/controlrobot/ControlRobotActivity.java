@@ -9,6 +9,7 @@ import android.widget.Button;
 import com.aiwac.cilentapp.patrobot.R;
 import com.aiwac.cilentapp.patrobot.activity.videochat.VideoChatViewActivity;
 import com.aiwac.cilentapp.patrobot.sport.MoveControlService;
+import com.aiwac.robotapp.commonlibrary.common.Constant;
 import com.aiwac.robotapp.commonlibrary.task.ThreadPoolManager;
 
 import me.caibou.rockerview.DirectionView;
@@ -109,8 +110,8 @@ public class ControlRobotActivity extends AppCompatActivity {
                 while (isLongClick){
                     try{
                         MoveControlService.getInstance().getMessage(messageCode);
-                        //间隔0.8
-                        Thread.sleep(800);
+                        //间隔1s
+                        Thread.sleep(Constant.WEBSOCKET_SEND_DIRECTION_TIME);
                     }catch (Exception e){
                         e.printStackTrace();
                     }

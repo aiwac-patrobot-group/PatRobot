@@ -420,6 +420,10 @@ public class Constant {
     public final static String WEBSOCKET_COMMAND_ULTRASOUND_NAVIGATE_STOP="ultrasoundStop";//停止超声波，巡航
 
 
+    public final static int WEBSOCKET_SEND_DIRECTION_TIME=1000;//手机端发送给机器人的方向指令的时间间隔
+
+
+
 
     /*
         "businessType:"0002"
