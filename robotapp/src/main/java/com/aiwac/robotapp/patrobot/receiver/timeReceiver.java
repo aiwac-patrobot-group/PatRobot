@@ -15,7 +15,8 @@ public class timeReceiver extends BroadcastReceiver {
     private int sleepSeconds=1000;
     int upDis=0,downDis=0,leftDis=0,rightDis=0;
     private int direction=10;
-    private Handler aiwacAndroidHandler  = new Handler(){
+
+    public Handler aiwacAndroidHandler  = new Handler(){
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             // TODO Auto-generated method stub
