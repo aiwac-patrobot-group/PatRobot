@@ -13,11 +13,13 @@ import com.aiwac.robotapp.patrobot.utils.AiwacSportApi;
 public class timeReceiver extends BroadcastReceiver {
     private AiwacSportApi aiwacSportApi =  new AiwacSportApi();
     private int sleepSeconds=1000;
+    private boolean navigateFlag=false;
     int upDis=0,downDis=0,leftDis=0,rightDis=0;
     private int direction=10;
 
     public Handler aiwacAndroidHandler  = new Handler(){
         public void handleMessage(Message msg) {
+            LogUtil.d("aaaagetobj:");
             super.handleMessage(msg);
             // TODO Auto-generated method stub
             if(msg.what == 100)
@@ -39,7 +41,6 @@ public class timeReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        aiwacSportApi.setAiwacHaLMsgHandler(aiwacAndroidHandler);
         if(intent.getAction().equals("feedStart")){
             //处理开始投食
             LogUtil.d("开始投食");
@@ -51,13 +52,15 @@ public class timeReceiver extends BroadcastReceiver {
         }else if(intent.getAction().equals("navigateStart")) {
             //处理开始巡航
             LogUtil.d("开始巡航");
+            aiwacSportApi.setAiwacHaLMsgHandler(aiwacAndroidHandler);
+            navigateFlag=true;
             int duration = intent.getIntExtra("Duration",10);
             long t1 = System.currentTimeMillis();
             aiwacSportApi.aiwacUltrasoundDetectionType(1);
 
             try {
                 Thread.sleep(sleepSeconds);
-                while(true){
+                while(navigateFlag){
                     long t2 = System.currentTimeMillis();
                     //设定循环执行时长
                     if(t2 - t1 > duration * 60 * 1000){
@@ -114,6 +117,7 @@ public class timeReceiver extends BroadcastReceiver {
         }else if(intent.getAction().equals("navigateEnd")) {
             //处理结束巡航
             LogUtil.d("结束巡航");
+            navigateFlag=false;
             aiwacSportApi.aiwacUltrasoundDetectionType(0);
             aiwacSportApi.aiwacSportType(0);
         }

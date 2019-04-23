@@ -6,6 +6,8 @@ import android.os.Message;
 import android.print.PrinterId;
 import android.util.Log;
 
+import com.aiwac.robotapp.commonlibrary.utils.LogUtil;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -51,53 +53,23 @@ public class AiwacSportApi {
 
 	private Handler APPGetHaLHandle ;
 	private int APPGetHaLHandleFlag = 0; // 0: 未传入；1: 赋值OK
-
-
-	private Handler analysisHandler  = new Handler(){
-		public void handleMessage(Message msg) {
-			// TODO Auto-generated method stub
-			if(msg.what == 100)
-			{
-				String analysisContent = msg.obj.toString();
-				//Log.i("A33Socket", "analysisContent:"+analysisContent+"++");
-
-				try {
-					if (analysisContent.substring(0,1).equals("1") == true) // 避障信息
-					{
-						//Log.i("A33Socket", "aaaaaaa:"+analysisContent+"++"+APPGetHaLHandleFlag);
-//						if (APPGetHaLHandleFlag == 1) // 已经getAPP 的处理handler
-//						{
-							//Log.i("A33Socket", "vbbbbb:"+analysisContent+"++");
-							Message ms = new Message();
-							ms.what = 100;
-							ms.obj = analysisContent.substring(2);
-							APPGetHaLHandle.sendMessage(ms);
-							//Log.i("A33Socket", "准备发往APP进行处理"+ms.obj.toString()+"++");
-//						}
-					}
-				} catch (Exception e) {
-					////Log.i("A33Socket", "准备发往APP进行处理"+ms.obj.toString()+"++");
-				}
-			}
-		}
-	};
+	private Handler analysisHandler ;
 
 	public AiwacSportApi()
 	{
 		//Log.i("A33Socket", "启动  link  ，并检测");
 		this.startAiwacSport();
 		this.linsentingLinkStatus();
-		this.writeSocketFromA33();
+		this.writeSocketToA33();
 		this.readSocketFromA33();
+		this.AnalysisMsgFromA33();
 	}
 
 	// 传入应用程序的handler ，有消息就提醒app
 	public void setAiwacHaLMsgHandler(Handler aiwacAndroidHandler)
 	{
 		this.APPGetHaLHandle = aiwacAndroidHandler;
-		//Log.i("A33Socket", "777777"+APPGetHaLHandleFlag);
 		APPGetHaLHandleFlag = 1;
-		//Log.i("A33Socket", "777777"+APPGetHaLHandleFlag);
 	}
 
 
@@ -127,6 +99,7 @@ public class AiwacSportApi {
 
 					try{
 						socketA33.sendUrgentData(0xFF);
+						stateNetFlag = 1;  // 每次都确认标志位
 					}catch(Exception ex){
 						//连接断开
 						//Log.i("A33Socket", "检测到A33Socket连接已断开，尝试重连ing");
@@ -138,8 +111,6 @@ public class AiwacSportApi {
 					if (LinkStatus == false)   //启动重连
 					{
 						try {
-
-							//socketA33.close();
 
 							socketA33 = null;
 							socketA33 = new Socket(A33Ip, socketPort);
@@ -159,10 +130,8 @@ public class AiwacSportApi {
 							stateNetFlag = 1;
 
 						} catch (UnknownHostException e) {
-							e.printStackTrace();
 							stateNetFlag = 0;
 						} catch (IOException e) {
-							e.printStackTrace();
 							stateNetFlag = 0;
 						}
 
@@ -198,35 +167,13 @@ public class AiwacSportApi {
 							;
 
 						//Log.i("A33Socket", "检测接受情况");
-						if((readContent = br.readLine())!=null) {
-							/*Message ms = new Message();
+						if((readContent = br.readLine())!=null)
+						{
+							Message ms = new Message();
 							ms.what = 100;
 							ms.obj = readContent;
-							analysisHandler.sendMessage(ms);*/
-							//Log.i("A33Socket", "收到A33发来的数据" + readContent + "++");
-							try {
-								if (readContent.substring(0, 1).equals("1") == true) // 避障信息
-								{
-									//Log.i("A33Socket", "aaaaaaa:" + readContent + "++" + APPGetHaLHandleFlag);
-									if (APPGetHaLHandleFlag == 1) // 已经getAPP 的处理handler
-									{
-										//Log.i("A33Socket", "bbbbb:" + readContent + "++");
-										Message ms = new Message();
-										ms.what = 100;
-										ms.obj = readContent.substring(2);
-										//Log.i("A33Socket", "cccc:" +  readContent.substring(2) + "++");
-										if(APPGetHaLHandle!=null){
-											//Log.i("A33Socket", "不是空");
-										}else{
-											//Log.i("A33Socket", "是空的");
-										}
-										APPGetHaLHandle.sendMessage(ms);
-										//Log.i("A33Socket", "准备发往APP进行处理" + ms.obj.toString() + "++");
-									}
-								}
-							} catch (Exception e) {
-								//Log.i("error","error");
-							}
+							analysisHandler.sendMessage(ms);
+							//Log.i("A33Socket", "收到A33发来的数据"+readContent+"++");
 						}
 
 					} catch (UnknownHostException e) {
@@ -245,7 +192,51 @@ public class AiwacSportApi {
 	}
 
 
-	private void writeSocketFromA33()
+	private void AnalysisMsgFromA33()
+	{
+		new Thread()
+		{
+			public void run() {
+
+				Looper.prepare();
+				analysisHandler = new Handler(){
+					public void handleMessage(Message msg) {
+						// TODO Auto-generated method stub
+						if(msg.what == 100)
+						{
+							String analysisContent = msg.obj.toString();
+							//Log.i("A33Socket", "analysisContent:"+analysisContent+"++");
+
+							try {
+								if (analysisContent.substring(0,1).equals("1") == true) // 避障信息
+								{
+									if (APPGetHaLHandleFlag == 1) // 已经getAPP 的处理handler
+									{
+										Message ms = new Message();
+										ms.what = 100;
+										ms.obj = analysisContent.substring(2);
+										APPGetHaLHandle.sendMessage(ms);
+										LogUtil.d("send message:"+ms.obj);
+										//Log.i("A33Socket", "准备发往APP进行处理"+ms.obj.toString()+"++");
+									}
+								}
+							} catch (Exception e) {
+								//Log.i("A33Socket", "准备发往APP进行处理  出现错误");
+							}
+
+						}
+					}
+				};
+				Looper.loop();
+
+			}
+		}.start();
+
+	}
+
+
+
+	private void writeSocketToA33()
 	{
 		new Thread()
 		{
@@ -260,9 +251,10 @@ public class AiwacSportApi {
 							if (stateNetFlag == 1) // 判断为连接状态再发送
 							{
 								try {
-									//Log.i("A33Socket", "发送前："+ msg.obj.toString());
+									Log.i("A33Socket", "发送前："+ msg.obj.toString());
 									os.write((msg.obj.toString()).getBytes("utf-8"));
-									//Log.i("A33Socket", "发送后："+ msg.obj.toString());
+									os.flush();
+									Log.i("A33Socket", "发送后："+ msg.obj.toString());
 								} catch (UnsupportedEncodingException e) {
 									//Log.i("A33Socket", "发送失败");
 									stateNetFlag = 0; // 马上设置网络情况

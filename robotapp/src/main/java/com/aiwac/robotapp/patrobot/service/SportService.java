@@ -101,6 +101,7 @@ public class SportService extends Service {
         sendBroadcast(intent);
     }
     public void navigateStop(){
+        LogUtil.d("stop");
         Intent intent = new Intent(getApplicationContext(), timeReceiver.class);
         intent.setAction("navigateEnd");
         sendBroadcast(intent);
