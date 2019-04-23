@@ -105,7 +105,11 @@ public class ControlRobotActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }else {
-                    isLongClick=true;
+                    if(isLongClick==false){
+                        isLongClick=true;
+                    }else{
+                        return;
+                    }
                 }
                 while (isLongClick){
                     try{
