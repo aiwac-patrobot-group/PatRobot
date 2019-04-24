@@ -229,13 +229,14 @@ public class SportService extends Service {
         setCallBackFromApi();
         navigateFlag=true;
         ultrasoundOpen();
+        //设定循环执行时长
+        long t1 = System.currentTimeMillis();
         try {
             Thread.sleep(sleepSeconds);
+            int time=duration * 60 * 1000;
             while (navigateFlag) {
                 long t2 = System.currentTimeMillis();
-                //设定循环执行时长
-                long t1 = System.currentTimeMillis();
-                if (t2 - t1 > duration * 60 * 1000) {
+                if (t2 - t1 > time) {
                     aiwacSportApi.aiwacUltrasoundDetectionType(0);
                     aiwacSportApi.aiwacSportType(0);
                     break;
