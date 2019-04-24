@@ -30,16 +30,17 @@ public class SportService extends Service {
     private static boolean navigateFlag=false;
     private int direction=100;
 
-    private HandlerThread navigateHandlerThread;
+    /*private HandlerThread navigateHandlerThread;
 
     private Thread runNavigateThread;
-    private Handler workHandler;
+    private Handler workHandler;*/
+
     public SportService() {
         myInstance =this;
         aiwacSportApi=AiwacSportApi.getInstance();
 
 
-        navigateHandlerThread=new HandlerThread("navigate");
+        /*navigateHandlerThread=new HandlerThread("navigate");
         navigateHandlerThread.start();
 
         workHandler=new Handler(navigateHandlerThread.getLooper()) {
@@ -63,9 +64,9 @@ public class SportService extends Service {
                 }
             }
 
-            /**
+            *//**
              * 巡航开关
-             */
+             *//*
             public void navigateStartHandle(final int duration){
                 setCallBackFromApi();
                 navigateFlag=true;
@@ -129,7 +130,7 @@ public class SportService extends Service {
                 ultrasoundClose();
                 stop();
             }
-        };
+        };*/
     }
 
     public static SportService getInstance(){
@@ -211,26 +212,85 @@ public class SportService extends Service {
     }
 
 
-
-
-
+    /**
+     * 巡航开关
+     */
     public void navigateStart(final int duration){
-        Message msg=Message.obtain();
-        msg.what=1;
-        msg.obj=duration;
-        workHandler.sendMessage(msg);
+        final int d= duration;
+        LogUtil.d("what 1");
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                navigateStartHandle(d);
+            }
+        }).start();
+    }
+    public void navigateStartHandle(final int duration){
+        setCallBackFromApi();
+        navigateFlag=true;
+        ultrasoundOpen();
+        try {
+            Thread.sleep(sleepSeconds);
+            while (navigateFlag) {
+                long t2 = System.currentTimeMillis();
+                //设定循环执行时长
+                long t1 = System.currentTimeMillis();
+                if (t2 - t1 > duration * 60 * 1000) {
+                    aiwacSportApi.aiwacUltrasoundDetectionType(0);
+                    aiwacSportApi.aiwacSportType(0);
+                    break;
+                }
+                //自动巡航
+                LogUtil.d("uP:" + upDis + "  down:" + downDis + "    leF:" + leftDis + "   right:" + rightDis);
+                if (upDis > direction) {//前方无障碍朝前走
+                    //up();
+
+                    if (new Random().nextInt(50) > 5) {//前方无障碍朝前走
+                        up();
+                        //LogUtil.d("qian");
+                    } else {//前方无障碍朝前走,随机变化方向
+                        //LogUtil.d("suiji");
+                        turnRandom();
+                    }
+                } else if (leftDis > direction) { //前方有障碍，左或者右转，朝前走
+                    turnRandom();
+                    //LogUtil.d("zhuan");
+                } else if (rightDis > direction) {//前方有障碍，左方有障碍，右转，朝前走
+                    turnRight();
+                    //LogUtil.d("youzhuan");
+                } else if (downDis > direction) {
+                    //LogUtil.d("houtui");
+                    down();//前方、左方、右方有障碍，后退，后右
+                    Thread.sleep(sleepSeconds);
+                    down();
+                    Thread.sleep(sleepSeconds);
+                    turnRandom();
+                } else {//走不通，停止
+                    //LogUtil.d("停止");
+                    stop();
+                    navigateFlag = false;
+                }
+                Thread.sleep(sleepSeconds);
+            }
+            if (navigateFlag == false) {
+                ultrasoundClose();
+                stop();
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
     }
     public void navigateStop(){
-        //LogUtil.d("stopin waimian");
-        Message msg=Message.obtain();
-        msg.what=0;
-        workHandler.sendMessage(msg);
+        navigateFlag=false;
+        ultrasoundClose();
+        stop();
     }
 
-
-
-
-    //设置回调函数
+    /**
+     * 设置回调函数
+     */
     private void setCallBackFromApi(){
         aiwacSportApi.setCallback(new AiwacSportApi.Callback() {
             @Override
@@ -252,29 +312,27 @@ public class SportService extends Service {
         });
     }
 
-
-
     /**
      * 运动控制
      */
     private void  up(){
-        LogUtil.d("Up");
+        //LogUtil.d("Up");
         //type=type|0b0001;
         type=0b0001;
         aiwacSportApi.aiwacSportType(type);
     }
     private void  down(){
-        LogUtil.d("down");
+        //LogUtil.d("down");
         type=0b0010;
         aiwacSportApi.aiwacSportType(type);
     }
     private void  left(){
-        LogUtil.d("lef");
+        //LogUtil.d("lef");
         type=0b0100;
         aiwacSportApi.aiwacSportType(type);
     }
     private void  right(){
-        LogUtil.d("right");
+        //LogUtil.d("right");
         type=0b1000;
         aiwacSportApi.aiwacSportType(type);
     }
@@ -295,19 +353,20 @@ public class SportService extends Service {
         aiwacSportApi.aiwacSportType(type);
     }
     private void stop(){
-        LogUtil.d("stop");
+        //LogUtil.d("stop");
         type=type&0b0000;
         aiwacSportApi.aiwacSportType(type);
     }
+
     //转向
     private void turnRight() throws InterruptedException {
-        LogUtil.d("turnright");
+        //LogUtil.d("turnright");
         right();
         Thread.sleep(sleepSeconds);
         right();
     }
     private void turnLeft() throws InterruptedException {
-        LogUtil.d("turnleft");
+        //LogUtil.d("turnleft");
         left();
         Thread.sleep(sleepSeconds);
         left();
