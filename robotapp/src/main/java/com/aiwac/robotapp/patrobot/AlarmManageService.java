@@ -84,7 +84,7 @@ public class AlarmManageService {
                     }else{
                         intent.putExtra("Duration",60-minute+endMinute);
                     }
-                intent.setAction("navigateStart");
+                intent.setAction("navigateStartHandle");
             }else if(flag == 1){
                     String endTime = time[i].split("-")[1];
                     hour = Integer.valueOf(endTime.split(":")[0]).intValue();
